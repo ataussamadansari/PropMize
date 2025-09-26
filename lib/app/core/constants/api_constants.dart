@@ -1,6 +1,8 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class ApiConstants
 {
-    static const String baseUrl = "https://propmize-backend.onrender.com/api";
+    static String baseUrl = dotenv.env['BASE_URL']!;
 
     // ------------------ AI-Chat Endpoints ------------------
 
