@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:prop_mize/app/core/themes/app_theme.dart';
+import 'package:prop_mize/app/routes/app_pages.dart';
+import 'package:prop_mize/app/routes/app_routes.dart';
+
+import 'app/data/services/storage_services.dart';
+import 'app/modules/auth_screen/controllers/auth_controller.dart';
+
+void main() async{
+  // init getStorage
+  await GetStorage.init();
+  await _initServices();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  Get.put(AuthController());
+
+  runApp(const MyApp());
+}
+
+Future<void> _initServices() async {
+  await Get.putAsync<StorageServices>(() async => StorageServices());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
+      darkTheme: AppTheme.dark,
+      theme: AppTheme.light,
+      initialRoute: Routes.splash,
+      getPages: AppPages.routes,
+    );
+  }
+}
