@@ -109,7 +109,7 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                 trailing: "Switch",
                                                 onTap: ()
                                                 {
-                                                  isLoggedIn ? "" : AppHelpers.showSnackBar(title: "Alert", message: "Please login to switch to seller mode", isError: true);
+                                                  isLoggedIn ? "" : AppHelpers.showSnackBar(title: "Alert", message: "Please login to switch to seller mode");
                                                 }
                                             ),
                                             DrawerMenuItem(

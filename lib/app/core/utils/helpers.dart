@@ -6,7 +6,7 @@ class AppHelpers {
   static void showSnackBar({
     required String title,
     required String message,
-    bool isError = false,
+    bool? isError,
     Duration duration = const Duration(seconds: 3),
     String? actionLabel, // optional button label
     VoidCallback? onActionTap, // button tap callback
@@ -15,14 +15,15 @@ class AppHelpers {
       title,
       message,
       // snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: isError ? Colors.red[200] : Colors.green[200],
+      backgroundColor: isError == true ? Colors.red[200] : isError == false ? Colors.green[200] : null,
       icon: Icon(
-        isError ? Icons.error : Icons.check_circle,
-        color: isError ? Colors.red : Colors.green,
+        isError == true ? Icons.error : isError == false ? Icons.check_circle : null,
+        color: isError == true ? Colors.red : isError == false ? Colors.green : null,
       ),
       margin: const EdgeInsets.all(16),
       borderRadius: 8,
       duration: duration,
+      dismissDirection: DismissDirection.horizontal,
       mainButton: actionLabel != null && onActionTap != null
           ? TextButton(
         onPressed: () {

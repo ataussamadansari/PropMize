@@ -26,13 +26,13 @@ class AuthController extends GetxController {
   final RxBool hasError = false.obs;
   final RxString errorMessage = "".obs;
 
-  // ✅ FIX: Controllers ko immediately initialize karo
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
 
   // FocusNodes
   final phoneFocus = FocusNode();
   final otpFocus = FocusNode();
+
 
   @override
   void onInit() {
@@ -75,45 +75,23 @@ class AuthController extends GetxController {
     });
   }
 
+
   Future<void> sendOtp() async {
     try {
-      // ✅ Pehle unfocus karo
-      phoneFocus.unfocus();
 
       isLoading.value = true;
       hasError.value = false;
       errorMessage.value = "";
 
-      // ✅ Phone validation improve karo
-      final phoneNumber = phone.value.trim();
-      if (phoneNumber.isEmpty) {
+      if (phone.value.isEmpty) {
         hasError.value = true;
         errorMessage.value = "Please enter a phone number";
-        AppHelpers.showSnackBar(
-            title: "Error",
-            message: errorMessage.value,
-            isError: true
-        );
-        // ✅ Phone field par focus wapas lao
-        phoneFocus.requestFocus();
-        return;
-      }
-
-      // ✅ Basic phone number validation
-      if (!_isValidPhoneNumber(phoneNumber)) {
-        hasError.value = true;
-        errorMessage.value = "Please enter a valid phone number";
-        AppHelpers.showSnackBar(
-            title: "Error",
-            message: errorMessage.value,
-            isError: true
-        );
-        phoneFocus.requestFocus();
+        AppHelpers.showSnackBar(title: "Error", message: errorMessage.value, isError: hasError.value);
         return;
       }
 
       // Create request model
-      final request = SendOtpRequest(phone: phoneNumber);
+      final request = SendOtpRequest(phone: phone.value);
 
       // Call repository
       final response = await _authRepo.sendOtp(request);
@@ -133,8 +111,6 @@ class AuthController extends GetxController {
             message: response.message,
             isError: true
         );
-        // ✅ Error mein phone field par focus rakhO
-        phoneFocus.requestFocus();
       }
 
     } catch (e) {
@@ -143,9 +119,7 @@ class AuthController extends GetxController {
       AppHelpers.showSnackBar(
           title: "Error",
           message: errorMessage.value,
-          isError: true
-      );
-      phoneFocus.requestFocus();
+          isError: true);
     } finally {
       isLoading.value = false;
     }
@@ -153,24 +127,9 @@ class AuthController extends GetxController {
 
   Future<bool> verifyOtp() async {
     try {
-      // ✅ Pehle unfocus karo
-      otpFocus.unfocus();
-
       isLoading.value = true;
       hasError.value = false;
       errorMessage.value = "";
-
-      // ✅ Phone available hai ya nahi check karo
-      if (phone.value.isEmpty) {
-        errorMessage.value = "Phone number not found. Please restart the process.";
-        hasError.value = true;
-        AppHelpers.showSnackBar(
-          title: "Error",
-          message: errorMessage.value,
-          isError: true,
-        );
-        return false;
-      }
 
       if (otp.value.isEmpty) {
         errorMessage.value = "Please enter the OTP";
@@ -180,21 +139,6 @@ class AuthController extends GetxController {
           message: errorMessage.value,
           isError: true,
         );
-        // ✅ OTP field par focus karo
-        otpFocus.requestFocus();
-        return false;
-      }
-
-      // ✅ OTP length validation
-      if (otp.value.length < 5) {
-        errorMessage.value = "Please enter a valid OTP";
-        hasError.value = true;
-        AppHelpers.showSnackBar(
-          title: "Error",
-          message: errorMessage.value,
-          isError: true,
-        );
-        otpFocus.requestFocus();
         return false;
       }
 
@@ -211,12 +155,14 @@ class AuthController extends GetxController {
         if (user.value != null && user.value!.data.user.id != null) {
           StorageServices.to.setUserId(user.value!.data.user.id!);
         }
-
+        // ✅ SUCCESS MESSAGE
         AppHelpers.showSnackBar(
           title: "Success",
           message: "Login successful!",
         );
+
         me();
+
         return true;
       } else {
         hasError.value = true;
@@ -226,20 +172,14 @@ class AuthController extends GetxController {
             message: response.message,
             isError: true
         );
-        // ✅ OTP field par focus wapas karo
-        otpFocus.requestFocus();
+
         return false;
       }
 
     } catch (e) {
       hasError.value = true;
       errorMessage.value = e.toString();
-      AppHelpers.showSnackBar(
-          title: "Error",
-          message: errorMessage.value,
-          isError: true
-      );
-      otpFocus.requestFocus();
+      AppHelpers.showSnackBar(title: "Error", message: errorMessage.value, isError: true);
       return false;
     } finally {
       isLoading.value = false;
@@ -263,6 +203,7 @@ class AuthController extends GetxController {
       if (response.success) {
         profile.value = response.data!;
 
+        // ✅ User info ko storage me update bhi kar sakte ho (optional)
         if (user.value != null && user.value!.data.user.id != null) {
           StorageServices.to.setUserId(user.value!.data.user.id!);
         }
@@ -278,11 +219,7 @@ class AuthController extends GetxController {
     } catch (e) {
       hasError.value = true;
       errorMessage.value = e.toString();
-      AppHelpers.showSnackBar(
-          title: "Error",
-          message: errorMessage.value,
-          isError: true
-      );
+      AppHelpers.showSnackBar(title: "Error", message: errorMessage.value, isError: true);
     } finally {
       isLoading.value = false;
     }
@@ -295,6 +232,7 @@ class AuthController extends GetxController {
     AppHelpers.showSnackBar(title: "Logout", message: "Logout successful");
   }
 
+  // 🔹 Update profile method jo Map accept kare
   Future<ApiResponse<UserMe>> updateProfile(Map<String, dynamic> updateData) async {
     try {
       isLoading.value = true;
@@ -312,13 +250,10 @@ class AuthController extends GetxController {
     }
   }
 
+
   @override
   void onClose() {
-    // ✅ Properly dispose karo
-    phoneController.dispose();
-    otpController.dispose();
-    phoneFocus.dispose();
-    otpFocus.dispose();
+    resetAuthState();
     super.onClose();
   }
 
@@ -330,38 +265,10 @@ class AuthController extends GetxController {
     hasError.value = false;
     errorMessage.value = "";
 
-    // ✅ Controllers clear karo
     phoneController.clear();
     otpController.clear();
-
-    // ✅ Focus reset karo
     phoneFocus.unfocus();
     otpFocus.unfocus();
-
-    // ✅ Phone field par focus wapas lao
-    Future.delayed(Duration(milliseconds: 100), () {
-      phoneFocus.requestFocus();
-    });
   }
 
-  // ✅ Phone number validation
-  bool _isValidPhoneNumber(String phone) {
-    // Basic validation - adjust according to your needs
-    final phoneRegex = RegExp(r'^[0-9]{10}$');
-    return phoneRegex.hasMatch(phone.replaceAll(RegExp(r'[^0-9]'), ''));
-  }
-
-  // ✅ Resend OTP method
-  void resendOtp() {
-    if (phone.value.isNotEmpty) {
-      sendOtp();
-    } else {
-      AppHelpers.showSnackBar(
-          title: "Error",
-          message: "Please enter phone number first",
-          isError: true
-      );
-      phoneFocus.requestFocus();
-    }
-  }
 }

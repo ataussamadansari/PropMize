@@ -42,72 +42,39 @@ class AuthBottomSheet extends GetView<AuthController>
                                 ),
                                 const SizedBox(height: 24),
 
-                              // Phone Number Field
-                              TextFormField(
-                                controller: controller.phoneController,
-                                focusNode: controller.phoneFocus,
-                                keyboardType: TextInputType.phone,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.phone, color: AppColors.primary),
-                                  hintText: "Enter 10-digit phone number",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 14,
-                                  ),
-                                ),
-                                onChanged: (value) {
-                                  // ✅ Controller listener automatically handle karega
-                                },
-                                onFieldSubmitted: (value) {
-                                  // ✅ Enter press karne par OTP send karo
-                                  if (value.trim().isNotEmpty && !controller.otpSent.value) {
-                                    controller.sendOtp();
-                                  }
-                                },
-                              ),
-
-
-                              const SizedBox(height: 16),
-
-                              // OTP Field
-                              if (controller.otpSent.value)
-                                AnimatedSize(
-                                  duration: const Duration(milliseconds: 300),
-                                  child: TextFormField(
-                                    controller: controller.otpController,
-                                    focusNode: controller.otpFocus,
-                                    keyboardType: TextInputType.number,
-                                    textInputAction: TextInputAction.done,
-                                    maxLength: 6,
+                                // Phone Number Field
+                                TextFormField(
+                                    controller: controller.phoneController,
+                                    keyboardType: TextInputType.phone,
+                                    onChanged: (val) => controller.phone.value = val,
                                     decoration: InputDecoration(
-                                      prefixIcon: const Icon(Icons.lock, color: AppColors.primary),
-                                      hintText: "Enter 6-digit OTP",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      counterText: "",
-                                      contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                        vertical: 14,
-                                      ),
-                                    ),
-                                    onChanged: (value) {
-                                      // ✅ Auto verify jab OTP complete ho
-                                      if (value.length == 6) {
-                                        controller.verifyOtp();
-                                      }
-                                    },
-                                    onFieldSubmitted: (value) {
-                                      if (value.isNotEmpty) {
-                                        controller.verifyOtp();
-                                      }
-                                    },
-                                  ),
+                                        prefixIcon: const Icon(
+                                            Icons.phone, color: AppColors.primary),
+                                        hintText: "Phone Number",
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12)
+                                        )
+                                    )
                                 ),
+
+                                const SizedBox(height: 16),
+
+                                // OTP Field
+                                if (controller.otpSent.value)
+                                TextFormField(
+                                    controller: controller.otpController,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (val) => controller.otp.value = val,
+                                    decoration: InputDecoration(
+                                        prefixIcon: const Icon(
+                                            Icons.lock, color: AppColors.primary),
+                                        hintText: "Enter OTP",
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12)
+                                        )
+                                    )
+                                ),
+
                                 const SizedBox(height: 24),
 
                                 // Action Button
@@ -126,9 +93,8 @@ class AuthBottomSheet extends GetView<AuthController>
                                                     bool res = await controller.verifyOtp();
                                                     if (res)
                                                     {
-                                                        // Navigator.pop(context);
-                                                      controller.resetAuthState();
-                                                      Get.back();
+                                                        controller.resetAuthState();
+                                                        Navigator.pop(context);
                                                     }
                                                 }
                                             },

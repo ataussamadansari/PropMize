@@ -10,7 +10,7 @@ import 'app/data/services/storage_services.dart';
 import 'app/modules/auth_screen/controllers/auth_controller.dart';
 
 void main() async{
-  await dotenv.load();
+  await dotenv.load(fileName: ".env");
   await GetStorage.init();
   await _initServices();
 
