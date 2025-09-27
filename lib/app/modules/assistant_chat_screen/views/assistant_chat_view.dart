@@ -22,6 +22,7 @@ class AssistantChatView extends GetView<AssistantChatController>
     Widget build(BuildContext context)
     {
         return Scaffold(
+            key: controller.globalKey,
             appBar: AppBar(
                 title: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,32 +65,53 @@ class AssistantChatView extends GetView<AssistantChatController>
                             Obx(()
                                 {
                                     final isLoggedIn = controller.currentUserId.value.isNotEmpty;
+                                    final avatarUrl = controller.authController.profile.value?.data?.avatar ?? "";
                                     return Column(
                                         children: [
-                                            isLoggedIn ? Column(
-                                                    children: [
-                                                        if (controller.authController.profile.value?.data != null) ...[
+                                            isLoggedIn ? Padding(
+                                                    padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 24.0, bottom: 8.0),
+                                                    child: Column(
+                                                        children: [
+                                                            if (controller.authController.profile.value?.data != null) ...[
 
-                                                          FlutterLogo(size: 80),
-                                                          const SizedBox(height: 15),
-                                                          Text(
-                                                              controller.authController.profile.value?.data?.name ?? "Not Available", textAlign: TextAlign.center,
-                                                              style: context.textTheme.displaySmall
-                                                          ),
+                                                                CircleAvatar(
+                                                                    radius: 38,
+                                                                    backgroundColor: Colors.deepOrange,
+                                                                    backgroundImage: NetworkImage(avatarUrl),
+                                                                    child: Text(
+                                                                        (controller.authController.profile.value?.data?.name?.isNotEmpty == true
+                                                                            ? controller.authController.profile.value!.data!.name!.substring(0, 1).toUpperCase()
+                                                                            : "U"),
+                                                                        style: context.textTheme.displayLarge?.copyWith(color: Colors.white)
+                                                                    )
+                                                                ),
 
-                                                          Text(
-                                                              controller.authController.profile.value?.data?.email ?? "Not Provider",
-                                                              textAlign: TextAlign.center,
-                                                              style: context.textTheme.labelMedium
-                                                          ),
-                                                          SizedBox(height: 8),
-                                                          Text(
-                                                              capitalize(controller.authController.profile.value?.data?.role ?? "Not Available"),
-                                                              textAlign: TextAlign.center,
-                                                              style: context.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600)
-                                                          )
-                                                        ],
-                                                    ]
+                                                                const SizedBox(height: 8),
+                                                                Text(
+                                                                    controller.authController.profile.value?.data?.name ?? "User",
+                                                                    style: context.textTheme.headlineMedium,
+                                                                    overflow: TextOverflow.fade,
+                                                                    maxLines: 1,
+                                                                    softWrap: false
+                                                                ),
+
+                                                                Text(
+                                                                    controller.authController.profile.value?.data?.email ?? "---",
+                                                                    style: context.textTheme.labelMedium,
+                                                                    overflow: TextOverflow.fade,
+                                                                    maxLines: 1,
+                                                                    softWrap: false
+                                                                ),
+
+                                                                const SizedBox(height: 8),
+                                                                Text(
+                                                                    capitalize(controller.authController.profile.value?.data?.role ?? "Not Available"),
+                                                                    textAlign: TextAlign.center,
+                                                                    style: context.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600)
+                                                                )
+                                                            ]
+                                                        ]
+                                                    )
                                                 ) : SizedBox.shrink(),
 
                                             Divider(color: Colors.grey.withAlpha(100)),
@@ -99,6 +121,7 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                     subtitle: "View Profile",
                                                     onTap: ()
                                                     {
+                                                        controller.globalKey.currentState?.closeDrawer();
                                                         controller.goToProfile();
                                                     }
                                                 ) : SizedBox.shrink(),
@@ -109,7 +132,7 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                 trailing: "Switch",
                                                 onTap: ()
                                                 {
-                                                  isLoggedIn ? "" : AppHelpers.showSnackBar(title: "Alert", message: "Please login to switch to seller mode");
+                                                    isLoggedIn ? AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...") : AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Please login to switch to seller mode");
                                                 }
                                             ),
                                             DrawerMenuItem(
@@ -118,38 +141,43 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                 subtitle: "Explore property listed in my city",
                                                 onTap: ()
                                                 {
+                                                    controller.globalKey.currentState?.closeDrawer();
                                                 }
                                             ),
                                             isLoggedIn ? DrawerMenuItem(
-                                                leading: CupertinoIcons.heart,
-                                                title: "Saved",
-                                                subtitle: "Properties saved for later viewing",
-                                                onTap: ()
-                                                {
-                                                }
-                                            ) : SizedBox.shrink(),
+                                                    leading: CupertinoIcons.heart,
+                                                    title: "Saved",
+                                                    subtitle: "Properties saved for later viewing",
+                                                    onTap: ()
+                                                    {
+                                                        controller.globalKey.currentState?.closeDrawer();
+                                                    }
+                                                ) : SizedBox.shrink(),
                                             isLoggedIn ? DrawerMenuItem(
-                                                leading: CupertinoIcons.eye,
-                                                title: "Recently Viewed",
-                                                subtitle: "Recently viewed properties",
-                                                onTap: ()
-                                                {
-                                                }
-                                            ) : SizedBox.shrink(),
+                                                    leading: CupertinoIcons.eye,
+                                                    title: "Recently Viewed",
+                                                    subtitle: "Recently viewed properties",
+                                                    onTap: ()
+                                                    {
+                                                        controller.globalKey.currentState?.closeDrawer();
+                                                    }
+                                                ) : SizedBox.shrink(),
                                             isLoggedIn ? DrawerMenuItem(
-                                                leading: CupertinoIcons.phone,
-                                                title: "Contacted",
-                                                subtitle: "Properties where to you connected ower",
-                                                onTap: ()
-                                                {
-                                                }
-                                            ) : SizedBox.shrink(),
+                                                    leading: CupertinoIcons.phone,
+                                                    title: "Contacted",
+                                                    subtitle: "Properties where to you connected ower",
+                                                    onTap: ()
+                                                    {
+                                                        controller.globalKey.currentState?.closeDrawer();
+                                                    }
+                                                ) : SizedBox.shrink(),
                                             DrawerMenuItem(
                                                 leading: Icons.add_home_work_outlined,
                                                 title: "New Projects",
                                                 subtitle: "New projects in your city",
                                                 onTap: ()
                                                 {
+                                                    controller.globalKey.currentState?.closeDrawer();
                                                 }
                                             ),
                                             DrawerMenuItem(
@@ -158,6 +186,7 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                 subtitle: "Buyer's guide and advice",
                                                 onTap: ()
                                                 {
+                                                    controller.globalKey.currentState?.closeDrawer();
                                                 }
                                             ),
                                             DrawerMenuItem(
@@ -166,7 +195,7 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                 subtitle: "Help and support center",
                                                 onTap: ()
                                                 {
-                                                    // controller.globalKey.currentState?.closeDrawer();
+                                                    controller.globalKey.currentState?.closeDrawer();
                                                 }
                                             ),
                                             Divider(color: Colors.grey.withAlpha(100)),
@@ -179,10 +208,12 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                     : "Sign out of your account",
                                                 onTap: ()
                                                 {
+                                                    controller.globalKey.currentState?.closeDrawer();
+
                                                     if (StorageServices.to.userId.value.isEmpty)
                                                     {
                                                         Get.bottomSheet(
-                                                            const AuthBottomSheet(),
+                                                            AuthBottomSheet(),
                                                             isScrollControlled: true,
                                                             backgroundColor: Colors.transparent
                                                         );

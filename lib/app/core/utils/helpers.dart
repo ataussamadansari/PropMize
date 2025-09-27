@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class AppHelpers {
 
   static void showSnackBar({
+    IconData? icon,
     required String title,
     required String message,
     bool? isError,
@@ -17,7 +18,7 @@ class AppHelpers {
       // snackPosition: SnackPosition.BOTTOM,
       backgroundColor: isError == true ? Colors.red[200] : isError == false ? Colors.green[200] : null,
       icon: Icon(
-        isError == true ? Icons.error : isError == false ? Icons.check_circle : null,
+        isError == true ? Icons.error : isError == false ? Icons.check_circle : icon,
         color: isError == true ? Colors.red : isError == false ? Colors.green : null,
       ),
       margin: const EdgeInsets.all(16),

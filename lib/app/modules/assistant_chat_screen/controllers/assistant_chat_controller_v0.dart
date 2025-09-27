@@ -65,7 +65,7 @@ class AssistantChatController extends GetxController {
     {
       hasError.value = true;
       errorMessage.value = e.toString();
-      AppHelpers.showSnackBar(title: "Catch Error", message: errorMessage.value, isError: true);
+      AppHelpers.showSnackBar(title: "Error", message: errorMessage.value, isError: true);
     }
     finally
     {

@@ -99,12 +99,12 @@ class ProfileController extends GetxController
     Future<void> loadProfileData()
     async {
         ever(authController.profile, (profile)
-        {
-            if (profile != null && profile.data != null)
             {
-                updateControllersWithProfileData(profile.data!);
+                if (profile != null && profile.data != null)
+                {
+                    updateControllersWithProfileData(profile.data!);
+                }
             }
-        }
         );
 
         // ✅ Agar data already available hai to use karo
@@ -124,7 +124,7 @@ class ProfileController extends GetxController
     {
         try
         {
-            if (userData.name == null && userData.email == null)
+            if (userData.name == null && userData.email == null) 
             {
                 return;
             }
@@ -210,22 +210,22 @@ class ProfileController extends GetxController
 
             // ✅ Property Types handle karo
             if (userData.preferences?.propertyTypes != null &&
-                userData.preferences!.propertyTypes!.isNotEmpty)
+                userData.preferences!.propertyTypes!.isNotEmpty) 
             {
                 preferredPropertyTypes.value = userData.preferences!.propertyTypes!.join(", ");
             }
-            else
+            else 
             {
                 preferredPropertyTypes.value = "";
             }
 
             // ✅ Locations handle karo
             if (userData.preferences?.locations != null &&
-                userData.preferences!.locations!.isNotEmpty)
+                userData.preferences!.locations!.isNotEmpty) 
             {
                 preferredLocations.value = userData.preferences!.locations!.join(", ");
             }
-            else
+            else 
             {
                 preferredLocations.value = "";
             }
@@ -267,7 +267,7 @@ class ProfileController extends GetxController
         }
         catch (e)
         {
-            AppHelpers.showSnackBar(title: "Error", message: "Updating profile data: $e", isError: true);
+          AppHelpers.showSnackBar(title: "Error", message: "Updating profile data: $e", isError: true);
         }
     }
 
@@ -317,7 +317,7 @@ class ProfileController extends GetxController
         {
             isLoading.value = true;
 
-            if (authController.profile.value?.data == null)
+            if (authController.profile.value?.data == null) 
             {
                 AppHelpers.showSnackBar(title: "Error", message: "Please login to update profile", isError: true);
                 return;
@@ -357,7 +357,7 @@ class ProfileController extends GetxController
       //   }
       // };
 
-            final updateData =
+            final updateData = 
             {
                 "name": fullNameController.text.trim(),
                 "bio": bioController.text.trim(),
@@ -393,13 +393,13 @@ class ProfileController extends GetxController
 
             final response = await authController.updateProfile(updateData);
 
-            if (response.success)
+            if (response.success) 
             {
                 isEnable.value = false;
                 AppHelpers.showSnackBar(title: "Success", message: "Profile updated successfully", isError: false);
                 authController.me();
             }
-            else
+            else 
             {
               AppHelpers.showSnackBar(title: "Error", message: "else updateProfile ${response.message}", isError: true);
             }
@@ -421,7 +421,7 @@ class ProfileController extends GetxController
         {
             isLoading.value = true;
 
-            if (authController.profile.value?.data == null)
+            if (authController.profile.value?.data == null) 
             {
                 AppHelpers.showSnackBar(title: "Error", message: "Please login to update profile", isError: true);
                 return;
@@ -434,36 +434,36 @@ class ProfileController extends GetxController
             // 🔹 Basic Info - Compare with original data
             final originalData = authController.profile.value!.data!;
 
-            if (fullNameController.text.trim() != (originalData.name ?? ""))
+            if (fullNameController.text.trim() != (originalData.name ?? "")) 
             {
                 updateData["name"] = fullNameController.text.trim();
             }
 
-            if (bioController.text.trim() != (originalData.bio?.toString() ?? ""))
+            if (bioController.text.trim() != (originalData.bio?.toString() ?? "")) 
             {
                 updateData["bio"] = bioController.text.trim();
             }
 
-            if (emailAddressController.text.trim() != (originalData.email ?? ""))
+            if (emailAddressController.text.trim() != (originalData.email ?? "")) 
             {
                 updateData["email"] = emailAddressController.text.trim();
             }
 
             // 🔹 Address - Only if changed
             final originalAddress = originalData.address;
-            if (streetController.text.trim() != (originalAddress?.street ?? ""))
+            if (streetController.text.trim() != (originalAddress?.street ?? "")) 
             {
                 updateData["address.street"] = streetController.text.trim();
             }
-            if (cityController.text.trim() != (originalAddress?.city ?? ""))
+            if (cityController.text.trim() != (originalAddress?.city ?? "")) 
             {
                 updateData["address.city"] = cityController.text.trim();
             }
-            if (stateController.text.trim() != (originalAddress?.state ?? ""))
+            if (stateController.text.trim() != (originalAddress?.state ?? "")) 
             {
                 updateData["address.state"] = stateController.text.trim();
             }
-            if (zipCodeController.text.trim() != (originalAddress?.zipCode ?? ""))
+            if (zipCodeController.text.trim() != (originalAddress?.zipCode ?? "")) 
             {
                 updateData["address.zipCode"] = zipCodeController.text.trim();
             }
@@ -479,7 +479,7 @@ class ProfileController extends GetxController
                 .toList();
 
             final originalPropertyTypes = originalPrefs?.propertyTypes ?? [];
-            if (!_areListsEqual(newPropertyTypes, originalPropertyTypes))
+            if (!_areListsEqual(newPropertyTypes, originalPropertyTypes)) 
             {
                 updateData["preferences.propertyTypes"] = newPropertyTypes;
             }
@@ -490,9 +490,9 @@ class ProfileController extends GetxController
             final originalMin = originalPrefs?.priceRange?.min ?? 0;
             final originalMax = originalPrefs?.priceRange?.max ?? 10000000;
 
-            if (newMin != originalMin || newMax != originalMax)
+            if (newMin != originalMin || newMax != originalMax) 
             {
-                updateData["preferences.priceRange"] =
+                updateData["preferences.priceRange"] = 
                 {
                     "min": newMin,
                     "max": newMax
@@ -507,28 +507,28 @@ class ProfileController extends GetxController
                 .toList();
 
             final originalLocations = originalPrefs?.locations ?? [];
-            if (!_areListsEqual(newLocations, originalLocations))
+            if (!_areListsEqual(newLocations, originalLocations)) 
             {
                 updateData["preferences.locations"] = newLocations;
             }
 
             // Notifications - Only if changed
             final originalNotifications = originalPrefs?.notifications;
-            if (emailNotifications.value != (originalNotifications?.email ?? true))
+            if (emailNotifications.value != (originalNotifications?.email ?? true)) 
             {
                 updateData["preferences.notifications.email"] = emailNotifications.value;
             }
-            if (smsNotifications.value != (originalNotifications?.sms ?? true))
+            if (smsNotifications.value != (originalNotifications?.sms ?? true)) 
             {
                 updateData["preferences.notifications.sms"] = smsNotifications.value;
             }
-            if (pushNotifications.value != (originalNotifications?.push ?? true))
+            if (pushNotifications.value != (originalNotifications?.push ?? true)) 
             {
                 updateData["preferences.notifications.push"] = pushNotifications.value;
             }
 
             // ✅ Agar koi change nahi hai to API call avoid karo
-            if (updateData.isEmpty)
+            if (updateData.isEmpty) 
             {
                 Get.snackbar("Info", "No changes detected to update");
                 isLoading.value = false;
@@ -537,7 +537,7 @@ class ProfileController extends GetxController
 
             final response = await authController.updateProfile(updateData);
 
-            if (response.success)
+            if (response.success) 
             {
                 isEnable.value = false;
                 AppHelpers.showSnackBar(title: "Profile Update", message: response.message, isError: false);
@@ -559,7 +559,7 @@ class ProfileController extends GetxController
 
 
     // ✅ Helper method to compare lists
-    bool _areListsEqual(List<dynamic> list1, List<dynamic> list2)
+    bool _areListsEqual(List<dynamic> list1, List<dynamic> list2) 
     {
         if (list1.length != list2.length) return false;
         for (int i = 0; i < list1.length; i++)

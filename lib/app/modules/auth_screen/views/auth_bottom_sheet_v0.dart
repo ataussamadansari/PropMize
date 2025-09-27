@@ -90,12 +90,13 @@ class AuthBottomSheet extends GetView<AuthController>
                                                 }
                                                 else
                                                 {
-                                                    bool res = await controller.verifyOtp();
+                                                  await controller.verifyOtp();
+                                                    /*bool res = await controller.verifyOtp();
                                                     if (res)
                                                     {
                                                         controller.resetAuthState();
                                                         Navigator.pop(context);
-                                                    }
+                                                    }*/
                                                 }
                                             },
                                         style: ElevatedButton.styleFrom(

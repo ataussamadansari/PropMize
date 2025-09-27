@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
@@ -71,13 +72,7 @@ class HomeView extends GetView<HomeController>
                                     title: "Sell / Rent Property",
                                     subtitle: "List your property & reach genuine buyers/tenants",
                                     onTap: () {
-                                      /*ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text("Sell / Rent Property - Coming Soon"),
-                                          duration: Duration(seconds: 2),
-                                        ),
-                                      );*/
-                                      AppHelpers.showSnackBar(title: "Sell / Rent Property", message: "Coming Soon");
+                                      AppHelpers.showSnackBar(icon: CupertinoIcons.bell,title: "Sell / Rent Property", message: "Coming Soon");
                                     },
                                   ),
                                 ],

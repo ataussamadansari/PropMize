@@ -14,6 +14,8 @@ class AssistantChatController extends GetxController {
 
   final AiChatRepository _aiChatRepository = AiChatRepository();
 
+  GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
+
   // Reactive Variables
   final aiChat = Rxn<AiStartChatModel>();
   final messageModel = Rxn<MessageModel>();
@@ -86,18 +88,12 @@ class AssistantChatController extends GetxController {
       } else {
         hasError.value = true;
         errorMessage.value = response.message;
-        AppHelpers.showSnackBar(
-            title: "Error",
-            message: response.message,
-            isError: true);
+        AppHelpers.showSnackBar(title: "Error", message: response.message, isError: true);
       }
     } catch (e) {
       hasError.value = true;
       errorMessage.value = e.toString();
-      AppHelpers.showSnackBar(
-          title: "Error",
-          message: errorMessage.value,
-          isError: true);
+      AppHelpers.showSnackBar(title: "Error", message: errorMessage.value, isError: true);
     } finally {
       isLoading.value = false;
     }
@@ -120,19 +116,12 @@ class AssistantChatController extends GetxController {
       } else {
         hasError.value = true;
         errorMessage.value = response.message;
-        AppHelpers.showSnackBar(
-            title: "Error",
-            message: response.message,
-            isError: true
-        );
+        AppHelpers.showSnackBar(title: "Error", message: response.message, isError: true);
       }
     } catch (e) {
       hasError.value = true;
       errorMessage.value = e.toString();
-      AppHelpers.showSnackBar(
-          title: "Error",
-          message: errorMessage.value,
-          isError: true);
+      AppHelpers.showSnackBar(title: "Error", message: errorMessage.value, isError: true);
     } finally {
       isLoading.value = false;
       isSendingMessage.value = false;
