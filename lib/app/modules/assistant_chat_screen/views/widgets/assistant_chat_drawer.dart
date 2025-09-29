@@ -14,7 +14,7 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
     const AssistantChatDrawer({super.key});
 
     @override
-    Widget build(BuildContext context) 
+    Widget build(BuildContext context)
     {
         return Drawer(
             child: SafeArea(
@@ -66,7 +66,8 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                                 subtitle: "Properties saved for later viewing",
                                                 onTap: ()
                                                 {
-                                                    controller.globalKey.currentState?.closeDrawer();
+                                                    // controller.globalKey.currentState?.closeDrawer();
+                                                    AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
                                                 }
                                             ) : SizedBox.shrink(),
                                         isLoggedIn ? DrawerMenuItem(
@@ -75,7 +76,8 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                                 subtitle: "Recently viewed properties",
                                                 onTap: ()
                                                 {
-                                                    controller.globalKey.currentState?.closeDrawer();
+                                                    // controller.globalKey.currentState?.closeDrawer();
+                                                    AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
                                                 }
                                             ) : SizedBox.shrink(),
                                         isLoggedIn ? DrawerMenuItem(
@@ -84,7 +86,8 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                                 subtitle: "Properties where to you connected ower",
                                                 onTap: ()
                                                 {
-                                                    controller.globalKey.currentState?.closeDrawer();
+                                                    // controller.globalKey.currentState?.closeDrawer();
+                                                    AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
                                                 }
                                             ) : SizedBox.shrink(),
                                         DrawerMenuItem(
@@ -93,7 +96,8 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                             subtitle: "New projects in your city",
                                             onTap: ()
                                             {
-                                                controller.globalKey.currentState?.closeDrawer();
+                                                // controller.globalKey.currentState?.closeDrawer();
+                                                AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
                                             }
                                         ),
                                         DrawerMenuItem(
@@ -102,7 +106,8 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                             subtitle: "Buyer's guide and advice",
                                             onTap: ()
                                             {
-                                                controller.globalKey.currentState?.closeDrawer();
+                                                // controller.globalKey.currentState?.closeDrawer();
+                                                AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
                                             }
                                         ),
                                         DrawerMenuItem(
@@ -111,7 +116,8 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                             subtitle: "Help and support center",
                                             onTap: ()
                                             {
-                                                controller.globalKey.currentState?.closeDrawer();
+                                                // controller.globalKey.currentState?.closeDrawer();
+                                                AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
                                             }
                                         ),
                                         Divider(color: Colors.grey.withAlpha(100)),
