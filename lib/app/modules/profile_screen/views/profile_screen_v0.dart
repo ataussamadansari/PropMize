@@ -16,8 +16,6 @@ class ProfileScreen extends GetView<ProfileController>
     @override
     Widget build(BuildContext context)
     {
-
-        final user = controller.authController.profile.value?.data;
         return Obx(() => ListView(
                 padding: const EdgeInsets.all(16.0),
                 children: [
@@ -36,96 +34,34 @@ class ProfileScreen extends GetView<ProfileController>
                         ),
                         child: Column(
                             children: [
-
-                                Stack(
-                                    children: [
-                                        // 🔹 Gradient Header
-                                        Container(
-                                            height: 150,
-                                            decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.vertical(top: Radius.circular(12))
-                                            )
-                                        ),
-                                        // 🔹 Gradient Header
-                                        Container(
-                                            height: 100,
-                                            decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                                                gradient: AppColors.primaryGradient
-                                            )
-                                        ),
-                                        Positioned(
-                                            left: 0,
-                                            right: 0,
-                                            bottom: 10,
-                                            child: Positioned(
-                                                left: 0,
-                                                right: 0,
-                                                bottom: 10,
-                                                child: CircleAvatar(
-                                                    radius: 40,
-                                                    backgroundColor: Theme.of(context).cardTheme.color,
-                                                    child: CircleAvatar(
-                                                        radius: 38,
-                                                        backgroundImage: controller.selectedImage.value != null
-                                                            ? FileImage(controller.selectedImage.value!) as ImageProvider
-                                                            : (user?.avatar != null && user!.avatar!.isNotEmpty
-                                                                ? NetworkImage(user.avatar!) // 👈 backend image
-                                                                : null),
-                                                        child: (controller.selectedImage.value == null &&
-                                                            (user?.avatar == null || user!.avatar!.isEmpty))
-                                                            ? Text(
-                                                                (user?.name?.isNotEmpty == true
-                                                                    ? user!.name!.substring(0, 1).toUpperCase()
-                                                                    : "U"),
-                                                                style: context.textTheme.displayLarge?.copyWith(
-                                                                    color: Colors.white
-                                                                )
-                                                            )
-                                                            : null
-                                                    )
-                                                )
-                                            )
-                                          /*CircleAvatar(
-                                                radius: 40,
-                                                backgroundColor: Theme.of(context).cardTheme.color,
-                                                child: CircleAvatar(
-                                                    radius: 38,
-                                                    backgroundColor: Colors.deepOrange,
-                                                    child: Text(
-                                                        (controller.authController.profile.value?.data?.name?.isNotEmpty == true
-                                                            ? controller.authController.profile.value!.data!.name!.substring(0, 1).toUpperCase()
-                                                            : "U"),
-                                                        style: context.textTheme.displayLarge?.copyWith(color: Colors.white)
-                                                    )
-                                                )
-                                            )*/
-                                        ),
-
-                                        controller.isEnable.value ?
-                                            Positioned(
-                                                left: 50, right: 0, bottom: 12,
-                                                child: InkWell(
-                                                    onTap: controller.showImageSourceOptions,
-                                                    child: Container(
-                                                        padding: EdgeInsets.all(4.0),
-                                                        decoration: BoxDecoration(
-                                                            color: context.theme.cardTheme.color,
-                                                            shape: BoxShape.circle,
-                                                            boxShadow: [
-                                                                BoxShadow(
-                                                                    color: Colors.black.withOpacity(0.1),
-                                                                    blurRadius: 10,
-                                                                    offset: const Offset(0, 8)
-                                                                )
-                                                            ]
-                                                        ),
-                                                        child: Icon(CupertinoIcons.camera, size: 16)
-                                                    )
-                                                )
-                                            ) : SizedBox.shrink()
-                                    ]
+                                // 🔹 Gradient Header
+                                Container(
+                                    height: 100,
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                                        gradient: AppColors.primaryGradient
+                                    )
                                 ),
+
+                                // 🔹 Avatar (Overlap)
+                                Transform.translate(
+                                    offset: const Offset(0, -40),
+                                    child: CircleAvatar(
+                                        radius: 40,
+                                        backgroundColor: Theme.of(context).cardTheme.color,
+                                        child: CircleAvatar(
+                                            radius: 38,
+                                            backgroundColor: Colors.deepOrange,
+                                            child: Text(
+                                                (controller.authController.profile.value?.data?.name?.isNotEmpty == true
+                                                    ? controller.authController.profile.value!.data!.name!.substring(0, 1).toUpperCase()
+                                                    : "U"),
+                                                style: context.textTheme.displayLarge?.copyWith(color: Colors.white)
+                                            )
+                                        )
+                                    )
+                                ),
+                                
 
                                 // 🔹 Name & Location
                                 Text(

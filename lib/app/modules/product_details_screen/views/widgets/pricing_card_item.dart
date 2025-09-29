@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 
+import '../../../../core/utils/helpers.dart';
+
 class PricingCardItem extends StatelessWidget {
   final Pricing? pricing;
   final int? price;
+  final String? currency;
 
-  const PricingCardItem({super.key, this.pricing, this.price});
+  const PricingCardItem({super.key, this.pricing, this.price, this.currency});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,8 @@ class PricingCardItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                "₹ $basePrice",
+                // "₹ $basePrice",
+                '${AppHelpers.formatCurrency(basePrice ?? 0)} ${currency ?? 'INR'}',
                 style: context.textTheme.headlineMedium?.copyWith(color: Colors.green),
               ),
               if (pricing?.basePrice != null)

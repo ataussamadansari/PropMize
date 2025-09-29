@@ -294,7 +294,7 @@ class ProductDetailsView extends GetView<ProductDetailsController>
 
                                 // Pricing
                                 const SizedBox(height: 8),
-                                PricingCardItem(pricing: details.pricing, price: details.price),
+                                PricingCardItem(pricing: details.pricing, price: details.price, currency: details.currency),
 
                                 // Property Overview
                                 const SizedBox(height: 8),

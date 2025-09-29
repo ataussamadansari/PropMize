@@ -6,27 +6,20 @@ import 'package:prop_mize/app/data/models/properties/properties_model.dart';
 import '../../../data/repositories/properties/properties_repository.dart';
 import '../views/widgets/filter_bottom_sheet.dart';
 
-
 class AllListingController extends GetxController {
   final PropertiesRepository _propertiesRepo = PropertiesRepository();
 
   // Search
   final TextEditingController searchController = TextEditingController();
-  final Debouncer debouncer = Debouncer(milliseconds: 800);
+  final Debouncer debouncer = Debouncer(milliseconds: 500);
 
   // Filters
   final RxList<String> selectedPropertyTypes = <String>[].obs;
-  // final TextEditingController minPriceController = TextEditingController();
-  // final TextEditingController maxPriceController = TextEditingController();
+  final TextEditingController minPriceController = TextEditingController();
+  final TextEditingController maxPriceController = TextEditingController();
   final RxList<String> selectedBedrooms = <String>[].obs;
-  final RxList<String> selectedBathrooms = <String>[].obs;
   final RxBool showFeaturedOnly = false.obs;
   final RxBool showPremiumOnly = false.obs;
-
-  // Controller me
-  var minPrice = 0.0.obs;
-  var maxPrice = 10000000.0.obs;
-
 
   // Properties
   final RxList<Data> properties = <Data>[].obs;
@@ -37,18 +30,12 @@ class AllListingController extends GetxController {
   final RxString errorMessage = ''.obs;
   final RxBool hasError = false.obs;
 
-  final RxString searchText = ''.obs;  // add this
-
-
-  // String currentSearchQuery = "";
-
   @override
   void onInit() {
     super.onInit();
     loadProperties();
   }
 
-  // ---------------- LOAD PROPERTIES ----------------
   Future<void> loadProperties({bool reset = true}) async {
     try {
       if (reset) {
@@ -64,27 +51,26 @@ class AllListingController extends GetxController {
       final Map<String, dynamic> filters = {};
 
       // Apply filters
-      if (selectedPropertyTypes.isNotEmpty) filters['propertyType'] = selectedPropertyTypes;
-      // if (minPriceController.text.isNotEmpty) filters['minPrice'] = int.tryParse(minPriceController.text);
-      // if (maxPriceController.text.isNotEmpty) filters['maxPrice'] = int.tryParse(maxPriceController.text);
+      if (selectedPropertyTypes.isNotEmpty) {
+        filters['propertyType'] = selectedPropertyTypes;
+      }
+      if (minPriceController.text.isNotEmpty) {
+        filters['minPrice'] = int.tryParse(minPriceController.text);
+      }
+      if (maxPriceController.text.isNotEmpty) {
+        filters['maxPrice'] = int.tryParse(maxPriceController.text);
+      }
+      if (selectedBedrooms.isNotEmpty) {
+        filters['bedrooms'] = selectedBedrooms;
+      }
+      if (showFeaturedOnly.value) {
+        filters['featured'] = true;
+      }
+      if (showPremiumOnly.value) {
+        filters['premium'] = true;
+      }
 
-      if (minPrice.value.isGreaterThan(0)) filters['minPrice'] = minPrice.value;
-      if (maxPrice.value.isLowerThan(10000000)) filters['maxPrice'] = maxPrice.value;
-
-      if (selectedBedrooms.isNotEmpty) filters['bedrooms'] = selectedBedrooms;
-      if (selectedBathrooms.isNotEmpty) filters['bathrooms'] = selectedBathrooms;
-      if (showFeaturedOnly.value) filters['featured'] = true;
-      if (showPremiumOnly.value) filters['premium'] = true;
-
-      // If search query exists, use search endpoint
-      final response = searchText.isNotEmpty
-          ? await _propertiesRepo.searchProperties(
-        query: searchText.value,
-        page: currentPage.value,
-        limit: 10,
-        filters: filters.isNotEmpty ? filters : null,
-      )
-          : await _propertiesRepo.getProperties(
+      final response = await _propertiesRepo.getProperties(
         page: currentPage.value,
         limit: 10,
         filters: filters.isNotEmpty ? filters : null,
@@ -99,7 +85,7 @@ class AllListingController extends GetxController {
           properties.addAll(newProperties);
         }
 
-        hasMore.value = newProperties.length == 10; // Pagination check
+        hasMore.value = newProperties.length == 10; // If we got less than limit, no more data
       } else {
         hasError.value = true;
         errorMessage.value = response.message;
@@ -113,43 +99,41 @@ class AllListingController extends GetxController {
     }
   }
 
-  // ---------------- SEARCH ----------------
-  void searchProperties(String query) {
-    searchText.value = query;
-    currentPage.value = 1;
-    properties.clear();
-    hasMore.value = true;
-    loadProperties(reset: true);
-  }
+  Future<void> searchProperties(String query) async {
+    try {
+      isLoading.value = true;
+      currentPage.value = 1;
+      properties.clear();
+      hasMore.value = true;
 
-  void clearSearch() {
-    searchController.clear();
-    searchText.value = "";
-    removeFocus();
-    loadProperties(reset: true);
-  }
+      final response = await _propertiesRepo.searchProperties(
+        query: query,
+        page: currentPage.value,
+        limit: 10,
+      );
 
-  void removeFocus() {
-    FocusScopeNode currentFocus = FocusScope.of(Get.context!);
-    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-      currentFocus.focusedChild!.unfocus();
+      if (response.success && response.data != null) {
+        properties.value = response.data!.data ?? [];
+        hasMore.value = properties.length == 10;
+      } else {
+        hasError.value = true;
+        errorMessage.value = response.message;
+      }
+    } catch (e) {
+      hasError.value = true;
+      errorMessage.value = e.toString();
+    } finally {
+      isLoading.value = false;
     }
   }
 
-
-  /*void clearSearch() {
-    searchController.clear();
-    searchText.value = "";
-    loadProperties(reset: true);
-  }*/
-
-  // ---------------- LOAD MORE ----------------
   Future<void> loadMoreProperties() async {
     if (isLoadMore.value || !hasMore.value) return;
 
     try {
       isLoadMore.value = true;
       currentPage.value++;
+
       await loadProperties(reset: false);
     } catch (e) {
       currentPage.value--;
@@ -160,23 +144,9 @@ class AllListingController extends GetxController {
     }
   }
 
-  // ---------------- FILTERS ----------------
-  void applyFilters() {
-    loadProperties(reset: true);
-  }
-
-  void clearFilters() {
-    removeFocus();
-    selectedPropertyTypes.clear();
-    // minPriceController.clear();
-    // maxPriceController.clear();
-    maxPrice.value = 10000000.0;
-    minPrice.value = 0.0;
-    selectedBedrooms.clear();
-    selectedBathrooms.clear();
-    showFeaturedOnly.value = false;
-    showPremiumOnly.value = false;
-    loadProperties(reset: true);
+  void clearSearch() {
+    searchController.clear();
+    loadProperties();
   }
 
   void showFilterBottomSheet() {
@@ -186,8 +156,22 @@ class AllListingController extends GetxController {
     );
   }
 
+  void applyFilters() {
+    loadProperties(reset: true);
+  }
+
+  void clearFilters() {
+    selectedPropertyTypes.clear();
+    minPriceController.clear();
+    maxPriceController.clear();
+    selectedBedrooms.clear();
+    showFeaturedOnly.value = false;
+    showPremiumOnly.value = false;
+    loadProperties(reset: true);
+  }
+
   void navigateToPropertyDetails(String propertyId) {
-    Get.toNamed('/product/$propertyId');
+      Get.toNamed('/product/$propertyId');
   }
 
   @override

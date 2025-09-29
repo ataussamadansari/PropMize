@@ -183,6 +183,10 @@ class AssistantChatController extends GetxController {
     Get.toNamed('/product/$id');
   }
 
+  void goToAllListing() {
+    Get.toNamed(Routes.allListing);
+  }
+
   void goToProfile() {
     Get.toNamed(Routes.profile);
   }

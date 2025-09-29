@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -312,7 +314,8 @@ class AuthController extends GetxController
         AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Logout", message: "Logout successful");
     }
 
-    Future<ApiResponse<UserMe>> updateProfile(dynamic updateData) async {
+
+    /*Future<ApiResponse<UserMe>> updateProfile(dynamic updateData) async {
         try {
             isLoading.value = true;
             final response = await _authRepo.updateDetails(updateData);
@@ -327,7 +330,25 @@ class AuthController extends GetxController
         } finally {
             isLoading.value = false;
         }
+    }*/
+
+    Future<ApiResponse<UserMe>> updateProfile(dynamic updateData, {File? image}) async {
+        try {
+            isLoading.value = true;
+            final response = await _authRepo.updateDetails(updateData, image: image);
+
+            if (response.success) {
+                profile.value = response.data;
+            }
+
+            return response;
+        } on DioException catch (e) {
+            return ApiResponse(success: false, message: "$e");
+        } finally {
+            isLoading.value = false;
+        }
     }
+
 
 
     /*Future<ApiResponse<UserMe>> updateProfile(Map<String, dynamic> updateData) async

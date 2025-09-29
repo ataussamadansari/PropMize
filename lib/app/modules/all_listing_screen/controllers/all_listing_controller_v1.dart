@@ -16,17 +16,12 @@ class AllListingController extends GetxController {
 
   // Filters
   final RxList<String> selectedPropertyTypes = <String>[].obs;
-  // final TextEditingController minPriceController = TextEditingController();
-  // final TextEditingController maxPriceController = TextEditingController();
+  final TextEditingController minPriceController = TextEditingController();
+  final TextEditingController maxPriceController = TextEditingController();
   final RxList<String> selectedBedrooms = <String>[].obs;
   final RxList<String> selectedBathrooms = <String>[].obs;
   final RxBool showFeaturedOnly = false.obs;
   final RxBool showPremiumOnly = false.obs;
-
-  // Controller me
-  var minPrice = 0.0.obs;
-  var maxPrice = 10000000.0.obs;
-
 
   // Properties
   final RxList<Data> properties = <Data>[].obs;
@@ -65,12 +60,8 @@ class AllListingController extends GetxController {
 
       // Apply filters
       if (selectedPropertyTypes.isNotEmpty) filters['propertyType'] = selectedPropertyTypes;
-      // if (minPriceController.text.isNotEmpty) filters['minPrice'] = int.tryParse(minPriceController.text);
-      // if (maxPriceController.text.isNotEmpty) filters['maxPrice'] = int.tryParse(maxPriceController.text);
-
-      if (minPrice.value.isGreaterThan(0)) filters['minPrice'] = minPrice.value;
-      if (maxPrice.value.isLowerThan(10000000)) filters['maxPrice'] = maxPrice.value;
-
+      if (minPriceController.text.isNotEmpty) filters['minPrice'] = int.tryParse(minPriceController.text);
+      if (maxPriceController.text.isNotEmpty) filters['maxPrice'] = int.tryParse(maxPriceController.text);
       if (selectedBedrooms.isNotEmpty) filters['bedrooms'] = selectedBedrooms;
       if (selectedBathrooms.isNotEmpty) filters['bathrooms'] = selectedBathrooms;
       if (showFeaturedOnly.value) filters['featured'] = true;
@@ -125,23 +116,8 @@ class AllListingController extends GetxController {
   void clearSearch() {
     searchController.clear();
     searchText.value = "";
-    removeFocus();
     loadProperties(reset: true);
   }
-
-  void removeFocus() {
-    FocusScopeNode currentFocus = FocusScope.of(Get.context!);
-    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-      currentFocus.focusedChild!.unfocus();
-    }
-  }
-
-
-  /*void clearSearch() {
-    searchController.clear();
-    searchText.value = "";
-    loadProperties(reset: true);
-  }*/
 
   // ---------------- LOAD MORE ----------------
   Future<void> loadMoreProperties() async {
@@ -166,16 +142,14 @@ class AllListingController extends GetxController {
   }
 
   void clearFilters() {
-    removeFocus();
     selectedPropertyTypes.clear();
-    // minPriceController.clear();
-    // maxPriceController.clear();
-    maxPrice.value = 10000000.0;
-    minPrice.value = 0.0;
+    minPriceController.clear();
+    maxPriceController.clear();
     selectedBedrooms.clear();
     selectedBathrooms.clear();
     showFeaturedOnly.value = false;
     showPremiumOnly.value = false;
+    searchController.clear();
     loadProperties(reset: true);
   }
 

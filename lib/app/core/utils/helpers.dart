@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppHelpers {
 
@@ -76,4 +79,15 @@ class AppHelpers {
         barrierDismissible: false
     );
   }
+
+  /// ✅ Currency format helper
+  static String formatCurrency(num value, {String symbol = '₹'}) {
+    final format = NumberFormat.currency(
+      locale: 'en_IN', // Indian locale
+      symbol: symbol,
+      decimalDigits: 0, // without paisa
+    );
+    return format.format(value);
+  }
+
 }

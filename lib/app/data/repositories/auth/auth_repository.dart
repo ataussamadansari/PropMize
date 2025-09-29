@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:prop_mize/app/core/constants/api_constants.dart';
 import 'package:prop_mize/app/data/models/api_response_model.dart';
@@ -107,7 +109,7 @@ class AuthRepository
     }
 
     // Update User
-    Future<ApiResponse<UserMe>> updateDetails(Map<String, dynamic> data) async {
+    /*Future<ApiResponse<UserMe>> updateDetails(Map<String, dynamic> data) async {
         try {
             final response = await _apiServices.put<UserMe>(
                 ApiConstants.updateProfile,
@@ -122,11 +124,47 @@ class AuthRepository
                     message: response.message,
                 );
             } else {
-                print("updateDetails Response: message- ${response.message}");
-                print("updateDetails Response: data- ${response.data}");
-                print("updateDetails Response: success- ${response.success}");
-                print("updateDetails Response: statusCode- ${response.statusCode}");
+                return ApiResponse.error(
+                    response.message,
+                    statusCode: response.statusCode,
+                );
+            }
+        } on DioException catch (e) {
+            return ApiResponse.error(
+                e.message ?? "Something went wrong",
+                statusCode: e.response?.statusCode,
+                errors: e.response?.data,
+            );
+        }
+    }*/
 
+    Future<ApiResponse<UserMe>> updateDetails(Map<String, dynamic> data, {File? image}) async {
+        try {
+            FormData formData = FormData.fromMap(data);
+
+            // Agar image hai to add kar do
+            if (image != null) {
+                formData.files.add(
+                    MapEntry(
+                        "avatar",
+                        await MultipartFile.fromFile(image.path, filename: image.path.split("/").last),
+                    ),
+                );
+            }
+
+            final response = await _apiServices.put<UserMe>(
+                ApiConstants.updateProfile,
+                    (json) => UserMe.fromJson(json),
+                data: formData,
+                cancelToken: _cancelToken,
+            );
+
+            if (response.statusCode == 200 && response.data != null) {
+                return ApiResponse.success(
+                    response.data!,
+                    message: response.message,
+                );
+            } else {
                 return ApiResponse.error(
                     response.message,
                     statusCode: response.statusCode,

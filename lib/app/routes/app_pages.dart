@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:prop_mize/app/modules/all_listing_screen/bindings/all_listing_binding.dart';
+import 'package:prop_mize/app/modules/all_listing_screen/views/all_listing_view.dart';
 import 'package:prop_mize/app/modules/auth_screen/bindings/auth_binding.dart';
 import 'package:prop_mize/app/modules/auth_screen/views/auth_view.dart';
 import 'package:prop_mize/app/modules/product_details_screen/bindings/product_details_binding.dart';
@@ -14,13 +16,15 @@ import '../modules/profile_screen/views/profile_view.dart';
 import '../modules/splash_screen/bindings/splash_bindings.dart';
 import '../modules/splash_screen/views/splash_view.dart';
 
-class AppPages {
-  static final routes = [
-    GetPage(name: Routes.splash, page: () => SplashView(), binding: SplashBinding()),
-    GetPage(name: Routes.auth, page: () => AuthView(), binding: AuthBinding()),
-    GetPage(name: Routes.home, page: () => HomeView(), binding: HomeBinding()),
-    GetPage(name: Routes.assistantChat, page: () => AssistantChatView(), binding: AssistantChatBinding()),
-    GetPage(name: Routes.profile, page: () => ProfileView(), binding: ProfileBinding()),
-    GetPage(name: Routes.productDetails, page: () => ProductDetailsView(), binding: ProductDetailsBinding()),
-  ];
+class AppPages
+{
+    static final routes = [
+        GetPage(name: Routes.splash, page: () => SplashView(), binding: SplashBinding()),
+        GetPage(name: Routes.auth, page: () => AuthView(), binding: AuthBinding()),
+        GetPage(name: Routes.home, page: () => HomeView(), binding: HomeBinding()),
+        GetPage(name: Routes.assistantChat, page: () => AssistantChatView(), binding: AssistantChatBinding()),
+        GetPage(name: Routes.profile, page: () => ProfileView(), binding: ProfileBinding()),
+        GetPage(name: Routes.allListing, page: () => AllListingView(), binding: AllListingBinding()),
+        GetPage(name: Routes.productDetails, page: () => ProductDetailsView(), binding: ProductDetailsBinding())
+    ];
 }
