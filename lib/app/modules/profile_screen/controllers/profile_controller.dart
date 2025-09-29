@@ -103,7 +103,6 @@ class ProfileController extends GetxController
 
             if (pickedFile != null) {
                 selectedImage.value = File(pickedFile.path);
-                print("Image: ${selectedImage.value}");
             }
         } catch (e) {
             AppHelpers.showSnackBar(

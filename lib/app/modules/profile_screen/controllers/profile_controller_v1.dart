@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
-import 'package:image_picker/image_picker.dart';
 import '../../../core/utils/helpers.dart';
 import '../../auth_screen/controllers/auth_controller.dart';
 import 'package:prop_mize/app/data/models/user/user_me.dart';

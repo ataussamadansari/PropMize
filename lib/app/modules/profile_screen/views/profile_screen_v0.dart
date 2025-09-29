@@ -1,9 +1,5 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/core/utils/DateTimeHelper.dart';
 import 'package:prop_mize/app/global_widgets/profile/custom_text_form_fields.dart';

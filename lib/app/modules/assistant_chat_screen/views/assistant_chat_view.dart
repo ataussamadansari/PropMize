@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:prop_mize/app/core/themes/app_colors.dart';
-import 'package:prop_mize/app/core/utils/helpers.dart';
 import 'package:prop_mize/app/data/models/ai/message_model.dart';
 import 'package:prop_mize/app/modules/assistant_chat_screen/views/widgets/assistant_chat_appbar.dart';
 import 'package:prop_mize/app/modules/assistant_chat_screen/views/widgets/assistant_chat_drawer.dart';
 
-import '../../../core/utils/capitalize.dart';
-import '../../../data/services/storage_services.dart';
 import '../../../global_widgets/chat/received_message_bubble.dart';
 import '../../../global_widgets/chat/send_message_bubble.dart';
-import '../../../global_widgets/drawer/drawer_menu_item.dart';
-import '../../../global_widgets/menu/global_menu_option.dart';
 import '../../../global_widgets/typing_indicator.dart';
-import '../../auth_screen/views/auth_bottom_sheet.dart';
 import '../controllers/assistant_chat_controller.dart';
 
 class AssistantChatView extends GetView<AssistantChatController>

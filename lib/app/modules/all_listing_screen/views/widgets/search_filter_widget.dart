@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/modules/all_listing_screen/controllers/all_listing_controller.dart';
 
 class SearchFilterWidget extends GetView<AllListingController> {
@@ -48,7 +49,7 @@ class SearchFilterWidget extends GetView<AllListingController> {
           },
           icon: Icon(
             Icons.search,
-            color: Theme.of(context).primaryColor,
+            // color: Theme.of(context).primaryColor,
           ),
         ),
         // Filter Button
@@ -56,9 +57,12 @@ class SearchFilterWidget extends GetView<AllListingController> {
           onPressed: () {
             controller.showFilterBottomSheet();
           },
+          style: IconButton.styleFrom(
+            backgroundColor: AppColors.primary.withOpacity(0.2)
+          ),
           icon: Icon(
             Icons.filter_list,
-            color: Theme.of(context).primaryColor,
+            // color: Theme.of(context).primaryColor,
           ),
         ),
       ],

@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
+import 'package:prop_mize/app/core/utils/helpers.dart';
 import 'package:prop_mize/app/modules/all_listing_screen/controllers/all_listing_controller.dart';
 
 class FilterBottomSheet extends GetView<AllListingController>
 {
-    const FilterBottomSheet({super.key});
+     const FilterBottomSheet({super.key});
 
     @override
     Widget build(BuildContext context) 
     {
         return Container(
             height: Get.height * 0.6,
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-                color: Colors.white,
+            padding: EdgeInsets.all(16),
+            decoration:  BoxDecoration(
+                color: context.theme.cardColor,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20)
@@ -141,7 +142,7 @@ class FilterBottomSheet extends GetView<AllListingController>
                                         },
                                         selectedColor: AppColors.primary,
                                         labelStyle: TextStyle(
-                                            color: isSelected ? Colors.white : Colors.black)
+                                            color: isSelected ? Colors.white : Colors.grey)
                                     );
                                 }
                             );
@@ -168,11 +169,13 @@ class FilterBottomSheet extends GetView<AllListingController>
                                 values: RangeValues(controller.minPrice.value, controller.maxPrice.value),
                                 min: 0,
                                 max: 10000000,
-                                // divisions: 100,
+                                divisions: 2000,
                                 activeColor: AppColors.primary,
                                 labels: RangeLabels(
-                                    '₹${controller.minPrice.value.toInt()}',
-                                    '₹${controller.maxPrice.value.toInt()}'
+                                    '${AppHelpers.formatCurrency(controller.minPrice.value)} ${'INR'}',
+                                    '${AppHelpers.formatCurrency(controller.maxPrice.value)} ${'INR'}'
+                                    // '₹${controller.minPrice.value.toInt()}',
+                                    // '₹${controller.maxPrice.value.toInt()}'
                                 ),
                                 onChanged: (values)
                                 {
@@ -183,8 +186,10 @@ class FilterBottomSheet extends GetView<AllListingController>
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                    Text('Min: ₹${controller.minPrice.value.toInt()}'),
-                                    Text('Max: ₹${controller.maxPrice.value.toInt()}')
+                                    Text('Min: ${AppHelpers.formatCurrency(controller.minPrice.value)}'),
+                                    Text('Max: ${AppHelpers.formatCurrency(controller.maxPrice.value)}')
+                                    // Text('Min: ₹${controller.minPrice.value.toInt()}'),
+                                    // Text('Max: ₹${controller.maxPrice.value.toInt()}')
                                 ]
                             )
                         ]

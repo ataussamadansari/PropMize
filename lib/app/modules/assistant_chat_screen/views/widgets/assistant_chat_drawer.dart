@@ -4,12 +4,9 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
 import 'package:prop_mize/app/modules/assistant_chat_screen/views/widgets/drawer/header_view.dart';
 
-import '../../../../core/themes/app_colors.dart';
-import '../../../../core/utils/capitalize.dart';
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/services/storage_services.dart';
 import '../../../../global_widgets/drawer/drawer_menu_item.dart';
-import '../../../../global_widgets/menu/global_menu_option.dart';
 import '../../../auth_screen/views/auth_bottom_sheet.dart';
 
 class AssistantChatDrawer extends GetView<AssistantChatController> implements PreferredSizeWidget

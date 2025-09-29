@@ -1,10 +1,5 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/core/utils/helpers.dart';
 import 'package:prop_mize/app/modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
 
 import '../../../../../core/themes/app_colors.dart';
@@ -123,15 +118,4 @@ class HeaderView extends GetView<AssistantChatController>
             )
         ) : SizedBox.shrink();
     }
-}
-
-// Helper method
-Future<bool> _loadImage(String url) async {
-  try {
-    final response = await HttpClient().getUrl(Uri.parse(url));
-    final HttpResponse = await response.close();
-    return HttpResponse.statusCode == 200;
-  } catch (e) {
-    return false;
-  }
 }
