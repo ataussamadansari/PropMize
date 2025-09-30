@@ -7,7 +7,6 @@ import 'package:prop_mize/app/modules/assistant_chat_screen/views/widgets/drawer
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/services/storage_services.dart';
 import '../../../../global_widgets/drawer/drawer_menu_item.dart';
-import '../../../auth_screen/views/auth_bottom_sheet.dart';
 
 class AssistantChatDrawer extends GetView<AssistantChatController> implements PreferredSizeWidget
 {
@@ -47,7 +46,16 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                             trailing: "Switch",
                                             onTap: ()
                                             {
-                                                isLoggedIn ? AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...") : AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Please login to switch to seller mode");
+                                                isLoggedIn ? AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...") 
+                                                    : 
+                                                    AppHelpers.showSnackBar(
+                                                        icon: CupertinoIcons.bell, 
+                                                        title: "Alert",
+                                                        message: "Please login to switch to seller mode", 
+                                                        actionLabel: 'Login',
+                                                        onActionTap: () =>
+                                                        controller.showBottomSheet()
+                                                    );
                                             }
                                         ),
                                         DrawerMenuItem(
@@ -66,8 +74,8 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                                 subtitle: "Properties saved for later viewing",
                                                 onTap: ()
                                                 {
-                                                    // controller.globalKey.currentState?.closeDrawer();
-                                                    AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
+                                                    controller.globalKey.currentState?.closeDrawer();
+                                                    controller.goToSavedProperties();
                                                 }
                                             ) : SizedBox.shrink(),
                                         isLoggedIn ? DrawerMenuItem(
@@ -134,11 +142,7 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
 
                                                 if (StorageServices.to.userId.value.isEmpty)
                                                 {
-                                                    Get.bottomSheet(
-                                                        AuthBottomSheet(),
-                                                        isScrollControlled: true,
-                                                        backgroundColor: Colors.transparent
-                                                    );
+                                                    controller.showBottomSheet();
                                                 }
                                                 else
                                                 {

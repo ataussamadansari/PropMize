@@ -17,21 +17,14 @@ class CommunicationHelper {
     }
   }
 
-  /// Open WhatsApp chat
-  static Future<void> openWhatsApp(String? number) async {
-    if (number == null || number.isEmpty) {
-      Get.snackbar("Error", "WhatsApp number not available");
-      return;
-    }
 
-    // Remove any + or spaces for wa.me link
-    final cleanNumber = number.replaceAll(RegExp(r"[^\d]"), "");
-
-    final Uri url = Uri.parse("https://wa.me/$cleanNumber");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+  static Future<void> openWhatsApp(String? phoneNumber, {String message = ""}) async {
+    final Uri uri = Uri.parse("https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}");
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      Get.snackbar("Error", "Cannot open WhatsApp");
+      Get.snackbar("Error", "WhatsApp not installed");
     }
   }
+
 }

@@ -8,6 +8,7 @@ import 'package:prop_mize/app/routes/app_routes.dart';
 import '../../../data/models/ai/message_model.dart';
 import '../../../data/services/storage_services.dart';
 import '../../auth_screen/controllers/auth_controller.dart';
+import '../../auth_screen/views/auth_bottom_sheet.dart';
 
 class AssistantChatController extends GetxController {
   final AuthController authController = Get.find<AuthController>();
@@ -178,6 +179,15 @@ class AssistantChatController extends GetxController {
     });
   }
 
+  // Bottom sheet
+  void showBottomSheet() {
+    Get.bottomSheet(
+        AuthBottomSheet(),
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent
+    );
+  }
+
   // Navigation functions
   void goToProductDetails(String id) {
     Get.toNamed('/product/$id');
@@ -185,6 +195,10 @@ class AssistantChatController extends GetxController {
 
   void goToAllListing() {
     Get.toNamed(Routes.allListing);
+  }
+
+  void goToSavedProperties() {
+    Get.toNamed(Routes.saveProperties);
   }
 
   void goToProfile() {

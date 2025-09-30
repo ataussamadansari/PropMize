@@ -134,7 +134,7 @@ class AllListingView extends GetView<AllListingController>
                                                         }
 
                                                         final property = controller.properties[index];
-                                                        return PropertyCardWidget(property: property);
+                                                        return PropertyCardWidget(properties: property, index: index, controller: controller);
                                                     }
                                                 )
                                             );

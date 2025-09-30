@@ -12,6 +12,12 @@ class DateTimeHelper {
     return DateFormat('yyyy-MM-dd').format(dateTime);
   }
 
+  // Format to 'yyyy-MM-dd'
+  static String formatDateMonth(String isoString) {
+    final dateTime = parse(isoString);
+    return DateFormat('dd MMM yyyy').format(dateTime);
+  }
+
   // Format to 'hh:mm a'
   static String formatTime(String isoString) {
     final dateTime = parse(isoString);

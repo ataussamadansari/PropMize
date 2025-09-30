@@ -7,4 +7,5 @@ abstract class Routes
     static const productDetails = '/product/:id';
     static const auth = '/auth';
     static const allListing = '/all-listing';
+    static const saveProperties = '/saved-properties';
 }

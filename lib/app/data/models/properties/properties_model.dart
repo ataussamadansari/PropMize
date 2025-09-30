@@ -40,45 +40,47 @@ class PropertiesModel {
 
 class Data {
   Data({
-      this.area, 
-      this.address, 
-      this.seo, 
-      this.pricing, 
-      this.contact, 
-      this.features, 
-      this.nearbyPlaces, 
-      this.id, 
-      this.title, 
-      this.description, 
-      this.propertyType, 
-      this.listingType, 
-      this.price, 
-      this.currency, 
-      this.bedrooms, 
-      this.bathrooms, 
-      this.balconies, 
-      this.parking, 
-      this.furnished, 
-      this.floor, 
-      this.totalFloors, 
-      this.age, 
-      this.images, 
-      this.videos, 
-      this.amenities, 
-      this.seller, 
-      this.status, 
-      this.featured, 
-      this.premium, 
-      this.views, 
-      this.approvalStatus, 
-      this.notes, 
-      this.viewedBy, 
-      this.likedBy, 
-      this.contactedBy, 
-      this.expiresAt, 
-      this.createdAt, 
-      this.updatedAt, 
-      this.v,});
+    this.area,
+    this.address,
+    this.seo,
+    this.pricing,
+    this.contact,
+    this.features,
+    this.nearbyPlaces,
+    this.id,
+    this.title,
+    this.description,
+    this.propertyType,
+    this.listingType,
+    this.price,
+    this.currency,
+    this.bedrooms,
+    this.bathrooms,
+    this.balconies,
+    this.parking,
+    this.furnished,
+    this.floor,
+    this.totalFloors,
+    this.age,
+    this.images,
+    this.videos,
+    this.amenities,
+    this.seller,
+    this.status,
+    this.featured,
+    this.premium,
+    this.views,
+    this.likes,
+    this.leads,
+    this.approvalStatus,
+    this.notes,
+    this.viewedBy,
+    this.likedBy,
+    this.contactedBy,
+    this.expiresAt,
+    this.createdAt,
+    this.updatedAt,
+    this.v,});
 
   Data.fromJson(dynamic json) {
     area = json['area'] != null ? Area.fromJson(json['area']) : null;
@@ -111,6 +113,13 @@ class Data {
     featured = json['featured'];
     premium = json['premium'];
     views = json['views'];
+    likes = json['likes'] != null ? json['likes'].cast<String>() : [];
+    if (json['leads'] != null) {
+      leads = [];
+      json['leads'].forEach((v) {
+        leads?.add(Leads.fromJson(v));
+      });
+    }
     approvalStatus = json['approvalStatus'];
     notes = json['notes'];
     if (json['viewedBy'] != null) {
@@ -166,6 +175,8 @@ class Data {
   bool? featured;
   bool? premium;
   int? views;
+  List<String>? likes;
+  List<Leads>? leads;
   String? approvalStatus;
   String? notes;
   List<ViewedBy>? viewedBy;
@@ -224,6 +235,10 @@ class Data {
     map['featured'] = featured;
     map['premium'] = premium;
     map['views'] = views;
+    map['likes'] = likes;
+    if (leads != null) {
+      map['leads'] = leads?.map((v) => v.toJson()).toList();
+    }
     map['approvalStatus'] = approvalStatus;
     map['notes'] = notes;
     if (viewedBy != null) {

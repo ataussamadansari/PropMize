@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/communication_helper.dart';
 import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 import 'package:prop_mize/app/data/services/storage_services.dart';
+import 'package:prop_mize/app/modules/saved_properties_screen/controllers/saved_properties_controller.dart';
 import 'package:prop_mize/app/routes/app_routes.dart';
 
 import '../../../core/utils/helpers.dart';
 import '../../../data/repositories/properties/properties_repository.dart';
+import '../../all_listing_screen/controllers/all_listing_controller.dart';
 
 class ProductDetailsController extends GetxController
 {

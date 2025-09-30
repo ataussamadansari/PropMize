@@ -68,18 +68,20 @@ class AuthBottomSheet extends GetView<AuthController>
                                     decoration: InputDecoration(
                                         prefixIcon: const Icon(Icons.phone, color: AppColors.primary),
                                         hintText: "Enter 10-digit phone number",
-                                        /*border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12)
-                                        ),*/
 
+                                        // 🔹 Default border
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(12),
                                           borderSide: BorderSide(color: borderColor, width: 2), // ✅ live color
                                         ),
+
+                                        // 🔹 Grey border when not focused
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(12),
-                                          borderSide: BorderSide(color: borderColor, width: 2),
+                                          borderSide: BorderSide(color: AppColors.grey, width: 2),
                                         ),
+
+                                        // 🔹 Dynamic border when focused
                                         focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(12),
                                           borderSide: BorderSide(color: borderColor, width: 2),
