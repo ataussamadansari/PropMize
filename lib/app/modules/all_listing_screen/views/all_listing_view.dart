@@ -6,6 +6,8 @@ import 'package:prop_mize/app/modules/all_listing_screen/controllers/all_listing
 import 'package:prop_mize/app/modules/all_listing_screen/views/widgets/property_card_widget.dart';
 import 'package:prop_mize/app/modules/all_listing_screen/views/widgets/search_filter_widget.dart';
 
+import '../../../global_widgets/shimmer/shimmer_loader.dart';
+
 class AllListingView extends GetView<AllListingController>
 {
     const AllListingView({super.key});
@@ -68,7 +70,13 @@ class AllListingView extends GetView<AllListingController>
                                         {
                                             if (controller.isLoading.value && controller.properties.isEmpty) 
                                             {
-                                                return const Center(child: CircularProgressIndicator());
+                                              if (controller.isLoading.value && controller.properties.isEmpty) {
+                                                return ListView.builder(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                  itemCount: 5,
+                                                  itemBuilder: (context, index) => const ShimmerLoader(),
+                                                );
+                                              }
                                             }
 
                                             if (controller.hasError.value && controller.properties.isEmpty) 

@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
+import 'package:prop_mize/app/global_widgets/shimmer/properties_details/shimmer_loading.dart';
 import 'package:prop_mize/app/global_widgets/status_card_item.dart';
 import 'package:prop_mize/app/modules/product_details_screen/controllers/product_details_controller.dart';
 import 'package:prop_mize/app/modules/product_details_screen/views/widgets/amenities_item.dart';
@@ -15,6 +17,7 @@ import 'package:prop_mize/app/modules/product_details_screen/views/widgets/prope
 import 'package:prop_mize/app/modules/product_details_screen/views/widgets/property_overview.dart';
 
 import '../../../data/services/like_services.dart';
+import '../../../global_widgets/shimmer/properties_details/product_details_shimmer.dart';
 import 'widgets/contact_bottom_bar.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController>
@@ -59,11 +62,24 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                 {
                     if (controller.isLoading.value)
                     {
-                        return const Center(child: CircularProgressIndicator());
+                        return const ProductDetailsShimmer();
                     }
                     if (controller.hasError.value)
                     {
-                        return Center(child: Text(controller.errorMessage.value));
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 8,
+                            children: [
+                              SvgPicture.asset('assets/icons/404 Error-cuate.svg', width: 200,),
+                              Text(controller.errorMessage.value),
+                              ElevatedButton(
+                                  onPressed: () => controller.getProductDetails(controller.productId),
+                                  child: const Text("Retry")
+                              )
+                            ],
+                          ),
+                        );
                     }
 
                     final details = controller.details?.data;
@@ -158,7 +174,7 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                                     return IconButton(
                                                         onPressed: () => likeService.toggleLike(details),
                                                         style: IconButton.styleFrom(
-                                                            backgroundColor: Colors.grey.withValues(alpha:0.7),
+                                                            backgroundColor: Colors.grey.withValues(alpha: 0.7),
 
                                                             elevation: 2
                                                         ),
@@ -199,7 +215,7 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                             top: 200,
                                             child: IconButton(
                                                 style: IconButton.styleFrom(
-                                                    backgroundColor: Colors.grey.withValues(alpha:0.5),
+                                                    backgroundColor: Colors.grey.withValues(alpha: 0.5),
                                                     elevation: 2
                                                 ),
                                                 icon: const Icon(
@@ -223,7 +239,7 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                             top: 200,
                                             child: IconButton(
                                                 style: IconButton.styleFrom(
-                                                    backgroundColor: Colors.grey.withValues(alpha:0.5),
+                                                    backgroundColor: Colors.grey.withValues(alpha: 0.5),
                                                     elevation: 8
                                                 ),
                                                 icon: const Icon(

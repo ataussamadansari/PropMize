@@ -39,8 +39,6 @@ class ProductDetailsController extends GetxController
         return likeService.isLiked(details!.data!.id!);
     }
 
-
-
     @override
     void onInit()
     {

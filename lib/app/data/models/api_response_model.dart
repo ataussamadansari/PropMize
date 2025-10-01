@@ -33,5 +33,4 @@ class ApiResponse<T>
         errors: errors
     );
   }
-
 }

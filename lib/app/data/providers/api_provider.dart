@@ -171,6 +171,7 @@ class ApiProvider {
   }
 
   _handleError(dynamic error) {
+    print("Error: $error");
     if (error is DioException) {
       switch (error.type) {
         case DioExceptionType.connectionTimeout:
@@ -202,7 +203,6 @@ class ApiProvider {
       case 502: return 'Bad Gateway';
       case 503: return 'Service Unavailable';
       default: return 'Something went wrong';
-
     }
   }
 
