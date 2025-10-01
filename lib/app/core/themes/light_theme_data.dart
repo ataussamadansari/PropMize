@@ -166,7 +166,7 @@ class LightThemeData
             // Text Selection Theme
             textSelectionTheme: TextSelectionThemeData(
                 cursorColor: AppColors.primary,
-                selectionColor: AppColors.primary.withOpacity(0.25),
+                selectionColor: AppColors.primary.withValues(alpha:0.25),
                 selectionHandleColor: AppColors.primary
             ),
 

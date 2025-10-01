@@ -26,7 +26,7 @@ class AuthView extends GetView<AuthController> {
                   padding: const EdgeInsets.all(24),
                   // margin: const EdgeInsets.symmetric(horizontal: 24),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.95),
+                    color: Colors.white.withValues(alpha:0.95),
                     borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                     boxShadow: [
                       BoxShadow(

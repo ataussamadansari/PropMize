@@ -39,7 +39,7 @@ class MessageCardItem extends StatelessWidget
                         width: 70,
                         height: 70,
                         decoration: BoxDecoration(
-                            color: color.withOpacity(0.2),
+                            color: color.withValues(alpha:0.2),
                             shape: BoxShape.circle
                         ),
                         child: Center(child: isSvg ? SvgPicture.asset(leadingSvg!, color: color, width: 30, height: 30,) : Icon(leadingData, color: color, size: 35))

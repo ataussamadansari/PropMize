@@ -58,7 +58,7 @@ class SearchFilterWidget extends GetView<AllListingController> {
             controller.showFilterBottomSheet();
           },
           style: IconButton.styleFrom(
-            backgroundColor: AppColors.primary.withOpacity(0.2)
+            backgroundColor: AppColors.primary.withValues(alpha:0.2)
           ),
           icon: Icon(
             Icons.filter_list,

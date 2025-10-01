@@ -158,7 +158,7 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                                     return IconButton(
                                                         onPressed: () => likeService.toggleLike(details),
                                                         style: IconButton.styleFrom(
-                                                            backgroundColor: Colors.grey.withOpacity(0.7),
+                                                            backgroundColor: Colors.grey.withValues(alpha:0.7),
 
                                                             elevation: 2
                                                         ),
@@ -199,7 +199,7 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                             top: 200,
                                             child: IconButton(
                                                 style: IconButton.styleFrom(
-                                                    backgroundColor: Colors.grey.withOpacity(0.5),
+                                                    backgroundColor: Colors.grey.withValues(alpha:0.5),
                                                     elevation: 2
                                                 ),
                                                 icon: const Icon(
@@ -223,7 +223,7 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                             top: 200,
                                             child: IconButton(
                                                 style: IconButton.styleFrom(
-                                                    backgroundColor: Colors.grey.withOpacity(0.5),
+                                                    backgroundColor: Colors.grey.withValues(alpha:0.5),
                                                     elevation: 8
                                                 ),
                                                 icon: const Icon(

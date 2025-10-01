@@ -148,9 +148,9 @@ class _InfoBox extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: background?.withOpacity(0.2) ?? Colors.blue.withOpacity(0.2),
+        color: background?.withValues(alpha:0.2) ?? Colors.blue.withValues(alpha:0.2),
         borderRadius: BorderRadius.circular(8),
-        border: BoxBorder.all(color: background?.withOpacity(0.3) ?? Colors.blue.withOpacity(0.3), width: 1)
+        border: BoxBorder.all(color: background?.withValues(alpha:0.3) ?? Colors.blue.withValues(alpha:0.3), width: 1)
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

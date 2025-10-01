@@ -54,6 +54,7 @@ class ApiProvider {
               type: DioExceptionType.connectionError
           );
         }
+
         handler.next(options);
       },
       onResponse: (response, handler) {

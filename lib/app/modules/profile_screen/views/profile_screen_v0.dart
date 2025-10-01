@@ -22,7 +22,7 @@ class ProfileScreen extends GetView<ProfileController>
                             borderRadius: BorderRadius.circular(12.0),
                             boxShadow: [
                                 BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
+                                    color: Colors.black.withValues(alpha:0.05),
                                     blurRadius: 10,
                                     offset: const Offset(0, 4)
                                 )
@@ -97,7 +97,7 @@ class ProfileScreen extends GetView<ProfileController>
                             borderRadius: BorderRadius.circular(12.0),
                             boxShadow: [
                                 BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
+                                    color: Colors.black.withValues(alpha:0.05),
                                     blurRadius: 10,
                                     offset: const Offset(0, 4)
                                 )

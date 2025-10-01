@@ -28,7 +28,7 @@ class ReceivedMessageBubble extends GetView<AssistantChatController>
                 child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                     decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(0),
                             topRight: Radius.circular(8),
@@ -89,7 +89,7 @@ class ReceivedMessageBubble extends GetView<AssistantChatController>
                                             child: Container(
                                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                                 decoration: BoxDecoration(
-                                                    color: Colors.blue.withOpacity(0.1),
+                                                    color: Colors.blue.withValues(alpha:0.1),
                                                     borderRadius: BorderRadius.circular(8)
                                                 ),
                                                 child: Text(

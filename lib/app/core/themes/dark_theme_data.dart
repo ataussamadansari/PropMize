@@ -163,7 +163,7 @@ class DarkThemeData
             // Text Selection Theme
             textSelectionTheme: TextSelectionThemeData(
                 cursorColor: AppColors.primaryDark,
-                selectionColor: AppColors.primaryDark.withOpacity(0.25),
+                selectionColor: AppColors.primaryDark.withValues(alpha: 0.25),
                 selectionHandleColor: AppColors.primaryDark
             ),
 

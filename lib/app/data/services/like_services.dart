@@ -10,7 +10,6 @@ class LikeService extends GetxService
 {
     final PropertiesRepository _repo = PropertiesRepository();
 
-    /// Map<propertyId, bool>
     final RxMap<String, bool> likedStatus = <String, bool>{}.obs;
 
     // String? get currentUserId => StorageServices.to.read("userId");

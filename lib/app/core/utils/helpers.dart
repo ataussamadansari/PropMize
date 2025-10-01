@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:prop_mize/app/core/themes/app_colors.dart';
 
 class AppHelpers {
 
@@ -17,7 +18,7 @@ class AppHelpers {
       title,
       message,
       // snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: isError == true ? Colors.red[200] : isError == false ? Colors.green[200] : null,
+      backgroundColor: isError == true ? Colors.red.withValues(alpha: 0.25) : isError == false ? Colors.green.withValues(alpha: 0.25) : null,
       icon: Icon(
         isError == true ? Icons.error : isError == false ? Icons.check_circle : icon,
         color: isError == true ? Colors.red : isError == false ? Colors.green : null,
@@ -32,6 +33,9 @@ class AppHelpers {
           onActionTap();
           if (Get.isSnackbarOpen) Get.back();
         },
+        style: TextButton.styleFrom(
+          foregroundColor: AppColors.primary
+        ),
         child: Text(
           actionLabel,
           style: const TextStyle(

@@ -96,7 +96,7 @@ class ProfileView extends GetView<ProfileController>
                                             children: const[
                                                 ProfileScreen(),
                                                 PreferencesScreen(),
-                                                ActivityScreen()
+                                                // ActivityScreen()
                                             ]
                                         );
                                     }

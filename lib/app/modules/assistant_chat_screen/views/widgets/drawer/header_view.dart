@@ -7,9 +7,9 @@ import '../../../../../core/utils/capitalize.dart';
 
 class HeaderView extends GetView<AssistantChatController>
 {
-    final isLoggedIn;
-    final user;
-    final avatarUrl;
+    final dynamic isLoggedIn;
+    final dynamic user;
+    final dynamic avatarUrl;
     const HeaderView({
       super.key,
       required this.isLoggedIn,

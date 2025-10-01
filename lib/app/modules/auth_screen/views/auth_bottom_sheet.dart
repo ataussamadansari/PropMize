@@ -151,61 +151,6 @@ class AuthBottomSheet extends GetView<AuthController>
                                 ),
                                 const SizedBox(height: 24),
 
-                                // Action Button
-                                /*SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                        onPressed: controller.isLoading.value ? null
-                                            : () async
-                                            {
-                                                // ✅ FIX: Focus pehle hi unfocus karo
-                                                FocusScope.of(context).unfocus();
-                                                if (!controller.otpSent.value)
-                                                {
-                                                    await controller.sendOtp();
-                                                }
-                                                else
-                                                {
-                                                    bool res = await controller.verifyOtp();
-                                                    print("login response: $res");
-                                                    if (res)
-                                                    {
-                                                        // ✅ FIX: Pehle reset auth state, phir close
-                                                        controller.resetAuthState();
-
-                                                        // ✅ FIX: Thoda delay dekar UI update hone ka time do
-                                                        await Future.delayed(Duration(milliseconds: 300));
-
-                                                        // ✅ FIX: Safe way se bottom sheet close karo
-                                                        if (Get.isBottomSheetOpen ?? false)
-                                                        {
-                                                            Get.back();
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                        style: ElevatedButton.styleFrom(
-                                            padding: const EdgeInsets.symmetric(vertical: 16),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(12)
-                                            )
-                                        ),
-                                        child: controller.isLoading.value
-                                            ? const SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child: CircularProgressIndicator(
-                                                    color: Colors.white,
-                                                    strokeWidth: 2
-                                                )
-                                            )
-                                            : Text(
-                                                controller.otpSent.value ? "Verify OTP" : "Send OTP",
-                                                style: const TextStyle(fontSize: 16)
-                                            )
-                                    )
-                                ),*/
-
                                 // auth_bottom_sheet.dart
                                 SizedBox(
                                     width: double.infinity,
