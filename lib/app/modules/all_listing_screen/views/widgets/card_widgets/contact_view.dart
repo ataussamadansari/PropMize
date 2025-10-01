@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/capitalize.dart';
 import 'package:prop_mize/app/core/utils/communication_helper.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
-import 'package:prop_mize/app/data/models/properties/properties_model.dart';
 
+import '../../../../../data/models/properties/data.dart';
 import '../../../controllers/all_listing_controller.dart';
 
 class ContactView extends GetView<AllListingController> {

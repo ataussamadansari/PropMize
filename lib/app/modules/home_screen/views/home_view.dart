@@ -126,7 +126,7 @@ class HomeView extends GetView<HomeController>
                                 children: [
                                     MessageCardItem(leadingData: Icons.electric_bolt, leadingSvg: "", isSvg: false, title: "AI-Powered Insights", message: "Get intelligent property recommendations and market analysis powered by advanced AI algorithms.", color: AppColors.primary),
                                     MessageCardItem(leadingData: Icons.shield_outlined, leadingSvg: "", isSvg: false, title: "Verified Community", message: "Connect with authenticated buyers and sellers in a secure, trusted marketplace environment.", color: Colors.green),
-                                    MessageCardItem(leadingData: Icons.abc, leadingSvg: "assets/svg_icons/trend.svg", isSvg: true, title: "Real-Time Analytics", message: "Access live market data, pricing trends, and property insights to make informed decisions.", color: Colors.deepPurple)
+                                    MessageCardItem(leadingData: Icons.abc, leadingSvg: "assets/icons/trend.svg", isSvg: true, title: "Real-Time Analytics", message: "Access live market data, pricing trends, and property insights to make informed decisions.", color: Colors.deepPurple)
                                 ]
                             )
 

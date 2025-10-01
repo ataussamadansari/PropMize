@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
+import 'package:prop_mize/app/data/models/properties/data.dart';
 
 class PropertyOverView extends StatelessWidget
 {

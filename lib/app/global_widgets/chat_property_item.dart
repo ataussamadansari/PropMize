@@ -37,10 +37,10 @@ class ChatPropertyItem extends GetView<AssistantChatController> {
                       height: 150,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
+                        color: Colors.black.withAlpha(100),
                         borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
                       ),
-                      child: const Icon(Icons.home, size: 50, color: Colors.white70),
+                      child: const Icon(Icons.broken_image, size: 50),
                     );
                   },
                 ),
@@ -61,10 +61,10 @@ class ChatPropertyItem extends GetView<AssistantChatController> {
                 height: 150,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  color: Colors.black.withAlpha(100),
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
                 ),
-                child: const Icon(Icons.home, size: 50, color: Colors.white70),
+                child: const Icon(Icons.broken_image, size: 50),
               ),
 
             // 🔹 Property Info

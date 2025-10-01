@@ -5,12 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/data/models/user/user_me.dart';
 import 'package:prop_mize/app/data/models/user/verify_otp/verify_otp_response.dart';
+import 'package:prop_mize/app/data/services/like_services.dart';
 
 import '../../../core/utils/helpers.dart';
 import '../../../data/models/api_response_model.dart';
 import '../../../data/models/user/send_otp/send_otp_request.dart';
 import '../../../data/models/user/verify_otp/verify_otp_request.dart';
 import '../../../data/repositories/auth/auth_repository.dart';
+import '../../../data/services/current_user_id_services.dart';
 import '../../../data/services/storage_services.dart';
 
 class AuthController extends GetxController
@@ -232,6 +234,10 @@ class AuthController extends GetxController
                     StorageServices.to.setUserId(user.value!.data.user.id!);
                 }
 
+                // Login success
+                Get.find<CurrentUserIdServices>().setUserId(user.value!.data.user.id!);
+                Get.find<LikeService>();
+
                 Get.isBottomSheetOpen == true ? Get.back() : null;
 
                 AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Success", message: "Login successful!");
@@ -311,6 +317,7 @@ class AuthController extends GetxController
         StorageServices.to.removeToken();
         StorageServices.to.removeUserId();
         resetAuthState();
+        Get.find<CurrentUserIdServices>().clearUserId();
         AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Logout", message: "Logout successful");
     }
 

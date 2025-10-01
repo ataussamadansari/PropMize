@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 
 import '../../../../core/utils/helpers.dart';
+import '../../../../data/models/properties/data.dart';
 
 class PricingCardItem extends StatelessWidget {
   final Pricing? pricing;

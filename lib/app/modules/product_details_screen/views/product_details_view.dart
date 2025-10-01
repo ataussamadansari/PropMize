@@ -14,6 +14,7 @@ import 'package:prop_mize/app/modules/product_details_screen/views/widgets/prici
 import 'package:prop_mize/app/modules/product_details_screen/views/widgets/property_history.dart';
 import 'package:prop_mize/app/modules/product_details_screen/views/widgets/property_overview.dart';
 
+import '../../../data/services/like_services.dart';
 import 'widgets/contact_bottom_bar.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController>
@@ -27,6 +28,7 @@ class ProductDetailsView extends GetView<ProductDetailsController>
             CarouselSliderController();
         final RxInt currentIndex = 0.obs;
         final ScrollController scrollController = ScrollController();
+        final likeService = Get.find<LikeService>();
 
         return Scaffold(
             appBar: AppBar(
@@ -126,9 +128,10 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                                         errorBuilder: (context, error, stackTrace)
                                                         {
                                                             return Container(
-                                                                color: Colors.grey.shade200,
+                                                                color: Colors.black.withAlpha(100),
+                                                                width: double.infinity,
                                                                 child:
-                                                                const Icon(Icons.broken_image, size: 60)
+                                                                const Icon(Icons.broken_image_rounded, size: 60)
                                                             );
                                                         }
                                                     )
@@ -145,8 +148,30 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                             )
                                         ),
 
-                                        // Like Btn
+                                        // Like-Dislike
                                         Positioned(
+                                            right: 8,
+                                            top: 8,
+                                            child: Obx(()
+                                                {
+                                                    final isLiked = likeService.isLiked(details.id!);
+                                                    return IconButton(
+                                                        onPressed: () => likeService.toggleLike(details),
+                                                        style: IconButton.styleFrom(
+                                                            backgroundColor: Colors.grey.withOpacity(0.7),
+
+                                                            elevation: 2
+                                                        ),
+                                                        icon: Icon(
+                                                            isLiked ? Icons.favorite : Icons.favorite_border,
+                                                            color: isLiked ? Colors.red : Colors.black
+                                                        )
+                                                    );
+                                                }
+                                            )
+                                        ),
+
+                                      /*Positioned(
                                             right: 12,
                                             top: 12,
                                             child: Obx(() => AnimatedScale(
@@ -166,7 +191,7 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                                         )
                                                     )
                                                 ))
-                                        ),
+                                        ),*/
 
                                         // 🔹 Prev Button
                                         Positioned(

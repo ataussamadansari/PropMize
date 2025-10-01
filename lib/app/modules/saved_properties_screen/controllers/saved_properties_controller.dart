@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
 import 'package:prop_mize/app/data/repositories/properties/properties_repository.dart';
 
-import '../../../core/utils/helpers.dart';
-import '../../../data/models/properties/properties_model.dart';
+import '../../../data/models/properties/data.dart';
+import '../../../data/services/like_services.dart';
 import '../../../data/services/storage_services.dart';
 
 class SavedPropertiesController extends GetxController {
   final PropertiesRepository _propertiesRepository = PropertiesRepository();
+  final LikeService likeService = Get.find<LikeService>();
 
   // Properties
   final RxList<Data> properties = <Data>[].obs;
@@ -25,6 +26,12 @@ class SavedPropertiesController extends GetxController {
   void onInit() {
     super.onInit();
     loadLikedProperties();
+
+    // Listener: jab bhi likeService change hoga → UI update hoga
+    ever(likeService.likedStatus, (_) {
+      // jo property unlike ho gayi usse list se hatao
+      properties.removeWhere((p) => !likeService.isLiked(p.id!));
+    });
   }
 
   Future<void> loadLikedProperties({bool reset = true}) async {
@@ -47,6 +54,11 @@ class SavedPropertiesController extends GetxController {
 
       if (response.success && response.data != null) {
         final newProperties = response.data!.data ?? [];
+
+        // sync with global like service
+        for (var p in newProperties) {
+          likeService.syncWithProperty(p);
+        }
 
         if (reset) {
           properties.value = newProperties;
@@ -88,7 +100,8 @@ class SavedPropertiesController extends GetxController {
 
 
   // ---------- Like - Dislike ----------
-  // Add this method to check like status for a specific property
+
+  /*// Add this method to check like status for a specific property
   bool isPropertyLiked(Data property) {
     return property.likedBy?.any((like) => like.user == currentUserId) ?? false;
   }
@@ -180,7 +193,7 @@ class SavedPropertiesController extends GetxController {
   // Refresh the entire list
   void refreshSavedProperties() {
     loadLikedProperties(reset: true);
-  }
+  }*/
 
 
   // ------------ Navigation -----------------

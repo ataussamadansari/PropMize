@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/modules/auth_screen/controllers/auth_controller.dart';
@@ -14,21 +15,22 @@ class AuthBottomSheet extends GetView<AuthController>
             ()
             {
 
-              Color borderColor;
+                Color borderColor;
 
-              switch (controller.phoneValidationState.value) {
-                case "empty" :
-                  borderColor = AppColors.primary;
-                  break;
-                case "valid":
-                  borderColor = Colors.green;
-                  break;
-                case "typing":
-                  borderColor = Colors.yellow;
-                  break;
-                default:
-                  borderColor = Colors.red;
-              }
+                switch (controller.phoneValidationState.value)
+                {
+                    case "empty":
+                        borderColor = AppColors.primary;
+                        break;
+                    case "valid":
+                        borderColor = Colors.green;
+                        break;
+                    case "typing":
+                        borderColor = Colors.yellow;
+                        break;
+                    default:
+                    borderColor = Colors.red;
+                }
 
                 return AnimatedContainer(
                     duration: const Duration(milliseconds: 500),
@@ -71,20 +73,20 @@ class AuthBottomSheet extends GetView<AuthController>
 
                                         // 🔹 Default border
                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12),
-                                          borderSide: BorderSide(color: borderColor, width: 2), // ✅ live color
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: BorderSide(color: borderColor, width: 2) // ✅ live color
                                         ),
 
                                         // 🔹 Grey border when not focused
                                         enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12),
-                                          borderSide: BorderSide(color: AppColors.grey, width: 2),
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: BorderSide(color: AppColors.grey, width: 2)
                                         ),
 
                                         // 🔹 Dynamic border when focused
                                         focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12),
-                                          borderSide: BorderSide(color: borderColor, width: 2),
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: BorderSide(color: borderColor, width: 2)
                                         ),
 
                                         contentPadding: const EdgeInsets.symmetric(
@@ -204,37 +206,36 @@ class AuthBottomSheet extends GetView<AuthController>
                                     )
                                 ),*/
 
-                              // auth_bottom_sheet.dart
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: controller.isLoading.value
-                                      ? null
-                                      : () => controller.handleAuthAction(),
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                  child: controller.isLoading.value
-                                      ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                      : Text(
-                                    controller.otpSent.value ? "Verify OTP" : "Send OTP",
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
+                                // auth_bottom_sheet.dart
+                                SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                        onPressed: controller.isLoading.value
+                                            ? null
+                                            : () => controller.handleAuthAction(),
+                                        style: ElevatedButton.styleFrom(
+                                            padding: const EdgeInsets.symmetric(vertical: 16),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12)
+                                            )
+                                        ),
+                                        child: controller.isLoading.value
+                                            ? const SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child: CircularProgressIndicator(
+                                                    color: Colors.white,
+                                                    strokeWidth: 2
+                                                )
+                                            )
+                                            : Text(
+                                                controller.otpSent.value ? "Verify OTP" : "Send OTP",
+                                                style: const TextStyle(fontSize: 16)
+                                            )
+                                    )
                                 ),
-                              ),
 
-
-                              if (controller.otpSent.value)
+                                if (controller.otpSent.value)
                                 TextButton(
                                     onPressed:
                                     controller.isLoading.value ? null : controller.sendOtp,
@@ -263,13 +264,11 @@ class AuthBottomSheet extends GetView<AuthController>
                                         child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                                Image.asset('assets/images/rent.png', width: 32),
-                                                const SizedBox(width: 4),
+                                                SvgPicture.asset('assets/icons/google.svg', width: 24),
+                                                const SizedBox(width: 8),
                                                 Text(
-                                                    'Google',
-                                                    style: context.textTheme.bodyLarge?.copyWith(
-                                                        fontWeight: FontWeight.bold
-                                                    )
+                                                    'Sign in with Google',
+                                                    style: context.textTheme.bodyLarge
                                                 )
                                             ]
                                         )

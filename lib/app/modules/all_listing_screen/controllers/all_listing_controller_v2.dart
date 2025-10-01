@@ -2,19 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/debouncer.dart';
 import 'package:prop_mize/app/data/models/properties/data.dart';
-import 'package:prop_mize/app/data/services/current_user_id_services.dart';
 
+import '../../../core/utils/helpers.dart';
 import '../../../data/repositories/properties/properties_repository.dart';
-import '../../../data/services/like_services.dart';
 import '../../../data/services/storage_services.dart';
 import '../views/widgets/filter_bottom_sheet.dart';
 
 class AllListingController extends GetxController
 {
     final PropertiesRepository _propertiesRepo = PropertiesRepository();
-
-    final LikeService likeService = Get.find<LikeService>();
-    final CurrentUserIdServices currentUserIdServices = Get.find<CurrentUserIdServices>();
 
     // Search
     final TextEditingController searchController = TextEditingController();
@@ -51,11 +47,6 @@ class AllListingController extends GetxController
     {
         super.onInit();
         loadProperties();
-
-        /// Jab bhi userId change hoga -> list reload ho jaayegi
-        ever(currentUserIdServices.userId, (_) {
-            loadProperties();
-        });
     }
 
     // ---------------- LOAD PROPERTIES ----------------
@@ -102,11 +93,6 @@ class AllListingController extends GetxController
             if (response.success && response.data != null) 
             {
                 final newProperties = response.data!.data ?? [];
-
-                // sync with global like service
-                for (var p in newProperties) {
-                    likeService.syncWithProperty(p);
-                }
 
                 if (reset) 
                 {
@@ -213,6 +199,102 @@ class AllListingController extends GetxController
             isScrollControlled: true
         );
     }
+
+    // ---------- Like - Dislike ----------
+    // Add this method to check like status for a specific property
+    bool isPropertyLiked(Data property) {
+        return property.likedBy?.any((like) => like.user == currentUserId) ?? false;
+    }
+
+    // Update the toggleLike method
+    void toggleLike(String productId, int index) async
+    {
+        if (properties.isEmpty) return;
+        if (currentUserId == null)
+        {
+            AppHelpers.showSnackBar(
+                title: "Error",
+                message: "Please login to like",
+                isError: true,
+                actionLabel: "Login"
+            );
+            return;
+        }
+
+        // Find the property and get current like status
+        final propertyIndex = properties.indexWhere((p) => p.id == productId);
+        if (propertyIndex == -1) return;
+
+        final property = properties[propertyIndex];
+        final previousStatus = isPropertyLiked(property);
+
+        try
+        {
+            final response = await _propertiesRepo.like(productId);
+            if (!response.success)
+            {
+                AppHelpers.showSnackBar(
+                    title: "Error",
+                    message: response.message,
+                    isError: true
+                );
+            }
+            else
+            {
+                // Update the local likedBy array to reflect the change
+                if (previousStatus) {
+                    // Remove like
+                    property.likedBy?.removeWhere((like) => like.user == currentUserId);
+                } else {
+                    // Add like
+                    property.likedBy ??= [];
+                    property.likedBy!.add(LikedBy(user: currentUserId));
+                }
+
+                // Force UI update by reassigning the list
+                properties[propertyIndex] = property;
+                properties.refresh();
+
+                AppHelpers.showSnackBar(
+                    title: "Property",
+                    message: !previousStatus ? "Liked successfully" : "Disliked successfully",
+                    isError: !previousStatus ? false : true
+                );
+            }
+        }
+        catch (e)
+        {
+            AppHelpers.showSnackBar(
+                title: "error",
+                message: e.toString(),
+                isError: true
+            );
+        }
+    }
+
+    // Add this method to update like status
+    void updateLikeStatus({required String propertyId, required bool isLiked}) {
+        final propertyIndex = properties.indexWhere((p) => p.id == propertyId);
+        if (propertyIndex != -1) {
+            final property = properties[propertyIndex];
+
+            if (isLiked) {
+                // Add like
+                property.likedBy ??= [];
+                if (!property.likedBy!.any((like) => like.user == currentUserId)) {
+                    property.likedBy!.add(LikedBy(user: currentUserId));
+                }
+            } else {
+                // Remove like
+                property.likedBy?.removeWhere((like) => like.user == currentUserId);
+            }
+
+            // Update the property in the list
+            properties[propertyIndex] = property;
+            properties.refresh(); // This triggers UI update
+        }
+    }
+
 
     // ------------ Navigation -----------------
     void navigateToPropertyDetails(String propertyId) 

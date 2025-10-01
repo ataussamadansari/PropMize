@@ -47,15 +47,16 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                             onTap: ()
                                             {
                                                 isLoggedIn ? AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...") 
-                                                    : 
-                                                    AppHelpers.showSnackBar(
+                                                    :
+                                                    controller.showBottomSheet();
+                                                    /*AppHelpers.showSnackBar(
                                                         icon: CupertinoIcons.bell, 
                                                         title: "Alert",
-                                                        message: "Please login to switch to seller mode", 
+                                                        message: "Please login to switch to seller",
                                                         actionLabel: 'Login',
                                                         onActionTap: () =>
                                                         controller.showBottomSheet()
-                                                    );
+                                                    );*/
                                             }
                                         ),
                                         DrawerMenuItem(

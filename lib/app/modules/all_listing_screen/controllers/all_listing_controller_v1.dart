@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/debouncer.dart';
-import 'package:prop_mize/app/data/models/properties/properties_model.dart';
+import 'package:prop_mize/app/data/models/properties/data.dart';
 
 import '../../../data/repositories/properties/properties_repository.dart';
 import '../views/widgets/filter_bottom_sheet.dart';

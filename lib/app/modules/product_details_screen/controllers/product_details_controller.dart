@@ -3,16 +3,19 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/communication_helper.dart';
 import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 import 'package:prop_mize/app/data/services/storage_services.dart';
-import 'package:prop_mize/app/modules/saved_properties_screen/controllers/saved_properties_controller.dart';
-import 'package:prop_mize/app/routes/app_routes.dart';
 
 import '../../../core/utils/helpers.dart';
 import '../../../data/repositories/properties/properties_repository.dart';
-import '../../all_listing_screen/controllers/all_listing_controller.dart';
+import '../../../data/services/current_user_id_services.dart';
+import '../../../data/services/like_services.dart';
+import '../../auth_screen/views/auth_bottom_sheet.dart';
 
 class ProductDetailsController extends GetxController
 {
     final PropertiesRepository _propertiesRepository = PropertiesRepository();
+
+    final LikeService likeService = Get.find<LikeService>();
+    final CurrentUserIdServices currentUserIdServices = Get.find<CurrentUserIdServices>();
 
     // Reactive Variables
     final productDetails = Rxn<PropertyByIdModel>();
@@ -25,11 +28,18 @@ class ProductDetailsController extends GetxController
 
     final currentUserId = StorageServices.to.read("userId");
 
-    final RxBool isLiked = false.obs;
+    // final RxBool isLiked = false.obs;
 
     late String productId;
 
     PropertyByIdModel? get details => productDetails.value;
+
+    bool get isLiked {
+        if (details?.data == null) return false;
+        return likeService.isLiked(details!.data!.id!);
+    }
+
+
 
     @override
     void onInit()
@@ -40,7 +50,12 @@ class ProductDetailsController extends GetxController
         {
             getProductDetails(productId);
         }
+
+        ever(currentUserIdServices.userId, (_){
+            getProductDetails(productId);
+        });
     }
+
 
     void getProductDetails(String id) async
     {
@@ -55,10 +70,6 @@ class ProductDetailsController extends GetxController
             if (response.success && response.data != null)
             {
                 productDetails.value = response.data;
-
-                // Like status initialize
-                final liked = response.data!.data?.likedBy?.any((like) => like.user == currentUserId) ?? false;
-                isLiked.value = liked;
             }
             else
             {
@@ -80,66 +91,22 @@ class ProductDetailsController extends GetxController
     }
 
     // like-dislike
-    void toggleLike() async
-    {
+    void toggleLike() async {
         if (details?.data == null) return;
-        if (currentUserId == null)
-        {
-            AppHelpers.showSnackBar(
-                title: "Error",
-                message: "Please login to like",
-                isError: true,
-                actionLabel: "Login",
-                onActionTap: () => Get.toNamed(Routes.auth)
-            );
-            return;
-        }
-        final previous = isLiked.value;
-        isLiked.value = !previous;
-
-        try
-        {
-            final response = await _propertiesRepository.like(productId);
-            if (!response.success)
-            {
-                isLiked.value = previous;
-                AppHelpers.showSnackBar(
-                    title: "Error",
-                    message: response.message,
-                    isError: isLiked.value ? true : false
-                );
-            }
-            else
-            {
-                AppHelpers.showSnackBar(
-                    title: "Property",
-                    message: isLiked.value ? "Liked successfully" : "Disliked successfully",
-                    // message: response.data!.message!,
-                    isError: isLiked.value ? false : true
-                );
-            }
-        }
-        catch (e)
-        {
-            isLiked.value = previous;
-            AppHelpers.showSnackBar(
-                title: "error", 
-                message: e.toString(), isError: true
-            );
-        }
+        await likeService.toggleLike(details!.data!);
     }
 
     // Contact
     void contact(String? phone) 
     {
-        if (currentUserId == null) 
+        if (currentUserIdServices.userId.value == null)
         {
             AppHelpers.showSnackBar(
                 title: "Error",
                 message: "Please login to contact",
                 isError: true,
                 actionLabel: "Login",
-                onActionTap: () => Get.toNamed(Routes.auth)
+                onActionTap: () => showBottomSheet()
             );
             return;
         }
@@ -149,18 +116,27 @@ class ProductDetailsController extends GetxController
     // WhatsApp
     void whatsapp(String? phone) 
     {
-        if (currentUserId == null) 
+        if (currentUserIdServices.userId.value == null)
         {
             AppHelpers.showSnackBar(
                 title: "Error",
                 message: "Please login to contact",
                 isError: true,
                 actionLabel: "Login",
-                onActionTap: () => Get.toNamed(Routes.auth)
+                onActionTap: () => showBottomSheet()
             );
             return;
         }
         CommunicationHelper.openWhatsApp(phone);
+    }
+
+    // Bottom sheet
+    void showBottomSheet() {
+        Get.bottomSheet(
+            AuthBottomSheet(),
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent
+        );
     }
 
     bool userId() {

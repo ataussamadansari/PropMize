@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 import '../../../../core/themes/app_colors.dart';
+import '../../../../data/models/properties/data.dart';
 
 class LocationDetails extends StatelessWidget
 {

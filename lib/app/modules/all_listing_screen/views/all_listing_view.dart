@@ -100,7 +100,7 @@ class AllListingView extends GetView<AllListingController>
                                                     child: Column(
                                                         mainAxisAlignment: MainAxisAlignment.center,
                                                         children: [
-                                                            SvgPicture.asset('assets/svg_icons/404 Error-cuate.svg', width: double.infinity, height: 200)
+                                                            SvgPicture.asset('assets/icons/404 Error-cuate.svg', width: double.infinity, height: 200)
                                                         ]
                                                     )
                                                 );
@@ -151,11 +151,8 @@ class AllListingView extends GetView<AllListingController>
             floatingActionButton: Obx(()
                 {
                     if (controller.selectedPropertyTypes.isNotEmpty ||
-                        // controller.minPriceController.text.isNotEmpty ||
-                        // controller.maxPriceController.text.isNotEmpty ||
                         controller.minPrice.value > 0 ||
                         controller.maxPrice.value < 10000000 ||
-
                         controller.selectedBedrooms.isNotEmpty ||
                         controller.selectedBathrooms.isNotEmpty ||
                         controller.showFeaturedOnly.value ||

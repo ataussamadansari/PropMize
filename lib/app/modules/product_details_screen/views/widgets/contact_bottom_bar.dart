@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 import 'package:prop_mize/app/modules/product_details_screen/controllers/product_details_controller.dart';
+
+import '../../../../data/models/properties/data.dart';
 
 class ContactBottomBar extends GetView<ProductDetailsController> {
   final Contact contact;

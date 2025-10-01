@@ -132,7 +132,7 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                                 SvgPicture.asset(
-                                    'assets/svg_icons/404 Error-cuate.svg',
+                                    'assets/icons/404 Error-cuate.svg',
                                     width: 300,
                                     height: 300,
                                 ),
@@ -224,7 +224,7 @@ class SavedPropertiesView extends GetView<SavedPropertiesController>
                             )
                         ]
                     ),
-                    body: controller.properties.isEmpty ? Center(child: SvgPicture.asset('assets/svg_icons/404 Error-cuate.svg', width: 300)) : ListView.builder(
+                    body: controller.properties.isEmpty ? Center(child: SvgPicture.asset('assets/icons/404 Error-cuate.svg', width: 300)) : ListView.builder(
                             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                             itemCount: controller.properties.length + (controller.hasMore.value ? 1 : 0),
                             itemBuilder: (context, index)

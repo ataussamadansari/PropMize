@@ -5,9 +5,12 @@ import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/core/utils/DateTimeHelper.dart';
 import 'package:prop_mize/app/core/utils/capitalize.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
-import 'package:prop_mize/app/data/models/properties/properties_model.dart';
-import 'package:prop_mize/app/data/services/storage_services.dart';
+import 'package:prop_mize/app/data/models/properties/data.dart';
+import 'package:prop_mize/app/data/services/current_user_id_services.dart';
+import 'package:prop_mize/app/modules/all_listing_screen/views/widgets/card_widgets/card_not_logged.dart';
 import 'package:prop_mize/app/modules/all_listing_screen/views/widgets/card_widgets/contact_view.dart';
+
+import '../../../../data/services/like_services.dart';
 
 // class PropertyCardWidget extends GetView<AllListingController>
 class PropertyCardWidget extends StatelessWidget
@@ -30,7 +33,8 @@ class PropertyCardWidget extends StatelessWidget
     Widget build(BuildContext context)
     {
         final firstImage = properties.images?.isNotEmpty == true ? properties.images!.first : '';
-
+        final likeService = Get.find<LikeService>();
+        final userIdService = Get.find<CurrentUserIdServices>();
         return Card(
             margin: const EdgeInsets.only(bottom: 16),
             elevation: 2,
@@ -70,8 +74,8 @@ class PropertyCardWidget extends StatelessWidget
                                             return Container(
                                                 height: 200,
                                                 width: double.infinity,
-                                                color: Colors.grey.shade200,
-                                                child: const Icon(Icons.home, size: 50, color: Colors.grey)
+                                                color: Colors.black.withAlpha(100),
+                                                child: const Icon(Icons.broken_image, size: 50)
                                             );
                                         }
                                     )
@@ -125,6 +129,28 @@ class PropertyCardWidget extends StatelessWidget
 
                                 // Like-Dislike
                                 Positioned(
+                                    right: 8,
+                                    top: 8,
+                                    child: Obx(()
+                                        {
+                                            final property = controller.properties[index];
+                                            final isLiked = likeService.isLiked(property.id!);
+                                            return IconButton(
+                                                onPressed: () => likeService.toggleLike(property),
+                                                style: IconButton.styleFrom(
+                                                    backgroundColor: Colors.grey.withOpacity(0.7),
+                                                    elevation: 2
+                                                ),
+                                                icon: Icon(
+                                                    isLiked ? Icons.favorite : Icons.favorite_border,
+                                                    color: isLiked ? Colors.red : Colors.black
+                                                )
+                                            );
+                                        }
+                                    )
+                                ),
+
+                                /*Positioned(
                                     right: 0,
                                     child: Obx(()
                                         {
@@ -144,7 +170,7 @@ class PropertyCardWidget extends StatelessWidget
                                             );
                                         }
                                     )
-                                ),
+                                ),*/
 
                                 // Featured Badge
                                 if (properties.featured == true)
@@ -307,8 +333,14 @@ class PropertyCardWidget extends StatelessWidget
 
                                     SizedBox(height: 8),
                                     // Contact
-                                    ContactView(contact: properties.contact!)
+                                   /* userIdService.currentUserId == null ? CardNotLogged() :
+                                        ContactView(contact: properties.contact!)*/
 
+                                    Obx(() {
+                                            return userIdService.userId.value == null
+                                                ? CardNotLogged()
+                                                : ContactView(contact: properties.contact!);
+                                    })
                                 ]
                             )
                         )

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 import 'package:prop_mize/app/modules/product_details_screen/controllers/product_details_controller.dart';
+
+import '../../../../data/models/properties/data.dart';
+import '../../../../data/services/current_user_id_services.dart';
 
 class ContactDetails extends GetView<ProductDetailsController> {
   final Contact contact;
@@ -10,6 +12,7 @@ class ContactDetails extends GetView<ProductDetailsController> {
 
   @override
   Widget build(BuildContext context) {
+    final userIdService = Get.find<CurrentUserIdServices>();
     return Container(
       padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -57,7 +60,8 @@ class ContactDetails extends GetView<ProductDetailsController> {
                 const Icon(Icons.phone, color: Colors.green),
                 const SizedBox(width: 8),
                 Text(
-                  controller.userId() ? contact.phone ?? "-" : "Login to view",
+                  // controller.userId() ? contact.phone ?? "-" : "Login to view",
+                  userIdService.userId.value != null ? contact.phone ?? "-" : "Login to view",
                   style: context.textTheme.bodyLarge
                       ?.copyWith(color: Colors.green[800]),
                 ),
@@ -75,7 +79,8 @@ class ContactDetails extends GetView<ProductDetailsController> {
                 const Icon(FontAwesomeIcons.whatsapp, color: Colors.green),
                 const SizedBox(width: 8),
                 Text(
-                  controller.userId() ? contact.whatsapp ?? "-" : "Login to view",
+                  // controller.userId() ? contact.whatsapp ?? "-" : "Login to view",
+                  userIdService.userId.value != null ? contact.whatsapp ?? "-" : "Login to view",
                   style: context.textTheme.bodyLarge
                       ?.copyWith(color: Colors.green[800]),
                 ),
