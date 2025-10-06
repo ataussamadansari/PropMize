@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/data/models/ai/message_model.dart';
 import 'package:prop_mize/app/modules/assistant_chat_screen/views/widgets/assistant_chat_appbar.dart';
 import 'package:prop_mize/app/modules/assistant_chat_screen/views/widgets/assistant_chat_drawer.dart';
 
+import '../../../core/utils/helpers.dart';
 import '../../../global_widgets/chat/received_message_bubble.dart';
 import '../../../global_widgets/chat/send_message_bubble.dart';
 import '../../../global_widgets/typing_indicator.dart';
@@ -46,6 +48,24 @@ class AssistantChatView extends GetView<AssistantChatController>
                                             final allMessages =
                                                 apiMessages.isEmpty ? chatMessages : apiMessages;
 
+                                            if (controller.errorMessage.value.isNotEmpty)
+                                            {
+                                                Center(
+                                                    child: Column(
+                                                        children: [
+                                                            Text(controller.errorMessage.value),
+                                                            ElevatedButton(
+                                                                onPressed: ()
+                                                                {
+                                                                    controller.errorMessage.value = '';
+                                                                    controller.startNewChat();
+                                                                },
+                                                                child: Text('Retry')
+                                                            )
+                                                        ]
+                                                    )
+                                                );
+                                            }
 
                                             return ListView.builder(
                                                 controller: controller.scrollController,
@@ -106,12 +126,53 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                         )
                                                     ),
 
-                                                    // Show Send button only if there is text
+                                                    /*// Show Send button only if there is text
                                                     if (hasText)
                                                     IconButton(
                                                         icon: Icon(CupertinoIcons.paperplane, color: sending ? Colors.grey : Colors.blue),
                                                         onPressed: sending ? null : controller.onSendMessageButtonPressed
+                                                    )*/
+
+                                                    // 👇 Single button that toggles Send ↔ Cancel
+                                                    IconButton(
+                                                        style: IconButton.styleFrom(
+                                                            backgroundColor: sending ? Colors.grey.withValues(alpha: 0.5) : null
+                                                        ),
+                                                        icon: Icon(
+                                                            sending ? Icons.stop : CupertinoIcons.paperplane,
+                                                            color: sending
+                                                                ? Colors.red
+                                                                : (hasText ? AppColors.primary : Colors.grey)
+                                                        ),
+                                                        onPressed: ()
+                                                        {
+                                                            if (sending)
+                                                            {
+                                                                // 🧠 If sending, cancel the current request
+                                                                controller.cancelChat();
+                                                                controller.isSendingMessage.value = false;
+                                                            }
+                                                            else if (hasText)
+                                                            {
+                                                                // 🚀 Otherwise, send message
+                                                                controller.onSendMessageButtonPressed();
+                                                            }
+                                                        }
                                                     )
+
+                                                  /*// 👇 Show Send button only if text is present
+                                                  if (hasText && !sending)
+                                                    IconButton(
+                                                      icon: const Icon(CupertinoIcons.paperplane, color: Colors.blue),
+                                                      onPressed: controller.onSendMessageButtonPressed,
+                                                    ),
+
+                                                  // 👇 Show Cancel button while sending
+                                                  if (sending)
+                                                    IconButton(
+                                                      icon: const Icon(Icons.cancel, color: Colors.red),
+                                                      onPressed: controller.cancelChat, // 🧠 this calls cancelToken.cancel()
+                                                    ),*/
                                                 ]
                                             )
                                         );

@@ -129,6 +129,19 @@ class AssistantChatController extends GetxController {
     }
   }
 
+  // cancel chat
+  void cancelChat() {
+    _aiChatRepository.cancelChat();
+  }
+
+  @override
+  void onClose() {
+    messageController.dispose();
+    scrollController.dispose();
+    _aiChatRepository.cancelChat();
+    super.onClose();
+  }
+
   // Role
   bool isAssistant(ChatMessage message) {
     return message.role?.toLowerCase() == "assistant";

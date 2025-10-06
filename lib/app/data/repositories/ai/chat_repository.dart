@@ -96,4 +96,8 @@ class AiChatRepository
         }
     }
 
+    Future<void> cancelChat() async {
+        _cancelToken?.cancel();
+    }
+
 }

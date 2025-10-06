@@ -99,7 +99,7 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                                     AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
                                                 }
                                             ) : SizedBox.shrink(),
-                                        DrawerMenuItem(
+                                        /*DrawerMenuItem(
                                             leading: Icons.add_home_work_outlined,
                                             title: "New Projects",
                                             subtitle: "New projects in your city",
@@ -108,7 +108,7 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                                 // controller.globalKey.currentState?.closeDrawer();
                                                 AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
                                             }
-                                        ),
+                                        ),*/
                                         DrawerMenuItem(
                                             leading: CupertinoIcons.book,
                                             title: "Buyer's Guide",
