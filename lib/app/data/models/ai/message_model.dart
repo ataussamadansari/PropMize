@@ -1,4 +1,4 @@
-import 'ai_start_chat_model.dart';
+import 'messages.dart';
 
 class MessageModel {
   final bool? success;

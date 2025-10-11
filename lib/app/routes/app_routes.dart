@@ -8,4 +8,5 @@ abstract class Routes
     static const auth = '/auth';
     static const allListing = '/all-listing';
     static const saveProperties = '/saved-properties';
+    static const contacted = '/contacted';
 }

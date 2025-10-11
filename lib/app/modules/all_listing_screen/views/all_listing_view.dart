@@ -81,24 +81,27 @@ class AllListingView extends GetView<AllListingController>
 
                                             if (controller.hasError.value && controller.properties.isEmpty) 
                                             {
-                                                return Center(
-                                                    child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                            const Icon(Icons.error_outline, size: 64, color: Colors.grey),
-                                                            const SizedBox(height: 16),
-                                                            Text(
-                                                                controller.errorMessage.value,
-                                                                textAlign: TextAlign.center,
-                                                                style: const TextStyle(color: Colors.grey)
-                                                            ),
-                                                            const SizedBox(height: 16),
-                                                            ElevatedButton(
-                                                                onPressed: controller.loadProperties,
-                                                                child: const Text('Try Again')
-                                                            )
-                                                        ]
-                                                    )
+                                                return Padding(
+                                                  padding: const EdgeInsets.all(16.0),
+                                                  child: Center(
+                                                      child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                              const Icon(Icons.error_outline, size: 64, color: Colors.grey),
+                                                              const SizedBox(height: 16),
+                                                              Text(
+                                                                  controller.errorMessage.value,
+                                                                  textAlign: TextAlign.center,
+                                                                  style: const TextStyle(color: Colors.grey)
+                                                              ),
+                                                              const SizedBox(height: 16),
+                                                              ElevatedButton(
+                                                                  onPressed: controller.loadProperties,
+                                                                  child: const Text('Try Again')
+                                                              )
+                                                          ]
+                                                      )
+                                                  ),
                                                 );
                                             }
 
@@ -142,7 +145,11 @@ class AllListingView extends GetView<AllListingController>
                                                         }
 
                                                         final property = controller.properties[index];
-                                                        return PropertyCardWidget(properties: property, index: index, controller: controller);
+                                                        return PropertyCardWidget(
+                                                            property: property,
+                                                            // index: index,
+                                                            controller: controller
+                                                        );
                                                     }
                                                 )
                                             );

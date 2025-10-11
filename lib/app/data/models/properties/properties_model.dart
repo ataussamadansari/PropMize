@@ -1,11 +1,14 @@
 import 'package:prop_mize/app/data/models/properties/data.dart';
 
+import 'lists/pagination.dart';
+
 class PropertiesModel {
   PropertiesModel({
-      this.success, 
-      this.count, 
-      this.pagination, 
-      this.data,});
+    this.success,
+    this.count,
+    this.pagination,
+    this.data
+  });
 
   PropertiesModel.fromJson(dynamic json) {
     success = json['success'];
@@ -36,5 +39,3 @@ class PropertiesModel {
     return map;
   }
 }
-
-

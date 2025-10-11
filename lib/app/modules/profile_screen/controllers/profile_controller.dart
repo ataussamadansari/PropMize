@@ -72,7 +72,6 @@ class ProfileController extends GetxController
     final RxBool isDataLoaded = false.obs;
 
     // Camera
-
     final Rx<File?> selectedImage = Rx<File?>(null);
     final ImagePicker imagePicker = ImagePicker();
 

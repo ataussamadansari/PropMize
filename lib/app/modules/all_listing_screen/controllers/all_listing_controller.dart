@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/debouncer.dart';
+import 'package:prop_mize/app/data/models/properties/contacted_seller/contacted_seller_request.dart';
 import 'package:prop_mize/app/data/models/properties/data.dart';
+import 'package:prop_mize/app/data/services/contact_seller_service.dart';
 import 'package:prop_mize/app/data/services/current_user_id_services.dart';
 
+import '../../../core/utils/helpers.dart';
 import '../../../data/repositories/properties/properties_repository.dart';
 import '../../../data/services/like_services.dart';
 import '../../../data/services/storage_services.dart';
+import '../../auth_screen/views/auth_bottom_sheet.dart';
 import '../views/widgets/filter_bottom_sheet.dart';
 
 class AllListingController extends GetxController
@@ -14,7 +18,10 @@ class AllListingController extends GetxController
     final PropertiesRepository _propertiesRepo = PropertiesRepository();
 
     final LikeService likeService = Get.find<LikeService>();
+    final ContactSellerService contactSellerService = Get.find<ContactSellerService>();
     final CurrentUserIdServices currentUserIdServices = Get.find<CurrentUserIdServices>();
+
+    final phone = StorageServices.to.read("phone");
 
     // Search
     final TextEditingController searchController = TextEditingController();
@@ -40,7 +47,7 @@ class AllListingController extends GetxController
     final RxString errorMessage = ''.obs;
     final RxBool hasError = false.obs;
 
-    final RxString searchText = ''.obs;  // add this
+    final RxString searchText = ''.obs;
 
     // current user id
     final currentUserId = StorageServices.to.read("userId");
@@ -161,6 +168,57 @@ class AllListingController extends GetxController
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) 
         {
             currentFocus.focusedChild!.unfocus();
+        }
+    }
+
+    // ------------- Contact Seller ----------------
+    Future<void> contactedSeller(Data property) async {
+        try {
+            // Check if property ID is valid
+            if (property.id == null || property.id!.isEmpty) {
+                AppHelpers.showSnackBar(
+                    title: "Error",
+                    message: "Invalid property ID",
+                    isError: true,
+                );
+                return;
+            }
+
+            // Get current user ID
+            final userId = currentUserIdServices.userId.value;
+            if (userId == null) {
+                AppHelpers.showSnackBar(
+                    title: "Error",
+                    message: "Please login to contact seller",
+                    isError: true,
+                    actionLabel: 'Login',
+                    onActionTap: () => Get.bottomSheet(
+                        AuthBottomSheet(),
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                    ),
+                );
+                return;
+            }
+
+            // Create request with proper data
+            final request = ContactedSellerRequest(
+                propertyId: property.id!,
+                message: "I am interested in this property: ${property.title}",
+                buyerContact: BuyerContact(
+                    contactMethod: "any",
+                    phone: phone ?? "N/A"
+                ),
+            );
+
+            // ✅ Service call karein aur response capture karein
+            await contactSellerService.contactedSeller(request);
+        } catch (e) {
+            AppHelpers.showSnackBar(
+                title: "Error",
+                message: "Failed to contact seller: ${e.toString()}",
+                isError: true,
+            );
         }
     }
 

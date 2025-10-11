@@ -3,6 +3,8 @@ import 'package:prop_mize/app/modules/all_listing_screen/bindings/all_listing_bi
 import 'package:prop_mize/app/modules/all_listing_screen/views/all_listing_view.dart';
 import 'package:prop_mize/app/modules/auth_screen/bindings/auth_binding.dart';
 import 'package:prop_mize/app/modules/auth_screen/views/auth_view.dart';
+import 'package:prop_mize/app/modules/contacted_screen/bindings/contacted_binding.dart';
+import 'package:prop_mize/app/modules/contacted_screen/views/contacted_view.dart';
 import 'package:prop_mize/app/modules/product_details_screen/bindings/product_details_binding.dart';
 import 'package:prop_mize/app/modules/product_details_screen/views/product_details_view.dart';
 import 'package:prop_mize/app/modules/saved_properties_screen/bindings/saved_properties_binding.dart';
@@ -28,6 +30,7 @@ class AppPages
         GetPage(name: Routes.profile, page: () => ProfileView(), binding: ProfileBinding()),
         GetPage(name: Routes.allListing, page: () => AllListingView(), binding: AllListingBinding()),
         GetPage(name: Routes.productDetails, page: () => ProductDetailsView(), binding: ProductDetailsBinding()),
-        GetPage(name: Routes.saveProperties, page: () => SavedPropertiesView(), binding: SavedPropertiesBinding())
+        GetPage(name: Routes.saveProperties, page: () => SavedPropertiesView(), binding: SavedPropertiesBinding()),
+        GetPage(name: Routes.contacted, page: () => ContactedView(), binding: ContactedBinding())
     ];
 }

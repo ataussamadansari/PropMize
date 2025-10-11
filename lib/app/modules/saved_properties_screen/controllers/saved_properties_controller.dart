@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/data/repositories/properties/properties_repository.dart';
 
@@ -18,20 +19,23 @@ class SavedPropertiesController extends GetxController {
   final RxString errorMessage = ''.obs;
   final RxBool hasError = false.obs;
 
-  // current user id
-  final currentUserId = StorageServices.to.read("userId");
-
+  // Current user id
+  final String? currentUserId = StorageServices.to.read("userId");
 
   @override
   void onInit() {
     super.onInit();
     loadLikedProperties();
 
-    // Listener: jab bhi likeService change hoga → UI update hoga
+    // Listen for like status changes and remove unliked properties
     ever(likeService.likedStatus, (_) {
-      // jo property unlike ho gayi usse list se hatao
-      properties.removeWhere((p) => !likeService.isLiked(p.id!));
+      _syncPropertiesWithLikeService();
     });
+  }
+
+  void _syncPropertiesWithLikeService() {
+    properties.removeWhere((property) => !likeService.isLiked(property.id!));
+    properties.refresh();
   }
 
   Future<void> loadLikedProperties({bool reset = true}) async {
@@ -41,24 +45,23 @@ class SavedPropertiesController extends GetxController {
         currentPage.value = 1;
         properties.clear();
         hasMore.value = true;
+        hasError.value = false;
+        errorMessage.value = '';
+      } else {
+        isLoadMore.value = true;
       }
 
-      hasError.value = false;
-      errorMessage.value = '';
-
-      // If search query exists, use search endpoint
-      final response =  await _propertiesRepository.getLikedProperties(
+      final response = await _propertiesRepository.getLikedProperties(
         page: currentPage.value,
         limit: 10,
       );
 
       if (response.success && response.data != null) {
+        // Access the data list from PropertiesModel
         final newProperties = response.data!.data ?? [];
 
-        // sync with global like service
-        for (var p in newProperties) {
-          likeService.syncWithProperty(p);
-        }
+        // Sync with global like service
+        _syncWithLikeService(newProperties);
 
         if (reset) {
           properties.value = newProperties;
@@ -66,138 +69,82 @@ class SavedPropertiesController extends GetxController {
           properties.addAll(newProperties);
         }
 
+        // Check if there are more pages
         hasMore.value = newProperties.length == 10;
-      } else {
-        hasError.value = true;
-        errorMessage.value = response.message;
-      }
 
-    } catch (e) {
-      hasError.value = true;
-      errorMessage.value = e.toString();
+        debugPrint('✅ Properties loaded successfully: ${properties.length}');
+      } else {
+        _handleError(response.message);
+      }
+    } catch (e, stackTrace) {
+      _handleError('Failed to load properties: ${e.toString()}');
+      debugPrint('❌ Error in loadLikedProperties: $e');
+      debugPrint('📋 Stack trace: $stackTrace');
     } finally {
       isLoading.value = false;
       isLoadMore.value = false;
     }
   }
 
+  void _syncWithLikeService(List<Data> newProperties) {
+    for (final property in newProperties) {
+      likeService.syncWithProperty(property);
+    }
+  }
+
+  void _handleError(String message) {
+    hasError.value = true;
+    errorMessage.value = message;
+  }
+
   // ---------------- LOAD MORE ----------------
   Future<void> loadMoreProperties() async {
-    if (isLoadMore.value || !hasMore.value) return;
+    if (isLoadMore.value || !hasMore.value || isLoading.value) return;
 
     try {
-      isLoadMore.value = true;
       currentPage.value++;
       await loadLikedProperties(reset: false);
     } catch (e) {
-      currentPage.value--;
-      hasError.value = true;
-      errorMessage.value = e.toString();
-    } finally {
-      isLoadMore.value = false;
+      currentPage.value--; // Revert page on error
+      _handleError(e.toString());
     }
   }
 
-
-  // ---------- Like - Dislike ----------
-
-  /*// Add this method to check like status for a specific property
-  bool isPropertyLiked(Data property) {
-    return property.likedBy?.any((like) => like.user == currentUserId) ?? false;
+  // ---------------- REFRESH ----------------
+  Future<void> refreshProperties() async {
+    await loadLikedProperties(reset: true);
   }
 
-  // Update the toggleLike method
-  void toggleLike(String productId, int index) async
-  {
-    if (properties.isEmpty) return;
-    if (currentUserId == null)
-    {
-      AppHelpers.showSnackBar(
-          title: "Error",
-          message: "Please login to like",
-          isError: true,
-          actionLabel: "Login"
-      );
-      return;
-    }
+  // ---------------- PROPERTY MANAGEMENT ----------------
 
-    // Find the property and get current like status
-    final propertyIndex = properties.indexWhere((p) => p.id == productId);
-    if (propertyIndex == -1) return;
+  // Remove a property from the list (when unliked from elsewhere)
+  void removeProperty(String propertyId) {
+    properties.removeWhere((property) => property.id == propertyId);
+    properties.refresh();
+  }
 
-    final property = properties[propertyIndex];
-    final previousStatus = isPropertyLiked(property);
-
-    try
-    {
-      final response = await _propertiesRepository.like(productId);
-      if (!response.success)
-      {
-        AppHelpers.showSnackBar(
-            title: "Error",
-            message: response.message,
-            isError: true
-        );
-      }
-      else
-      {
-        // Update the local likedBy array to reflect the change
-        if (previousStatus) {
-          // Remove like
-          property.likedBy?.removeWhere((like) => like.user == currentUserId);
-        } else {
-          // Add like
-          property.likedBy ??= [];
-          property.likedBy!.add(LikedBy(user: currentUserId));
-        }
-
-        // Force UI update by reassigning the list
-        properties[propertyIndex] = property;
-        properties.refresh();
-
-        loadLikedProperties(reset: true);
-
-        AppHelpers.showSnackBar(
-            title: "Property",
-            message: !previousStatus ? "Liked successfully" : "Disliked successfully",
-            isError: !previousStatus ? false : true
-        );
-      }
-    }
-    catch (e)
-    {
-      AppHelpers.showSnackBar(
-          title: "error",
-          message: e.toString(),
-          isError: true
-      );
+  // Add a property to the list (when liked from elsewhere)
+  void addProperty(Data property) {
+    if (!properties.any((p) => p.id == property.id)) {
+      properties.insert(0, property); // Add at the beginning
+      likeService.syncWithProperty(property);
     }
   }
 
-  // Add this method to update like status from other screens
-  void updateLikeStatus({required String propertyId, required bool isLiked}) {
-    if (!isLiked) {
-      // If property is unliked, remove it from saved properties
-      final propertyIndex = properties.indexWhere((p) => p.id == propertyId);
-      if (propertyIndex != -1) {
-        properties.removeAt(propertyIndex);
-        properties.refresh();
-      }
-    } else {
-      // If property is liked, we might want to add it to saved properties
-      // But we don't have the full property data here, so we'll reload
-      loadLikedProperties(reset: true);
-    }
+  // Check if property exists in the list
+  bool containsProperty(String propertyId) {
+    return properties.any((property) => property.id == propertyId);
   }
 
-  // Refresh the entire list
-  void refreshSavedProperties() {
-    loadLikedProperties(reset: true);
-  }*/
-
-
-  // ------------ Navigation -----------------
+  // ---------------- NAVIGATION ----------------
   void navigateToPropertyDetails(String propertyId) {
     Get.toNamed('/product/$propertyId');
+  }
+
+  // ---------------- DISPOSE ----------------
+  @override
+  void onClose() {
+    // Cancel any ongoing requests if needed
+    super.onClose();
   }
 }

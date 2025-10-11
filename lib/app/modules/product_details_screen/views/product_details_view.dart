@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
-import 'package:prop_mize/app/global_widgets/shimmer/properties_details/shimmer_loading.dart';
 import 'package:prop_mize/app/global_widgets/status_card_item.dart';
 import 'package:prop_mize/app/modules/product_details_screen/controllers/product_details_controller.dart';
 import 'package:prop_mize/app/modules/product_details_screen/views/widgets/amenities_item.dart';

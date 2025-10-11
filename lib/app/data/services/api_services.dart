@@ -10,7 +10,7 @@ class ApiServices {
     Future<ApiResponse<T>> handleApiCall<T>(
         Future<Response> Function() apiCall,
         T Function(dynamic) fromJson
-    ) async
+        ) async
     {
         try
         {
@@ -45,19 +45,19 @@ class ApiServices {
     Future<ApiResponse<List<T>>> handleListApiCall<T>(
         Future<Response> Function() apiCall,
         T Function(dynamic) fromJson
-    ) async
+        ) async
     {
         try
         {
             final response = await apiCall();
 
-            if (response.statusCode == 200 || response.statusCode == 201) 
+            if (response.statusCode == 200 || response.statusCode == 201)
             {
                 final List<dynamic> jsonList = response.data;
                 final List<T> dataList = jsonList.map((json) => fromJson(json as Map<String, dynamic>)).toList();
                 return ApiResponse.success(dataList);
             }
-            else 
+            else
             {
                 return ApiResponse.error(
                     "Request failed with status: ${response.statusCode}",
@@ -86,7 +86,7 @@ class ApiServices {
         }) async
     {
         return handleApiCall<T>(
-            () => _apiProvider.get(
+                () => _apiProvider.get(
                 endPint,
                 queryParameters: queryParameters,
                 cancelToken: cancelToken
@@ -104,7 +104,7 @@ class ApiServices {
         }) async
     {
         return handleListApiCall<T>(
-            () => _apiProvider.get(
+                () => _apiProvider.get(
                 endPint,
                 queryParameters: queryParameters,
                 cancelToken: cancelToken
@@ -117,59 +117,59 @@ class ApiServices {
     Future<ApiResponse<T>> post<T>(
         String endPint,
         T Function(dynamic) fromJson, {
-          dynamic data,
-          Map<String, dynamic>? queryParameters,
-          CancelToken? cancelToken
+            dynamic data,
+            Map<String, dynamic>? queryParameters,
+            CancelToken? cancelToken
         }) async
     {
-      return handleApiCall<T>(
-              () => _apiProvider.post(
-              endPint,
-              data: data,
-              queryParameters: queryParameters,
-              cancelToken: cancelToken
-          ),
-          fromJson
-      );
+        return handleApiCall<T>(
+                () => _apiProvider.post(
+                endPint,
+                data: data,
+                queryParameters: queryParameters,
+                cancelToken: cancelToken
+            ),
+            fromJson
+        );
     }
 
     // specific PUT method
     Future<ApiResponse<T>> put<T>(
         String endPint,
         T Function(dynamic) fromJson, {
-          dynamic data,
-          Map<String, dynamic>? queryParameters,
-          CancelToken? cancelToken
+            dynamic data,
+            Map<String, dynamic>? queryParameters,
+            CancelToken? cancelToken
         }) async
     {
-      return handleApiCall<T>(
-              () => _apiProvider.put(
-              endPint,
-              data: data,
-              queryParameters: queryParameters,
-              cancelToken: cancelToken
-          ),
-          fromJson
-      );
+        return handleApiCall<T>(
+                () => _apiProvider.put(
+                endPint,
+                data: data,
+                queryParameters: queryParameters,
+                cancelToken: cancelToken
+            ),
+            fromJson
+        );
     }
 
     // specific DELETE method
     Future<ApiResponse<T>> delete<T>(
         String endPint,
         T Function(dynamic) fromJson, {
-          dynamic data,
-          Map<String, dynamic>? queryParameters,
-          CancelToken? cancelToken
+            dynamic data,
+            Map<String, dynamic>? queryParameters,
+            CancelToken? cancelToken
         }) async
     {
-      return handleApiCall<T>(
-              () => _apiProvider.delete(
-              endPint,
-              data: data,
-              queryParameters: queryParameters,
-              cancelToken: cancelToken
-          ),
-          fromJson
-      );
+        return handleApiCall<T>(
+                () => _apiProvider.delete(
+                endPint,
+                data: data,
+                queryParameters: queryParameters,
+                cancelToken: cancelToken
+            ),
+            fromJson
+        );
     }
 }

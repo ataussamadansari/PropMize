@@ -31,6 +31,9 @@ class AuthController extends GetxController
     final RxBool hasError = false.obs;
     final RxString errorMessage = "".obs;
 
+    late TextEditingController phoneController;
+    late TextEditingController otpController;
+
     // Phone validation state
     var phoneValidationState = "".obs;
 
@@ -47,10 +50,6 @@ class AuthController extends GetxController
             phoneValidationState.value = "invalid";
         }
     }
-
-    // ✅ FIX: Controllers ko immediately initialize karo
-    TextEditingController phoneController = TextEditingController();
-    TextEditingController otpController = TextEditingController();
 
     // FocusNodes
     final phoneFocus = FocusNode();
@@ -232,6 +231,11 @@ class AuthController extends GetxController
                 if (user.value != null && user.value!.data.user.id != null) 
                 {
                     StorageServices.to.setUserId(user.value!.data.user.id!);
+                }
+
+                if (user.value != null) {
+                    StorageServices.to.write("users", user.value!.data.user);
+                    StorageServices.to.write("phone", user.value!.data.user.phone);
                 }
 
                 // Login success

@@ -20,5 +20,4 @@ class LikeModel {
     map['message'] = message;
     return map;
   }
-
 }

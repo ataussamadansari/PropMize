@@ -39,7 +39,6 @@ class StorageServices extends GetxService {
     userId.value = id; // reactive update
   }
 
-
   void removeUserId() {
     _box.remove('userId');
     userId.value = ""; // reactive update

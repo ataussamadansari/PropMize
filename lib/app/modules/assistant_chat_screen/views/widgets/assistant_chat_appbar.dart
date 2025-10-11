@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
 
-import '../../../../global_widgets/menu/global_menu_option.dart';
 
 class AssistantChatAppbar extends GetView<AssistantChatController> implements PreferredSizeWidget {
   const AssistantChatAppbar({super.key});
@@ -25,14 +24,23 @@ class AssistantChatAppbar extends GetView<AssistantChatController> implements Pr
               onPressed: () {},
               icon: const Icon(CupertinoIcons.bell)
           ),
-          GlobalPopupMenuBtn(onSelected: (option)
+          IconButton(
+              onPressed: () {
+                if (controller.globalKey.currentState != null) {
+                  controller.globalKey.currentState!.openEndDrawer();
+                }
+              },
+              icon: const Icon(Icons.more_vert)
+          ),
+          /*GlobalPopupMenuBtn(onSelected: (option)
           {
             switch (option)
             {
               case GlobalMenuOption.newChat:
-                controller.startNewChat();
                 break;
               case GlobalMenuOption.clearChat:
+                break;
+              case GlobalMenuOption.history:
                 break;
               case GlobalMenuOption.helpSupport:
                 break;
@@ -40,7 +48,7 @@ class AssistantChatAppbar extends GetView<AssistantChatController> implements Pr
                 break;
             }
           }
-          )
+          )*/
         ]
     );
   }

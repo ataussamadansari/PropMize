@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../data/models/properties/data.dart';
+import '../../../../data/models/properties/lists/features.dart';
 
 class FeatureItem extends StatelessWidget {
   final Features features;

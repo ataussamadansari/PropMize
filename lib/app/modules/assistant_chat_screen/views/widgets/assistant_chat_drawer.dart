@@ -79,24 +79,24 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                                     controller.goToSavedProperties();
                                                 }
                                             ) : SizedBox.shrink(),
-                                        isLoggedIn ? DrawerMenuItem(
-                                                leading: CupertinoIcons.eye,
-                                                title: "Recently Viewed",
-                                                subtitle: "Recently viewed properties",
-                                                onTap: ()
-                                                {
-                                                    // controller.globalKey.currentState?.closeDrawer();
-                                                    AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
-                                                }
-                                            ) : SizedBox.shrink(),
+                                        // isLoggedIn ? DrawerMenuItem(
+                                        //         leading: CupertinoIcons.eye,
+                                        //         title: "Recently Viewed",
+                                        //         subtitle: "Recently viewed properties",
+                                        //         onTap: ()
+                                        //         {
+                                        //             // controller.globalKey.currentState?.closeDrawer();
+                                        //             AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
+                                        //         }
+                                        //     ) : SizedBox.shrink(),
                                         isLoggedIn ? DrawerMenuItem(
                                                 leading: CupertinoIcons.phone,
                                                 title: "Contacted",
                                                 subtitle: "Properties where to you connected ower",
                                                 onTap: ()
                                                 {
-                                                    // controller.globalKey.currentState?.closeDrawer();
-                                                    AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
+                                                    controller.globalKey.currentState?.closeDrawer();
+                                                    controller.goToContacted();
                                                 }
                                             ) : SizedBox.shrink(),
                                         /*DrawerMenuItem(

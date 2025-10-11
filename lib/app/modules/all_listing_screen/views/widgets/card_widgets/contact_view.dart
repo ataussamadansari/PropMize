@@ -1,18 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/capitalize.dart';
 import 'package:prop_mize/app/core/utils/communication_helper.dart';
-import 'package:prop_mize/app/core/utils/helpers.dart';
 
 import '../../../../../data/models/properties/data.dart';
+import '../../../../../data/models/properties/lists/contact.dart';
 import '../../../controllers/all_listing_controller.dart';
 
 class ContactView extends GetView<AllListingController> {
   final Contact contact;
+  final Data property;
 
-  const ContactView({super.key, required this.contact});
+  const ContactView({super.key, required this.contact, required this.property});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class ContactView extends GetView<AllListingController> {
 
         const SizedBox(height: 8),
         SizedBox(width: double.infinity, height: 32, child: ElevatedButton(onPressed: () {
-          AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon");
+          controller.contactedSeller(property);
         }, child: Text('Contact Seller')))
       ],
     );

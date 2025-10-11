@@ -1,3 +1,15 @@
+import 'lists/address.dart';
+import 'lists/area.dart';
+import 'lists/contact.dart';
+import 'lists/contacted_by.dart';
+import 'lists/features.dart';
+import 'lists/leads.dart';
+import 'lists/liked_by.dart';
+import 'lists/near_by_places.dart';
+import 'lists/pricing.dart';
+import 'lists/seo.dart';
+import 'lists/seller.dart';
+import 'lists/viewed_by.dart';
 
 class Data
 {
@@ -77,42 +89,42 @@ class Data
         premium = json['premium'];
         views = json['views'];
         likes = json['likes'] != null ? json['likes'].cast<String>() : [];
-        if (json['leads'] != null) 
+        if (json['leads'] != null)
         {
             leads = [];
             json['leads'].forEach((v)
-                {
-                    leads?.add(Leads.fromJson(v));
-                }
+            {
+                leads?.add(Leads.fromJson(v));
+            }
             );
         }
         approvalStatus = json['approvalStatus'];
         notes = json['notes'];
-        if (json['viewedBy'] != null) 
+        if (json['viewedBy'] != null)
         {
             viewedBy = [];
             json['viewedBy'].forEach((v)
-                {
-                    viewedBy?.add(ViewedBy.fromJson(v));
-                }
+            {
+                viewedBy?.add(ViewedBy.fromJson(v));
+            }
             );
         }
-        if (json['likedBy'] != null) 
+        if (json['likedBy'] != null)
         {
             likedBy = [];
             json['likedBy'].forEach((v)
-                {
-                    likedBy?.add(LikedBy.fromJson(v));
-                }
+            {
+                likedBy?.add(LikedBy.fromJson(v));
+            }
             );
         }
-        if (json['contactedBy'] != null) 
+        if (json['contactedBy'] != null)
         {
             contactedBy = [];
             json['contactedBy'].forEach((v)
-                {
-                    contactedBy?.add(ContactedBy.fromJson(v));
-                }
+            {
+                contactedBy?.add(ContactedBy.fromJson(v));
+            }
             );
         }
         expiresAt = json['expiresAt'];
@@ -162,34 +174,34 @@ class Data
     String? updatedAt;
     int? v;
 
-    Map<String, dynamic> toJson() 
+    Map<String, dynamic> toJson()
     {
         final map = <String, dynamic>{};
-        if (area != null) 
+        if (area != null)
         {
             map['area'] = area?.toJson();
         }
-        if (address != null) 
+        if (address != null)
         {
             map['address'] = address?.toJson();
         }
-        if (seo != null) 
+        if (seo != null)
         {
             map['seo'] = seo?.toJson();
         }
-        if (pricing != null) 
+        if (pricing != null)
         {
             map['pricing'] = pricing?.toJson();
         }
-        if (contact != null) 
+        if (contact != null)
         {
             map['contact'] = contact?.toJson();
         }
-        if (features != null) 
+        if (features != null)
         {
             map['features'] = features?.toJson();
         }
-        if (nearbyPlaces != null) 
+        if (nearbyPlaces != null)
         {
             map['nearbyPlaces'] = nearbyPlaces?.toJson();
         }
@@ -211,7 +223,7 @@ class Data
         map['images'] = images;
         map['videos'] = videos;
         map['amenities'] = amenities;
-        if (seller != null) 
+        if (seller != null)
         {
             map['seller'] = seller?.toJson();
         }
@@ -220,21 +232,21 @@ class Data
         map['premium'] = premium;
         map['views'] = views;
         map['likes'] = likes;
-        if (leads != null) 
+        if (leads != null)
         {
             map['leads'] = leads?.map((v) => v.toJson()).toList();
         }
         map['approvalStatus'] = approvalStatus;
         map['notes'] = notes;
-        if (viewedBy != null) 
+        if (viewedBy != null)
         {
             map['viewedBy'] = viewedBy?.map((v) => v.toJson()).toList();
         }
-        if (likedBy != null) 
+        if (likedBy != null)
         {
             map['likedBy'] = likedBy?.map((v) => v.toJson()).toList();
         }
-        if (contactedBy != null) 
+        if (contactedBy != null)
         {
             map['contactedBy'] = contactedBy?.map((v) => v.toJson()).toList();
         }
@@ -246,657 +258,8 @@ class Data
     }
 }
 
-class Address
-{
-    Address({
-        this.street,
-        this.area,
-        this.city,
-        this.state,
-        this.zipCode,
-        this.country,
-        this.landmark});
 
-    Address.fromJson(dynamic json)
-    {
-        street = json['street'];
-        area = json['area'];
-        city = json['city'];
-        state = json['state'];
-        zipCode = json['zipCode'];
-        country = json['country'];
-        landmark = json['landmark'];
-    }
-    String? street;
-    String? area;
-    String? city;
-    String? state;
-    String? zipCode;
-    String? country;
-    String? landmark;
 
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['street'] = street;
-        map['area'] = area;
-        map['city'] = city;
-        map['state'] = state;
-        map['zipCode'] = zipCode;
-        map['country'] = country;
-        map['landmark'] = landmark;
-        return map;
-    }
 
-}
 
-class Area
-{
-    Area({
-        this.value,
-        this.unit});
 
-    Area.fromJson(dynamic json)
-    {
-        value = json['value'];
-        unit = json['unit'];
-    }
-    int? value;
-    String? unit;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['value'] = value;
-        map['unit'] = unit;
-        return map;
-    }
-
-}
-
-class ViewedBy
-{
-    ViewedBy({
-        this.user,
-        this.viewedAt,
-        this.id});
-
-    ViewedBy.fromJson(dynamic json)
-    {
-        user = json['user'];
-        viewedAt = json['viewedAt'];
-        id = json['_id'];
-    }
-    String? user;
-    String? viewedAt;
-    String? id;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['user'] = user;
-        map['viewedAt'] = viewedAt;
-        map['_id'] = id;
-        return map;
-    }
-
-}
-
-class Leads
-{
-    Leads({
-        this.id,
-        this.buyer,
-        this.status,
-        this.createdAt});
-
-    Leads.fromJson(dynamic json)
-    {
-        id = json['_id'];
-        buyer = json['buyer'] != null ? Buyer.fromJson(json['buyer']) : null;
-        status = json['status'];
-        createdAt = json['createdAt'];
-    }
-    String? id;
-    Buyer? buyer;
-    String? status;
-    String? createdAt;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['_id'] = id;
-        if (buyer != null) 
-        {
-            map['buyer'] = buyer?.toJson();
-        }
-        map['status'] = status;
-        map['createdAt'] = createdAt;
-        return map;
-    }
-
-}
-
-class Buyer
-{
-    Buyer({
-        this.id,
-        this.phone,
-        this.email,
-        this.name});
-
-    Buyer.fromJson(dynamic json)
-    {
-        id = json['_id'];
-        phone = json['phone'];
-        email = json['email'];
-        name = json['name'];
-    }
-    String? id;
-    String? phone;
-    String? email;
-    String? name;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['_id'] = id;
-        map['phone'] = phone;
-        map['email'] = email;
-        map['name'] = name;
-        return map;
-    }
-
-}
-
-class Seller
-{
-    Seller({
-        this.id,
-        this.phone,
-        this.avatar,
-        this.isEmailVerified,
-        this.isPhoneVerified,
-        this.email,
-        this.name});
-
-    Seller.fromJson(dynamic json)
-    {
-        id = json['_id'];
-        phone = json['phone'];
-        avatar = json['avatar'];
-        isEmailVerified = json['isEmailVerified'];
-        isPhoneVerified = json['isPhoneVerified'];
-        email = json['email'];
-        name = json['name'];
-    }
-    String? id;
-    String? phone;
-    String? avatar;
-    bool? isEmailVerified;
-    bool? isPhoneVerified;
-    String? email;
-    String? name;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['_id'] = id;
-        map['phone'] = phone;
-        map['avatar'] = avatar;
-        map['isEmailVerified'] = isEmailVerified;
-        map['isPhoneVerified'] = isPhoneVerified;
-        map['email'] = email;
-        map['name'] = name;
-        return map;
-    }
-
-}
-
-class NearbyPlaces
-{
-    NearbyPlaces({
-        this.schools,
-        this.hospitals,
-        this.malls,
-        this.transport});
-
-    NearbyPlaces.fromJson(dynamic json)
-    {
-        if (json['schools'] != null) 
-        {
-            schools = [];
-            json['schools'].forEach((v)
-                {
-                    schools?.add(Schools.fromJson(v));
-                }
-            );
-        }
-        if (json['hospitals'] != null) 
-        {
-            hospitals = [];
-            json['hospitals'].forEach((v)
-                {
-                    hospitals?.add(Hospitals.fromJson(v));
-                }
-            );
-        }
-        if (json['malls'] != null) 
-        {
-            malls = [];
-            json['malls'].forEach((v)
-                {
-                    malls?.add(Malls.fromJson(v));
-                }
-            );
-        }
-        if (json['transport'] != null) 
-        {
-            transport = [];
-            json['transport'].forEach((v)
-                {
-                    transport?.add(Transport.fromJson(v));
-                }
-            );
-        }
-    }
-    List<Schools>? schools;
-    List<Hospitals>? hospitals;
-    List<Malls>? malls;
-    List<Transport>? transport;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        if (schools != null) 
-        {
-            map['schools'] = schools?.map((v) => v.toJson()).toList();
-        }
-        if (hospitals != null) 
-        {
-            map['hospitals'] = hospitals?.map((v) => v.toJson()).toList();
-        }
-        if (malls != null) 
-        {
-            map['malls'] = malls?.map((v) => v.toJson()).toList();
-        }
-        if (transport != null) 
-        {
-            map['transport'] = transport?.map((v) => v.toJson()).toList();
-        }
-        return map;
-    }
-
-}
-
-class Transport
-{
-    Transport({
-        this.name,
-        this.distance,
-        this.unit,
-        this.id});
-
-    Transport.fromJson(dynamic json)
-    {
-        name = json['name'];
-        distance = json['distance'];
-        unit = json['unit'];
-        id = json['_id'];
-    }
-    String? name;
-    int? distance;
-    String? unit;
-    String? id;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['name'] = name;
-        map['distance'] = distance;
-        map['unit'] = unit;
-        map['_id'] = id;
-        return map;
-    }
-
-}
-
-class Malls
-{
-    Malls({
-        this.name,
-        this.distance,
-        this.unit,
-        this.id});
-
-    Malls.fromJson(dynamic json)
-    {
-        name = json['name'];
-        distance = json['distance'];
-        unit = json['unit'];
-        id = json['_id'];
-    }
-    String? name;
-    int? distance;
-    String? unit;
-    String? id;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['name'] = name;
-        map['distance'] = distance;
-        map['unit'] = unit;
-        map['_id'] = id;
-        return map;
-    }
-
-}
-
-class Hospitals
-{
-    Hospitals({
-        this.name,
-        this.distance,
-        this.unit,
-        this.id});
-
-    Hospitals.fromJson(dynamic json)
-    {
-        name = json['name'];
-        distance = json['distance'];
-        unit = json['unit'];
-        id = json['_id'];
-    }
-    String? name;
-    int? distance;
-    String? unit;
-    String? id;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['name'] = name;
-        map['distance'] = distance;
-        map['unit'] = unit;
-        map['_id'] = id;
-        return map;
-    }
-
-}
-
-class Schools
-{
-    Schools({
-        this.name,
-        this.distance,
-        this.unit,
-        this.id});
-
-    Schools.fromJson(dynamic json)
-    {
-        name = json['name'];
-        distance = json['distance'];
-        unit = json['unit'];
-        id = json['_id'];
-    }
-    String? name;
-    int? distance;
-    String? unit;
-    String? id;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['name'] = name;
-        map['distance'] = distance;
-        map['unit'] = unit;
-        map['_id'] = id;
-        return map;
-    }
-
-}
-
-class Features
-{
-    Features({
-        this.facing,
-        this.flooringType,
-        this.waterSupply,
-        this.powerBackup,
-        this.servantRoom,
-        this.poojaRoom,
-        this.studyRoom,
-        this.storeRoom,
-        this.garden,
-        this.swimmingPool,
-        this.gym,
-        this.lift,
-        this.security});
-
-    Features.fromJson(dynamic json)
-    {
-        facing = json['facing'];
-        flooringType = json['flooringType'];
-        waterSupply = json['waterSupply'];
-        powerBackup = json['powerBackup'];
-        servantRoom = json['servantRoom'];
-        poojaRoom = json['poojaRoom'];
-        studyRoom = json['studyRoom'];
-        storeRoom = json['storeRoom'];
-        garden = json['garden'];
-        swimmingPool = json['swimmingPool'];
-        gym = json['gym'];
-        lift = json['lift'];
-        security = json['security'];
-    }
-    String? facing;
-    String? flooringType;
-    String? waterSupply;
-    bool? powerBackup;
-    bool? servantRoom;
-    bool? poojaRoom;
-    bool? studyRoom;
-    bool? storeRoom;
-    bool? garden;
-    bool? swimmingPool;
-    bool? gym;
-    bool? lift;
-    bool? security;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['facing'] = facing;
-        map['flooringType'] = flooringType;
-        map['waterSupply'] = waterSupply;
-        map['powerBackup'] = powerBackup;
-        map['servantRoom'] = servantRoom;
-        map['poojaRoom'] = poojaRoom;
-        map['studyRoom'] = studyRoom;
-        map['storeRoom'] = storeRoom;
-        map['garden'] = garden;
-        map['swimmingPool'] = swimmingPool;
-        map['gym'] = gym;
-        map['lift'] = lift;
-        map['security'] = security;
-        return map;
-    }
-
-}
-
-class LikedBy
-{
-    LikedBy({
-        this.user,
-        this.likedAt,
-        this.id});
-
-    LikedBy.fromJson(dynamic json)
-    {
-        user = json['user'];
-        likedAt = json['likedAt'];
-        id = json['_id'];
-    }
-    String? user;
-    String? likedAt;
-    String? id;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['user'] = user;
-        map['likedAt'] = likedAt;
-        map['_id'] = id;
-        return map;
-    }
-
-}
-
-class Contact
-{
-    Contact({
-        this.name,
-        this.phone,
-        this.whatsapp,
-        this.type});
-
-    Contact.fromJson(dynamic json)
-    {
-        name = json['name'];
-        phone = json['phone'];
-        whatsapp = json['whatsapp'];
-        type = json['type'];
-    }
-    String? name;
-    String? phone;
-    String? whatsapp;
-    String? type;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['name'] = name;
-        map['phone'] = phone;
-        map['whatsapp'] = whatsapp;
-        map['type'] = type;
-        return map;
-    }
-
-}
-
-class Pricing
-{
-    Pricing({
-        this.basePrice,
-        this.maintenanceCharges,
-        this.securityDeposit,
-        this.priceNegotiable});
-
-    Pricing.fromJson(dynamic json)
-    {
-        basePrice = json['basePrice'];
-        maintenanceCharges = json['maintenanceCharges'];
-        securityDeposit = json['securityDeposit'];
-        priceNegotiable = json['priceNegotiable'];
-    }
-    dynamic basePrice;
-    dynamic maintenanceCharges;
-    dynamic securityDeposit;
-    bool? priceNegotiable;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['basePrice'] = basePrice;
-        map['maintenanceCharges'] = maintenanceCharges;
-        map['securityDeposit'] = securityDeposit;
-        map['priceNegotiable'] = priceNegotiable;
-        return map;
-    }
-
-}
-
-class Seo
-{
-    Seo({
-        this.metaTitle,
-        this.metaDescription,
-        this.slug});
-
-    Seo.fromJson(dynamic json)
-    {
-        metaTitle = json['metaTitle'];
-        metaDescription = json['metaDescription'];
-        slug = json['slug'];
-    }
-    String? metaTitle;
-    String? metaDescription;
-    String? slug;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['metaTitle'] = metaTitle;
-        map['metaDescription'] = metaDescription;
-        map['slug'] = slug;
-        return map;
-    }
-
-}
-
-class Pagination
-{
-    Pagination({
-        this.page,
-        this.limit,
-        this.total,
-        this.pages});
-
-    Pagination.fromJson(dynamic json)
-    {
-        page = json['page'];
-        limit = json['limit'];
-        total = json['total'];
-        pages = json['pages'];
-    }
-    int? page;
-    int? limit;
-    int? total;
-    int? pages;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['page'] = page;
-        map['limit'] = limit;
-        map['total'] = total;
-        map['pages'] = pages;
-        return map;
-    }
-
-}
-
-class ContactedBy
-{
-    ContactedBy({
-        this.user,
-        this.contactedAt
-    });
-
-    ContactedBy.fromJson(dynamic json)
-    {
-        user = json['user'];
-        contactedAt = json['contactedAt'];
-    }
-    String? user;
-    String? contactedAt;
-
-    Map<String, dynamic> toJson() 
-    {
-        final map = <String, dynamic>{};
-        map['user'] = user;
-        map['likedAt'] = contactedAt;
-        return map;
-    }
-}

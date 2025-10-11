@@ -67,45 +67,40 @@ class ProfileScreen extends GetView<ProfileController>
                                   left: 0,
                                   right: 0,
                                   bottom: 10,
-                                  child: Positioned(
-                                      left: 0,
-                                      right: 0,
-                                      bottom: 10,
+                                  child: CircleAvatar(
+                                      radius: 40,
+                                      backgroundColor: Theme
+                                          .of(context)
+                                          .cardTheme
+                                          .color,
                                       child: CircleAvatar(
-                                          radius: 40,
-                                          backgroundColor: Theme
-                                              .of(context)
-                                              .cardTheme
-                                              .color,
-                                          child: CircleAvatar(
-                                              radius: 38,
-                                              backgroundImage: controller
-                                                  .selectedImage.value != null
-                                                  ? FileImage(
-                                                  controller.selectedImage
-                                                      .value!) as ImageProvider
-                                                  : (user?.avatar != null &&
-                                                  user!.avatar!.isNotEmpty
-                                                  ? NetworkImage(user
-                                                  .avatar!) // 👈 backend image
-                                                  : null),
-                                              child: (controller.selectedImage
-                                                  .value == null &&
-                                                  (user?.avatar == null ||
-                                                      user!.avatar!.isEmpty))
-                                                  ? Text(
-                                                  (user?.name?.isNotEmpty ==
-                                                      true
-                                                      ? user!.name!.substring(
-                                                      0, 1).toUpperCase()
-                                                      : "U"),
-                                                  style: context.textTheme
-                                                      .displayLarge?.copyWith(
-                                                      color: Colors.white
-                                                  )
+                                          radius: 38,
+                                          backgroundImage: controller
+                                              .selectedImage.value != null
+                                              ? FileImage(
+                                              controller.selectedImage
+                                                  .value!) as ImageProvider
+                                              : (user?.avatar != null &&
+                                              user!.avatar!.isNotEmpty
+                                              ? NetworkImage(user
+                                              .avatar!) // 👈 backend image
+                                              : null),
+                                          child: (controller.selectedImage
+                                              .value == null &&
+                                              (user?.avatar == null ||
+                                                  user!.avatar!.isEmpty))
+                                              ? Text(
+                                              (user?.name?.isNotEmpty ==
+                                                  true
+                                                  ? user!.name!.substring(
+                                                  0, 1).toUpperCase()
+                                                  : "U"),
+                                              style: context.textTheme
+                                                  .displayLarge?.copyWith(
+                                                  color: Colors.white
                                               )
-                                                  : null
                                           )
+                                              : null
                                       )
                                   )
                                 /*CircleAvatar(

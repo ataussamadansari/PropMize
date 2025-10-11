@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/modules/saved_properties_screen/controllers/saved_properties_controller.dart';
 
 import '../../../core/themes/app_colors.dart';
-import '../../all_listing_screen/views/widgets/property_card_widget.dart';
+import '../../../global_widgets/shimmer/shimmer_loader.dart';
 
 class SavedPropertiesView extends GetView<SavedPropertiesController> {
     const SavedPropertiesView({super.key});
@@ -75,7 +75,7 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
                             },
                         )),
                     )*/
-                   /* Padding(
+                    /* Padding(
                         padding: const EdgeInsets.only(right: 16),
                         child: Obx(() => Text(
                             'Saved: ${controller.properties.length}',
@@ -90,13 +90,17 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
             body: Obx(() {
                 // Show loading indicator when initially loading
                 if (controller.isLoading.value && controller.properties.isEmpty) {
-                    return const Center(
-                        child: CircularProgressIndicator(),
-                    );
+                    if (controller.isLoading.value && controller.properties.isEmpty) {
+                        return ListView.builder(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            itemCount: 5,
+                            itemBuilder: (context, index) => const ShimmerLoader(),
+                        );
+                    }
                 }
 
                 // Show error state
-                if (controller.hasError.value && controller.properties.isEmpty) {
+                if (controller.hasError.value) {
                     return Center(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -181,11 +185,9 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
                             }
 
                             final property = controller.properties[index];
-                            return PropertyCardWidget(
-                                properties: property,
-                                index: index,
-                                controller: controller,
-                            );
+
+                            print(property);
+                            return null;
                         },
                     ),
                 );
@@ -199,7 +201,7 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/modules/abc_screen/controllers/abc_controller.dart';
+import 'package:prop_mize/app/modules/abc_screen/controllers/contacted_controller.dart';
 import 'package:prop_mize/app/modules/saved_properties_screen/controllers/saved_properties_controller.dart';
 
 import '../../../core/themes/app_colors.dart';

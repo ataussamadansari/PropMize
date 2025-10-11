@@ -1,12 +1,14 @@
-
 import 'package:dio/dio.dart';
 import 'package:prop_mize/app/core/constants/api_constants.dart';
 import 'package:prop_mize/app/data/models/api_response_model.dart';
+import 'package:prop_mize/app/data/models/properties/contacted_seller/contacted_seller_model.dart';
+import 'package:prop_mize/app/data/models/properties/contacted_seller/my_inquiries.dart';
 import 'package:prop_mize/app/data/models/properties/properties_model.dart';
 import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 import 'package:prop_mize/app/data/services/api_services.dart';
 
 import '../../models/like/like_model.dart';
+import '../../models/properties/contacted_seller/contacted_seller_request.dart';
 
 class PropertiesRepository
 {
@@ -16,7 +18,7 @@ class PropertiesRepository
     /// Get all properties with pagination and filters
     Future<ApiResponse<PropertiesModel>> getProperties({
         int page = 1,
-        int limit = 5,
+        int limit = 10,
         Map<String, dynamic>? filters
     }) async
     {
@@ -212,6 +214,47 @@ class PropertiesRepository
         }
     }
 
+    /// ✅ CORRECTED: Contacted Seller Method
+    Future<ApiResponse<ContactedSellerModel>> contactedSeller(ContactedSellerRequest request) async
+    {
+        try
+        {
+            // ✅ Use _apiServices instead of _apiProvider
+            final response = await _apiServices.post(
+                ApiConstants.leads, // ✅ Correct endpoint
+                (data) => ContactedSellerModel.fromJson(data), // ✅ Add fromJson
+                data: request.toJson(),
+                cancelToken: _cancelToken
+            );
+
+            if (response.success && response.data != null) 
+            {
+                return ApiResponse.success(
+                    response.data!,
+                    message: response.message
+                );
+            }
+            else 
+            {
+                return ApiResponse.error(
+                    response.message,
+                    statusCode: response.statusCode
+                );
+            }
+        }
+        on DioException catch (e)
+        {
+            return ApiResponse.error(
+                e.message ?? "Network error occurred",
+                statusCode: e.response?.statusCode
+            );
+        }
+        catch (e)
+        {
+            return ApiResponse.error("Failed to contact seller: ${e.toString()}");
+        }
+    }
+
     /// Like - Dislike
     Future<ApiResponse<LikeModel>> like(String id) async
     {
@@ -253,8 +296,40 @@ class PropertiesRepository
         }
     }
 
-    /// Liked Properties
+    /// Liked Properties - CORRECTED VERSION
     Future<ApiResponse<PropertiesModel>> getLikedProperties({
+        int page = 1,
+        int limit = 10,
+    }) async {
+        try {
+            _cancelToken = CancelToken();
+
+            final Map<String, dynamic> queryParams = {
+                'page': page,
+                'limit': limit,
+            };
+
+            // Use get() instead of getList() since we want a single PropertiesModel object
+            final ApiResponse<PropertiesModel> res = await _apiServices.get(
+                ApiConstants.likedProperties,
+                    (data) => PropertiesModel.fromJson(data), // This converts the entire response
+                queryParameters: queryParams,
+                cancelToken: _cancelToken,
+            );
+
+            return res;
+
+        } on DioException catch (e) {
+            return ApiResponse.error(
+                e.message ?? "Something went wrong",
+                statusCode: e.response?.statusCode,
+                errors: e.response?.data,
+            );
+        }
+    }
+
+    /// Contacted Leads
+    Future<ApiResponse<MyInquiries>> getContactedLeads({
         int page = 1,
         int limit = 10
     }) async
@@ -263,29 +338,29 @@ class PropertiesRepository
         {
             _cancelToken = CancelToken();
 
-            final Map<String, dynamic> queryParams =
+            final Map<String, dynamic> queryParams = 
             {
                 'page': page,
                 'limit': limit
             };
 
             final res = await _apiServices.get(
-                ApiConstants.likedProperties,
-                (data) => PropertiesModel.fromJson(data),
+                ApiConstants.myInquiries,
+                (data) => MyInquiries.fromJson(data),
                 queryParameters: queryParams,
                 cancelToken: _cancelToken
             );
 
-            if (res.statusCode == 200 && res.data != null)
+            if (res.statusCode == 200 && res.data != null) 
             {
-                return ApiResponse.success(
+                return ApiResponse<MyInquiries>.success(
                     res.data!,
                     message: res.message
                 );
             }
-            else
+            else 
             {
-                return ApiResponse.error(
+                return ApiResponse<MyInquiries>.error(
                     res.message,
                     statusCode: res.statusCode
                 );

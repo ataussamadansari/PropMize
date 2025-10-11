@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:prop_mize/app/modules/product_details_screen/controllers/product_details_controller.dart';
 
-import '../../../../data/models/properties/data.dart';
+import '../../../../data/models/properties/lists/contact.dart';
 
 class ContactBottomBar extends GetView<ProductDetailsController> {
   final Contact contact;
