@@ -5,7 +5,7 @@ import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
 import 'package:prop_mize/app/core/utils/responsice_media_query/responsive_helper.dart';
 import 'package:prop_mize/app/global_widgets/message_card_item.dart';
-import '../../../global_widgets/choice_client_seller_btn.dart';
+import '../../../../global_widgets/choice_client_seller_btn.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController>
