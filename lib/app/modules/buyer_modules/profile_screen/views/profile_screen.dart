@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/core/utils/DateTimeHelper.dart';
 import 'package:prop_mize/app/global_widgets/profile/custom_text_form_fields.dart';
-import 'package:prop_mize/app/modules/profile_screen/controllers/profile_controller.dart';
+import '../../profile_screen/controllers/profile_controller.dart';
 
 class ProfileScreen extends GetView<ProfileController>
 {

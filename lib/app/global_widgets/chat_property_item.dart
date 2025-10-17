@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/ai/message_model.dart';
+import 'package:prop_mize/app/data/models/ai/ai_list_model/properties.dart';
 
-import '../modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
+import '../modules/buyer_modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
 
 class ChatPropertyItem extends GetView<AssistantChatController> {
-  final Property property;
+  final Properties property;
   const ChatPropertyItem({super.key, required this.property});
 
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ShimmerProfileView extends StatelessWidget {
   const ShimmerProfileView({super.key});
@@ -13,8 +13,9 @@ class ShimmerProfileView extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Shimmer(
-              duration: Duration(seconds: 2),
+            Shimmer.fromColors(
+              baseColor: Colors.grey.withAlpha(100),
+              highlightColor: Colors.grey.withAlpha(50),
               child: Container(
                 width: 120,
                 height: 20,
@@ -25,8 +26,9 @@ class ShimmerProfileView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 4),
-            Shimmer(
-              duration: Duration(seconds: 2),
+            Shimmer.fromColors(
+              baseColor: Colors.grey.withAlpha(100),
+              highlightColor: Colors.grey.withAlpha(50),
               child: Container(
                 width: 200,
                 height: 14,
@@ -48,8 +50,9 @@ class ShimmerProfileView extends StatelessWidget {
               // Edit Button Shimmer
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-                child: Shimmer(
-                  duration: Duration(seconds: 2),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey.withAlpha(100),
+                  highlightColor: Colors.grey.withAlpha(50),
                   child: Container(
                     width: 120,
                     height: 40,
@@ -63,8 +66,9 @@ class ShimmerProfileView extends StatelessWidget {
 
               // Main Content Area Shimmer
               Expanded(
-                child: Shimmer(
-                  duration: Duration(seconds: 2),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey.withAlpha(100),
+                  highlightColor: Colors.grey.withAlpha(50),
                   child: Container(
                     margin: EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -97,8 +101,9 @@ class ShimmerProfileView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Toggle Button Shimmer
-                Shimmer(
-                  duration: Duration(seconds: 2),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey.withAlpha(100),
+                  highlightColor: Colors.grey.withAlpha(50),
                   child: Container(
                     margin: EdgeInsets.all(8),
                     width: 40,
@@ -126,8 +131,9 @@ class ShimmerProfileView extends StatelessWidget {
       child: Row(
         children: [
           // Avatar Shimmer
-          Shimmer(
-            duration: Duration(seconds: 2),
+          Shimmer.fromColors(
+            baseColor: Colors.grey.withAlpha(100),
+            highlightColor: Colors.grey.withAlpha(50),
             child: Container(
               width: 80,
               height: 80,
@@ -143,8 +149,9 @@ class ShimmerProfileView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Shimmer(
-                  duration: Duration(seconds: 2),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey.withAlpha(100),
+                  highlightColor: Colors.grey.withAlpha(50),
                   child: Container(
                     width: 150,
                     height: 20,
@@ -155,8 +162,9 @@ class ShimmerProfileView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8),
-                Shimmer(
-                  duration: Duration(seconds: 2),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey.withAlpha(100),
+                  highlightColor: Colors.grey.withAlpha(50),
                   child: Container(
                     width: 200,
                     height: 16,
@@ -167,8 +175,9 @@ class ShimmerProfileView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8),
-                Shimmer(
-                  duration: Duration(seconds: 2),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey.withAlpha(100),
+                  highlightColor: Colors.grey.withAlpha(50),
                   child: Container(
                     width: 100,
                     height: 14,
@@ -192,8 +201,9 @@ class ShimmerProfileView extends StatelessWidget {
       child: Column(
         children: [
           // Section Title
-          Shimmer(
-            duration: Duration(seconds: 2),
+          Shimmer.fromColors(
+            baseColor: Colors.grey.withAlpha(100),
+            highlightColor: Colors.grey.withAlpha(50),
             child: Container(
               width: 120,
               height: 18,
@@ -238,8 +248,9 @@ class ShimmerProfileView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Shimmer(
-          duration: Duration(seconds: 2),
+        Shimmer.fromColors(
+          baseColor: Colors.grey.withAlpha(100),
+          highlightColor: Colors.grey.withAlpha(50),
           child: Container(
             width: 60,
             height: 14,
@@ -250,8 +261,9 @@ class ShimmerProfileView extends StatelessWidget {
           ),
         ),
         SizedBox(height: 4),
-        Shimmer(
-          duration: Duration(seconds: 2),
+        Shimmer.fromColors(
+          baseColor: Colors.grey.withAlpha(100),
+          highlightColor: Colors.grey.withAlpha(50),
           child: Container(
             width: double.infinity,
             height: 20,
@@ -272,8 +284,9 @@ class ShimmerProfileView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section Title
-          Shimmer(
-            duration: Duration(seconds: 2),
+          Shimmer.fromColors(
+            baseColor: Colors.grey.withAlpha(100),
+            highlightColor: Colors.grey.withAlpha(50),
             child: Container(
               width: 100,
               height: 18,
@@ -297,8 +310,9 @@ class ShimmerProfileView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Shimmer(
-            duration: Duration(seconds: 2),
+          Shimmer.fromColors(
+            baseColor: Colors.grey.withAlpha(100),
+            highlightColor: Colors.grey.withAlpha(50),
             child: Container(
               width: 24,
               height: 24,
@@ -310,8 +324,9 @@ class ShimmerProfileView extends StatelessWidget {
           ),
           SizedBox(width: 12),
           Expanded(
-            child: Shimmer(
-              duration: Duration(seconds: 2),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey.withAlpha(100),
+              highlightColor: Colors.grey.withAlpha(50),
               child: Container(
                 height: 16,
                 decoration: BoxDecoration(
@@ -343,8 +358,9 @@ class ShimmerProfileView extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Shimmer(
-                duration: Duration(seconds: 2),
+              Shimmer.fromColors(
+                baseColor: Colors.grey.withAlpha(100),
+                highlightColor: Colors.grey.withAlpha(50),
                 child: Container(
                   width: 20,
                   height: 20,
@@ -355,8 +371,9 @@ class ShimmerProfileView extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8),
-              Shimmer(
-                duration: Duration(seconds: 2),
+              Shimmer.fromColors(
+                baseColor: Colors.grey.withAlpha(100),
+                highlightColor: Colors.grey.withAlpha(50),
                 child: Container(
                   width: 80,
                   height: 16,

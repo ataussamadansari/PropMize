@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
+import 'package:prop_mize/app/data/models/ai/ai_list_model/messages.dart';
 import 'package:prop_mize/app/data/models/ai/message_model.dart';
 
 import '../../core/utils/DateTimeHelper.dart';
 
 class SendMessageBubble extends StatelessWidget {
-  final ChatMessage chatMessage;
+  final Messages chatMessage;
 
   const SendMessageBubble({
     super.key,

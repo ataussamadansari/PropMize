@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/capitalize.dart';
 import 'package:prop_mize/app/core/utils/communication_helper.dart';
 
-import '../../../../../data/models/properties/data.dart';
-import '../../../../../data/models/properties/lists/contact.dart';
+import '../../../../../../data/models/properties/data.dart';
+import '../../../../../../data/models/properties/lists/contact.dart';
 import '../../../controllers/all_listing_controller.dart';
 
 class ContactView extends GetView<AllListingController> {

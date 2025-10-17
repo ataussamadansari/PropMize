@@ -2,21 +2,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/core/themes/app_colors.dart';
-import 'package:prop_mize/app/global_widgets/status_card_item.dart';
-import 'package:prop_mize/app/modules/product_details_screen/controllers/product_details_controller.dart';
-import 'package:prop_mize/app/modules/product_details_screen/views/widgets/amenities_item.dart';
-import 'package:prop_mize/app/modules/product_details_screen/views/widgets/contact_details.dart';
-import 'package:prop_mize/app/modules/product_details_screen/views/widgets/description_item.dart';
-import 'package:prop_mize/app/modules/product_details_screen/views/widgets/feature_item.dart';
-import 'package:prop_mize/app/modules/product_details_screen/views/widgets/full_screen_image_gallery.dart';
-import 'package:prop_mize/app/modules/product_details_screen/views/widgets/location_details.dart';
-import 'package:prop_mize/app/modules/product_details_screen/views/widgets/pricing_card_item.dart';
-import 'package:prop_mize/app/modules/product_details_screen/views/widgets/property_history.dart';
-import 'package:prop_mize/app/modules/product_details_screen/views/widgets/property_overview.dart';
+import '../../../../core/themes/app_colors.dart';
+import '../../../../global_widgets/status_card_item.dart';
+import '../controllers/product_details_controller.dart';
+import '../views/widgets/amenities_item.dart';
+import '../views/widgets/contact_details.dart';
+import '../views/widgets/description_item.dart';
+import '../views/widgets/feature_item.dart';
+import '../views/widgets/full_screen_image_gallery.dart';
+import '../views/widgets/location_details.dart';
+import '../views/widgets/pricing_card_item.dart';
+import '../views/widgets/property_history.dart';
+import '../views/widgets/property_overview.dart';
 
-import '../../../data/services/like_services.dart';
-import '../../../global_widgets/shimmer/properties_details/product_details_shimmer.dart';
+import '../../../../data/services/like_services.dart';
+import '../../../../global_widgets/shimmer/properties_details/product_details_shimmer.dart';
 import 'widgets/contact_bottom_bar.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController>

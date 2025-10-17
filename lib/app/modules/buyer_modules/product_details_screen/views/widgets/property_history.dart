@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/modules/product_details_screen/controllers/product_details_controller.dart';
+import '../../../product_details_screen/controllers/product_details_controller.dart';
 
 class PropertyHistorySheet extends GetView<ProductDetailsController>
 {

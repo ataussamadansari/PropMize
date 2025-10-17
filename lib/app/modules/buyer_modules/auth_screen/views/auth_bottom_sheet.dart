@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
-import 'package:prop_mize/app/modules/auth_screen/controllers/auth_controller.dart';
+import '../../auth_screen/controllers/auth_controller.dart';
 
 class AuthBottomSheet extends GetView<AuthController>
 {

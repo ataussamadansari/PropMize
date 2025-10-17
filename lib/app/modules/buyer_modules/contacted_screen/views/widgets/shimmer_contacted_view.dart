@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/modules/contacted_screen/controllers/contacted_controller.dart';
+import '../../../contacted_screen/controllers/contacted_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerContactedView extends GetView<ContactedController> {

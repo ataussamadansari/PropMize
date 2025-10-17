@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
+import '../../modules/buyer_modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
 
 enum GlobalMenuOption {
   newChat, clearChat, history, helpSupport, settings

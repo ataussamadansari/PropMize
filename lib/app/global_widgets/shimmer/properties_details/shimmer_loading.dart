@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ShimmerLoading extends StatelessWidget {
   final Widget child;
@@ -15,7 +15,9 @@ class ShimmerLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!isLoading) return child;
 
-    return Shimmer(
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
       child: child,
     );
   }

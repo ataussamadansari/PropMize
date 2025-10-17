@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/global_widgets/profile/custom_container.dart';
 import 'package:prop_mize/app/global_widgets/profile/custom_notification_list_item.dart';
 import 'package:prop_mize/app/global_widgets/profile/custom_text_form_fields.dart';
-import 'package:prop_mize/app/modules/profile_screen/controllers/profile_controller.dart';
+import '../controllers/profile_controller.dart';
 
 class PreferencesScreen extends GetView<ProfileController>
 {

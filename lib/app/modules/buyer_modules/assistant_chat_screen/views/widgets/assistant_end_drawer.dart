@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/core/utils/DateTimeHelper.dart';
 import 'package:prop_mize/app/global_widgets/shimmer/shimmer_history_loader.dart';
-import 'package:prop_mize/app/modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
+import '../../../assistant_chat_screen/controllers/assistant_chat_controller.dart';
 
 class AssistantEndDrawer extends GetView<AssistantChatController>
 {

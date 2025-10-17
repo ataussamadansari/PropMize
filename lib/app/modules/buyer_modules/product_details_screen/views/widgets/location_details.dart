@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../core/themes/app_colors.dart';
-import '../../../../data/models/properties/lists/address.dart';
-import '../../../../data/models/properties/lists/near_by_places.dart';
+import '../../../../../core/themes/app_colors.dart';
+import '../../../../../data/models/properties/lists/address.dart';
+import '../../../../../data/models/properties/lists/near_by_places.dart';
 
 class LocationDetails extends StatelessWidget
 {

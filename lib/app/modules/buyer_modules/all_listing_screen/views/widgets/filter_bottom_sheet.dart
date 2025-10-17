@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
-import 'package:prop_mize/app/modules/all_listing_screen/controllers/all_listing_controller.dart';
+
+import '../../controllers/all_listing_controller.dart';
 
 class FilterBottomSheet extends GetView<AllListingController>
 {

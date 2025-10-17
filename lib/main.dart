@@ -7,14 +7,13 @@ import 'package:prop_mize/app/core/themes/app_theme.dart';
 import 'package:prop_mize/app/routes/app_pages.dart';
 import 'package:prop_mize/app/routes/app_routes.dart';
 
-
 void main() async {
   await dotenv.load(fileName: ".env");
   await GetStorage.init();
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Bindings use karo - yeh automatically dependencies handle karega
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light,
       initialRoute: Routes.splash,
       getPages: AppPages.routes,
-      initialBinding: AppBindings(), // ✅ Yahan binding add karo
+      initialBinding: AppBindings(),
     );
   }
 }

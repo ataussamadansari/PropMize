@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/modules/saved_properties_screen/controllers/saved_properties_controller.dart';
+import '../controllers/saved_properties_controller.dart';
 
-import '../../../core/themes/app_colors.dart';
-import '../../../global_widgets/shimmer/shimmer_loader.dart';
+import '../../../../core/themes/app_colors.dart';
+import '../../../../global_widgets/shimmer/shimmer_loader.dart';
 
 class SavedPropertiesView extends GetView<SavedPropertiesController> {
     const SavedPropertiesView({super.key});

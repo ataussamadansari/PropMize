@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
-import 'package:prop_mize/app/modules/contacted_screen/controllers/contacted_controller.dart';
+import '../../contacted_screen/controllers/contacted_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:prop_mize/app/modules/contacted_screen/views/widgets/shimmer_contacted_view.dart';
+import '../../contacted_screen/views/widgets/shimmer_contacted_view.dart';
 
 class ContactedView extends GetView<ContactedController> {
   const ContactedView({super.key});

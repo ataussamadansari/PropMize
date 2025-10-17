@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/global_widgets/profile/activity_card_item.dart';
-import 'package:prop_mize/app/modules/profile_screen/controllers/profile_controller.dart';
+import '../../../../../app/global_widgets/profile/activity_card_item.dart';
+import '../controllers/profile_controller.dart';
 
 class ActivityScreen extends GetView<ProfileController>
 {

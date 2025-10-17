@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/core/utils/DateTimeHelper.dart';
-import 'package:prop_mize/app/data/models/ai/message_model.dart';
-import 'package:prop_mize/app/modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
+import 'package:prop_mize/app/data/models/ai/ai_list_model/messages.dart';
 
+import '../../modules/buyer_modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
 import '../chat_property_item.dart';
 
 class ReceivedMessageBubble extends GetView<AssistantChatController>
 {
-    final ChatMessage chatMessage;
+    final Messages chatMessage;
 
     const ReceivedMessageBubble({
         super.key,
@@ -64,7 +64,7 @@ class ReceivedMessageBubble extends GetView<AssistantChatController>
                                 Column(
                                     children: [
                                         for (final prop in chatMessage.properties!)
-                                            ChatPropertyItem(property: Property.fromJson(prop))
+                                            ChatPropertyItem(property: prop)
                                     ]
                                 )
                             ],

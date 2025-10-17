@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/data/models/properties/data.dart';
 
-import '../../../data/repositories/properties/properties_repository.dart';
-import '../../../data/services/like_services.dart';
-import '../../../data/services/storage_services.dart';
+import '../../../../data/repositories/properties/properties_repository.dart';
+import '../../../../data/services/like_services.dart';
+import '../../../../data/services/storage_services.dart';
 
 class SavedPropertiesController extends GetxController {
   final PropertiesRepository _propertiesRepository = PropertiesRepository();

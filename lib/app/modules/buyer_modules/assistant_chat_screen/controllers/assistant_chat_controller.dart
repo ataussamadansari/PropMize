@@ -9,8 +9,8 @@ import 'package:prop_mize/app/data/models/ai/chat_history_model.dart';
 import 'package:prop_mize/app/data/repositories/ai/chat_repository.dart';
 import 'package:prop_mize/app/routes/app_routes.dart';
 
-import '../../../data/models/ai/message_model.dart' hide Data;
-import '../../../data/services/storage_services.dart';
+import '../../../../data/models/ai/message_model.dart' hide Data;
+import '../../../../data/services/storage_services.dart';
 import '../../auth_screen/controllers/auth_controller.dart';
 import '../../auth_screen/views/auth_bottom_sheet.dart';
 
@@ -171,6 +171,9 @@ class AssistantChatController extends GetxController
     {
         try
         {
+
+            isChatLoading.value = true;
+
             final token = StorageServices.to.getToken();
             if (token != null && token.isNotEmpty)
             {
@@ -185,6 +188,8 @@ class AssistantChatController extends GetxController
         {
             // show a friendly error and keep the controller stable
             AppHelpers.showSnackBar(title: "Error", message: e.toString(), isError: true);
+        } finally {
+            isChatLoading.value = false;
         }
     }
 
@@ -322,6 +327,7 @@ class AssistantChatController extends GetxController
 
         try
         {
+            isChatLoading.value = true;
             clearError();
 
             final response = await _aiChatRepository.getChatById(chatId);

@@ -218,7 +218,7 @@ class ApiProvider
                         : _handleStatusCode(error.response?.statusCode);
                     return msg;
                 case DioExceptionType.cancel:
-                    return 'Request canceled';
+                    return 'Request cancelled';
                 case DioExceptionType.unknown:
                     return 'Unknown error';
                 case DioExceptionType.connectionError:

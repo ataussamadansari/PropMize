@@ -179,5 +179,44 @@ class AuthRepository
         }
     }
 
+    // AuthRepository mein
+    Future<ApiResponse<UserMe>> role(String userId, String role) async {
+        try {
+            final url = ApiConstants.changeUserRole.replaceAll('{id}', userId);
 
+            // ✅ Correct data format - JSON object with role
+            final Map<String, dynamic> data = {
+                "role": role
+            };
+
+            final response = await _apiServices.put<UserMe>(
+                url,
+                    (json) => UserMe.fromJson(json),
+                data: data, // ✅ Add data parameter
+                cancelToken: _cancelToken,
+            );
+
+            if (response.statusCode == 200 && response.data != null) {
+                return ApiResponse.success(
+                    response.data!,
+                    message: response.message,
+                );
+            } else {
+                return ApiResponse.error(
+                    response.message,
+                    statusCode: response.statusCode,
+                );
+            }
+        } on DioException catch(e) {
+            return ApiResponse.error(
+                e.message ?? "Something went wrong",
+                statusCode: e.response?.statusCode,
+                errors: e.response?.data,
+            );
+        }
+    }
+
+    Future<void> cancelChat() async {
+        _cancelToken?.cancel();
+    }
 }

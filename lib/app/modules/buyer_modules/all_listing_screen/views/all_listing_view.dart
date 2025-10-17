@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
-import 'package:prop_mize/app/modules/all_listing_screen/controllers/all_listing_controller.dart';
-import 'package:prop_mize/app/modules/all_listing_screen/views/widgets/property_card_widget.dart';
-import 'package:prop_mize/app/modules/all_listing_screen/views/widgets/search_filter_widget.dart';
+import 'package:prop_mize/app/modules/buyer_modules/all_listing_screen/controllers/all_listing_controller.dart';
+import 'package:prop_mize/app/modules/buyer_modules/all_listing_screen/views/widgets/property_card_widget.dart';
+import 'package:prop_mize/app/modules/buyer_modules/all_listing_screen/views/widgets/search_filter_widget.dart';
 
-import '../../../global_widgets/shimmer/shimmer_loader.dart';
+import '../../../../global_widgets/shimmer/shimmer_loader.dart';
 
 class AllListingView extends GetView<AllListingController>
 {

@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 
-import '../controllers/abc_controller.dart';
+import '../controllers/dashboard_controller.dart';
 
-class AbcBinding extends Bindings {
+class DashboardBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<AbcController>(() => AbcController());
+    Get.lazyPut<DashboardController>(() => DashboardController());
   }
 }

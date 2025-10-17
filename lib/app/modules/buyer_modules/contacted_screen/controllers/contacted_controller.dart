@@ -3,7 +3,7 @@ import 'package:prop_mize/app/core/utils/helpers.dart';
 import 'package:prop_mize/app/data/models/properties/contacted_seller/my_inquiries.dart';
 import 'package:prop_mize/app/data/repositories/properties/properties_repository.dart';
 
-import '../../../data/services/storage_services.dart';
+import '../../../../data/services/storage_services.dart';
 
 class ContactedController extends GetxController {
   final PropertiesRepository _repository = PropertiesRepository();

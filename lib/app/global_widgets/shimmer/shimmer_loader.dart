@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ShimmerLoader extends StatelessWidget {
   const ShimmerLoader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer(
-      duration: const Duration(seconds: 2),
-      interval: const Duration(milliseconds: 500),
-      color: Colors.grey.shade300,
-      colorOpacity: 0.3,
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.withAlpha(100),
+      highlightColor: Colors.grey.withAlpha(50),
       enabled: true,
       child: Card(
         margin: const EdgeInsets.only(bottom: 16),

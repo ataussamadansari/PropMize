@@ -1,5 +1,5 @@
 import '../properties/lists/pagination.dart';
-import 'messages.dart';
+import 'ai_list_model/messages.dart';
 
 class ChatHistoryModel {
   ChatHistoryModel({
@@ -51,6 +51,17 @@ class Data {
       map['pagination'] = pagination?.toJson();
     }
     return map;
+  }
+
+  // ✅ Add copyWith
+  Data copyWith({
+    List<Chats>? chats,
+    Pagination? pagination,
+  }) {
+    return Data(
+      chats: chats ?? this.chats,
+      pagination: pagination ?? this.pagination,
+    );
   }
 
 }
@@ -134,8 +145,40 @@ class Chats {
     map['__v'] = v;
     return map;
   }
-
 }
+
+extension ChatsCopyWith on Chats {
+  Chats copyWith({
+    String? id,
+    String? user,
+    String? sessionId,
+    String? title,
+    List<Messages>? messages,
+    String? status,
+    List<RelatedProperties>? relatedProperties,
+    List<RelatedLeads>? relatedLeads,
+    bool? isActive,
+    String? createdAt,
+    String? updatedAt,
+    int? v,
+  }) {
+    return Chats(
+      id: id ?? this.id,
+      user: user ?? this.user,
+      sessionId: sessionId ?? this.sessionId,
+      title: title ?? this.title,
+      messages: messages ?? this.messages,
+      status: status ?? this.status,
+      relatedProperties: relatedProperties ?? this.relatedProperties,
+      relatedLeads: relatedLeads ?? this.relatedLeads,
+      isActive: isActive ?? this.isActive,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      v: v ?? this.v,
+    );
+  }
+}
+
 
 class RelatedLeads {
   RelatedLeads({

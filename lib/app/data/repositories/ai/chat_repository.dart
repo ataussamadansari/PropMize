@@ -13,6 +13,7 @@ class AiChatRepository
     final ApiServices _apiServices = ApiServices();
     CancelToken? _cancelToken;
 
+
     /// Start a new AI Chat
     Future<ApiResponse<AiStartChatModel>> startChat(String initialMessage) async
     {
@@ -145,7 +146,6 @@ class AiChatRepository
     }
 
 
-
     /// Get Single Chat History (if you need to load a specific chat)
     Future<ApiResponse<AiStartChatModel>> getChatById(String chatId) async {
         try {
@@ -178,6 +178,61 @@ class AiChatRepository
         }
         on DioException catch (e)
         {
+            return ApiResponse.error(
+                e.message ?? "Something went wrong",
+                statusCode: e.response?.statusCode,
+                errors: e.response?.data
+            );
+        }
+    }
+
+    Future<ApiResponse<MessageModel>> deleteById(String chatId) async {
+        try {
+            _cancelToken = CancelToken();
+
+            final url = ApiConstants.chatDeleteById.replaceAll('{id}', chatId);
+            final response = await _apiServices.delete(
+                url,
+                (data) => MessageModel.fromJson(data),
+                cancelToken: _cancelToken
+            );
+
+            if (response.success && response.data!= null) {
+                return ApiResponse.success(response.data!, message: response.message);
+            } else {
+                return ApiResponse.error(response.message, statusCode: response.statusCode);
+            }
+
+        } on DioException catch (e) {
+            return ApiResponse.error(
+                e.message ?? "Something went wrong",
+                statusCode: e.response?.statusCode,
+                errors: e.response?.data
+            );
+        }
+    }
+
+    Future<ApiResponse<bool>> deleteAll() async {
+        try {
+            _cancelToken = CancelToken();
+
+            final response = await _apiServices.delete(
+                ApiConstants.chatAllDelete,
+                    (data) => null,
+                cancelToken: _cancelToken
+            );
+
+            if (response.success) {
+                return ApiResponse.success(response.success, message: response.message);
+            } else {
+                return ApiResponse.error(
+                    response.message,
+                    statusCode: response.statusCode,
+                    errors: response.data
+                );
+            }
+        }
+        on DioException catch (e) {
             return ApiResponse.error(
                 e.message ?? "Something went wrong",
                 statusCode: e.response?.statusCode,

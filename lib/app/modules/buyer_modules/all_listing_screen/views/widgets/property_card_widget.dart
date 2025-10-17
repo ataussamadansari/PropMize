@@ -7,10 +7,10 @@ import 'package:prop_mize/app/core/utils/capitalize.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
 import 'package:prop_mize/app/data/models/properties/data.dart';
 import 'package:prop_mize/app/data/services/current_user_id_services.dart';
-import 'package:prop_mize/app/modules/all_listing_screen/views/widgets/card_widgets/card_not_logged.dart';
-import 'package:prop_mize/app/modules/all_listing_screen/views/widgets/card_widgets/contact_view.dart';
 
-import '../../../../data/services/like_services.dart';
+import '../../../../../data/services/like_services.dart';
+import 'card_widgets/card_not_logged.dart';
+import 'card_widgets/contact_view.dart';
 
 class PropertyCardWidget extends StatelessWidget {
   final Data property;

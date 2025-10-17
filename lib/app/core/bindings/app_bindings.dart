@@ -4,7 +4,8 @@ import 'package:prop_mize/app/data/services/current_user_id_services.dart';
 import 'package:prop_mize/app/data/services/like_services.dart';
 import 'package:prop_mize/app/data/services/storage_services.dart';
 
-import '../../modules/auth_screen/controllers/auth_controller.dart';
+import '../../modules/buyer_modules/auth_screen/controllers/auth_controller.dart';
+
 
 class AppBindings extends Bindings {
   @override

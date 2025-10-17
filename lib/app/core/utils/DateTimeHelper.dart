@@ -35,4 +35,10 @@ class DateTimeHelper {
     final dateTime = parse(isoString);
     return DateFormat('MMMM yy').format(dateTime); // Sep 25
   }
+
+  // Formate to 'MMMM yy'
+  static String formatFull(String isoString) {
+    final dateTime = parse(isoString);
+    return DateFormat('dd MMM, yyyy hh:mm:ss a').format(dateTime); // Sep 25
+  }
 }

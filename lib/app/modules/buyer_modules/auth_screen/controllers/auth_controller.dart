@@ -7,13 +7,14 @@ import 'package:prop_mize/app/data/models/user/user_me.dart';
 import 'package:prop_mize/app/data/models/user/verify_otp/verify_otp_response.dart';
 import 'package:prop_mize/app/data/services/like_services.dart';
 
-import '../../../core/utils/helpers.dart';
-import '../../../data/models/api_response_model.dart';
-import '../../../data/models/user/send_otp/send_otp_request.dart';
-import '../../../data/models/user/verify_otp/verify_otp_request.dart';
-import '../../../data/repositories/auth/auth_repository.dart';
-import '../../../data/services/current_user_id_services.dart';
-import '../../../data/services/storage_services.dart';
+import '../../../../core/utils/helpers.dart';
+import '../../../../data/models/api_response_model.dart';
+import '../../../../data/models/user/send_otp/send_otp_request.dart';
+import '../../../../data/models/user/verify_otp/verify_otp_request.dart';
+import '../../../../data/repositories/auth/auth_repository.dart';
+import '../../../../data/services/current_user_id_services.dart';
+import '../../../../data/services/storage_services.dart';
+import '../../../../routes/app_routes.dart';
 
 class AuthController extends GetxController
 {
@@ -334,6 +335,7 @@ class AuthController extends GetxController
         StorageServices.to.removeChatId();
         StorageServices.to.remove('users');
         StorageServices.to.remove('phone');
+        StorageServices.to.remove('role');
         Get.find<CurrentUserIdServices>().clearUserId();
         AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Logout", message: "Logout successful");
     }
@@ -466,21 +468,35 @@ class AuthController extends GetxController
     }
 
     // =================================================
-    //         Role
-    //==================================================
+//         Role
+// =================================================
     Future<void> role(String userId, String role) async {
         try {
+            isLoading.value = true;
 
             final response = await _authRepo.role(userId, role);
 
             if(response.success && response.data != null) {
-                StorageServices.to.write("role", response.data!.data!.role);
-                AppHelpers.showSnackBar(title: "Success", message: "Role updated successfully", isError: false);
+                // ✅ Role store karo
+                final newRole = response.data!.data!.role;
+                StorageServices.to.write("role", newRole);
+
+                // ✅ Success message
+                AppHelpers.showSnackBar(
+                    title: "Success",
+                    message: "Role updated to ${newRole?.capitalize} successfully",
+                    isError: false
+                );
+
+                newRole == "seller" ? goToDashboard() : goToAssistantChat();
+
             } else {
-                _setError(response.message);
+                _setError(response.message ?? "Failed to update role");
             }
         } catch (e) {
             _setError(e.toString());
+        } finally {
+            isLoading.value = false;
         }
     }
 
@@ -491,4 +507,21 @@ class AuthController extends GetxController
         errorMessage.value = message;
         AppHelpers.showSnackBar(title: "Error", message: message, isError: true);
     }
+
+    // =============================================
+    //           NAVIGATION
+    // ===============================================
+
+    void goToDashboard() {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+            Get.offAllNamed(Routes.dashboard);
+        });
+    }
+
+    void goToAssistantChat() {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+            Get.offAllNamed(Routes.assistantChat);
+        });
+    }
+
 }

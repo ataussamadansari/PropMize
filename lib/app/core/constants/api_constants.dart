@@ -15,6 +15,8 @@ class ApiConstants
     static const String sessionFeedback = "/ai/chat/{id}/feedback"; // POST
     static const String chatAnalytics = "/ai/chat/{id}/analytics"; // GET
     static const String allChats = "/ai/chats"; // GET
+    static const String chatDeleteById = "/ai/chat/{id}"; // Delete
+    static const String chatAllDelete = "/ai/chat/all"; // Delete
 
     // ------------------ Authentication Endpoints ------------------
 
