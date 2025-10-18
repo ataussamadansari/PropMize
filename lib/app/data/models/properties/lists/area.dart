@@ -2,7 +2,8 @@ class Area
 {
   Area({
     this.value,
-    this.unit});
+    this.unit
+  });
 
   Area.fromJson(dynamic json)
   {

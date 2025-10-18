@@ -12,8 +12,9 @@ import '../../../../data/models/api_response_model.dart';
 import '../../../../data/models/user/send_otp/send_otp_request.dart';
 import '../../../../data/models/user/verify_otp/verify_otp_request.dart';
 import '../../../../data/repositories/auth/auth_repository.dart';
-import '../../../../data/services/current_user_id_services.dart';
-import '../../../../data/services/storage_services.dart';
+import '../../../../data/services/auth/google_auth_service.dart';
+import '../../../../data/services/storage/current_user_id_services.dart';
+import '../../../../data/services/storage/storage_services.dart';
 import '../../../../routes/app_routes.dart';
 
 class AuthController extends GetxController
@@ -37,6 +38,71 @@ class AuthController extends GetxController
 
     // Phone validation state
     var phoneValidationState = "".obs;
+
+
+    // AuthController mein ye methods add karo:
+    final GoogleAuthService _googleAuthService = Get.find<GoogleAuthService>();
+
+    Future<void> googleLogin() async {
+        try {
+            isLoading.value = true;
+            hasError.value = false;
+            errorMessage.value = "";
+
+            final result = await _googleAuthService.signInWithGoogle();
+
+            if (result['success'] == true) {
+                // ✅ SUCCESS
+                final userData = result['user'];
+                final token = result['token'];
+
+                await _saveUserData(userData, token);
+
+                AppHelpers.showSnackBar(
+                    title: "Success",
+                    message: "Google Sign-In successful!",
+                    isError: false,
+                );
+
+            } else {
+                _handleGoogleError(result['message'] ?? 'Google Sign-In failed');
+            }
+        } catch (e) {
+            _handleGoogleError('Google Sign-In error: $e');
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
+    Future<void> _saveUserData(dynamic userData, String token) async {
+        // Save token
+        StorageServices.to.setToken(token);
+
+        // Save user ID
+        if (userData.id != null) {
+            StorageServices.to.setUserId(userData.id!);
+            Get.find<CurrentUserIdServices>().setUserId(userData.id!);
+        }
+
+        // Save user details
+        StorageServices.to.write("role", userData.role);
+        StorageServices.to.write("email", userData.email);
+        StorageServices.to.write("phone", userData.phone);
+        StorageServices.to.write("name", userData.name);
+
+        // Initialize services
+        Get.find<LikeService>();
+    }
+
+    void _handleGoogleError(String message) {
+        hasError.value = true;
+        errorMessage.value = message;
+        AppHelpers.showSnackBar(
+            title: "Error",
+            message: message,
+            isError: true
+        );
+    }
 
     void validatePhoneLive(String value)
     {

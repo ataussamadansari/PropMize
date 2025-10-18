@@ -5,9 +5,10 @@ class Messages {
     this.role,
     this.content,
     this.timestamp,
-    this.properties,
     this.suggestions,
-    this.id,});
+    this.id,
+    this.properties,
+  });
 
   Messages.fromJson(dynamic json) {
     role = json['role'];

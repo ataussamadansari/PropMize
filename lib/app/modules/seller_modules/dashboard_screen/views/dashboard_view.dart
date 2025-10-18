@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/services/storage_services.dart';
 import 'package:prop_mize/app/modules/seller_modules/dashboard_screen/controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {

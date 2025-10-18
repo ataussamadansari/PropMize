@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../../../data/services/storage_services.dart';
+import '../../../../data/services/storage/storage_services.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../buyer_modules/auth_screen/controllers/auth_controller.dart';
 

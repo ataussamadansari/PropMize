@@ -21,7 +21,6 @@ class AiStartChatModel {
     }
     return map;
   }
-
 }
 
 

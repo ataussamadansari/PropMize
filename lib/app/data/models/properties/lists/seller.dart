@@ -3,41 +3,42 @@ class Seller
 {
   Seller({
     this.id,
-    this.phone,
-    this.avatar,
-    this.isEmailVerified,
-    this.isPhoneVerified,
+    this.name,
     this.email,
-    this.name});
+    this.avatar,
+    // this.phone,
+    // this.isEmailVerified,
+    // this.isPhoneVerified,
+  });
 
   Seller.fromJson(dynamic json)
   {
     id = json['_id'];
-    phone = json['phone'];
-    avatar = json['avatar'];
-    isEmailVerified = json['isEmailVerified'];
-    isPhoneVerified = json['isPhoneVerified'];
-    email = json['email'];
     name = json['name'];
+    email = json['email'];
+    avatar = json['avatar'];
+    // phone = json['phone'];
+    // isEmailVerified = json['isEmailVerified'];
+    // isPhoneVerified = json['isPhoneVerified'];
   }
   String? id;
-  String? phone;
-  String? avatar;
-  bool? isEmailVerified;
-  bool? isPhoneVerified;
-  String? email;
   String? name;
+  String? email;
+  String? avatar;
+  // String? phone;
+  // bool? isEmailVerified;
+  // bool? isPhoneVerified;
 
   Map<String, dynamic> toJson()
   {
     final map = <String, dynamic>{};
     map['_id'] = id;
-    map['phone'] = phone;
-    map['avatar'] = avatar;
-    map['isEmailVerified'] = isEmailVerified;
-    map['isPhoneVerified'] = isPhoneVerified;
-    map['email'] = email;
     map['name'] = name;
+    map['email'] = email;
+    map['avatar'] = avatar;
+    // map['phone'] = phone;
+    // map['isEmailVerified'] = isEmailVerified;
+    // map['isPhoneVerified'] = isPhoneVerified;
     return map;
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
+import '../../../../data/services/auth/google_auth_service.dart';
 import '../../auth_screen/controllers/auth_controller.dart';
 
 class AuthBottomSheet extends GetView<AuthController>
@@ -192,33 +193,57 @@ class AuthBottomSheet extends GetView<AuthController>
 
                                 const SizedBox(height: 16),
 
-                                InkWell(
-                                    child: Container(
-                                        padding: const EdgeInsets.all(8.0),
-                                        decoration: BoxDecoration(
-                                            color: context.theme.cardColor,
-                                            borderRadius: BorderRadius.circular(12),
-                                            boxShadow: [
-                                                BoxShadow(
-                                                    color: Colors.black26,
-                                                    blurRadius: 10,
-                                                    offset: const Offset(0, 4)
+                              // Google button ko ye functionality do:
+                              InkWell(
+                                onTap: () {
+                                  if (controller.isLoading.value) return;
+                                  controller.googleLogin();
+                                },
+                                child: Obx(() {
+                                  final googleService = Get.find<GoogleAuthService>();
+                                  return Container(
+                                      padding: const EdgeInsets.all(12.0),
+                                      decoration: BoxDecoration(
+                                          color: context.theme.cardColor,
+                                          borderRadius: BorderRadius.circular(12),
+                                          border: Border.all(color: Colors.grey.shade300),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.black12,
+                                                blurRadius: 4,
+                                                offset: const Offset(0, 2)
+                                            )
+                                          ]
+                                      ),
+                                      child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            if (googleService.isLoading.value)
+                                              SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child: CircularProgressIndicator(strokeWidth: 2),
+                                              )
+                                            else
+                                              SvgPicture.asset(
+                                                'assets/icons/google.svg',
+                                                width: 24,
+                                                height: 24,
+                                              ),
+                                            const SizedBox(width: 12),
+                                            Text(
+                                                googleService.isLoading.value
+                                                    ? 'Signing in...'
+                                                    : 'Sign in with Google',
+                                                style: context.textTheme.bodyLarge?.copyWith(
+                                                  fontWeight: FontWeight.w500,
                                                 )
-                                            ]
-                                        ),
-                                        child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                                SvgPicture.asset('assets/icons/google.svg', width: 24),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                    'Sign in with Google',
-                                                    style: context.textTheme.bodyLarge
-                                                )
-                                            ]
-                                        )
-                                    )
-                                )
+                                            )
+                                          ]
+                                      )
+                                  );
+                                }),
+                              )
                             ]
                         )
                     )

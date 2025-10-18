@@ -2,7 +2,8 @@ class LikeModel {
   LikeModel({
       this.success, 
       this.liked, 
-      this.message,});
+      this.message,
+  });
 
   LikeModel.fromJson(dynamic json) {
     success = json['success'];

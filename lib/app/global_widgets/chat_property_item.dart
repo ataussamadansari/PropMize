@@ -86,11 +86,12 @@ class ChatPropertyItem extends GetView<AssistantChatController> {
 
                   // Address
                   Text(
-                    [
-                      property.address?.area,
-                      property.address?.city,
-                      property.address?.state,
-                    ].where((e) => e != null && e.isNotEmpty).join(", "),
+                    // [
+                    //   property.address?.area,
+                    //   property.address?.city,
+                    //   property.address?.state,
+                    // ].where((e) => e != null && e.isNotEmpty).join(", "),
+                    property.address!,
                     style: context.textTheme.bodySmall,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -101,7 +102,8 @@ class ChatPropertyItem extends GetView<AssistantChatController> {
                   // Price
                   Text(
                     property.price != null
-                        ? "${property.currency ?? "₹"} ${property.price}"
+                        // ? "${property.currency ?? "₹"} ${property.price}"
+                        ? "₹ ${property.price}"
                         : "Price not available",
                     style: const TextStyle(
                       fontSize: 15,
@@ -113,7 +115,7 @@ class ChatPropertyItem extends GetView<AssistantChatController> {
                   const SizedBox(height: 6),
 
                   // Features Row
-                  Row(
+                  /*Row(
                     children: [
                       if (property.bedrooms != null)
                         _iconText(CupertinoIcons.bed_double_fill, "${property.bedrooms}"),
@@ -123,7 +125,7 @@ class ChatPropertyItem extends GetView<AssistantChatController> {
                         _iconText(Icons.square_foot,
                             "${property.area!.value} ${property.area!.unit ?? "sqft"}"),
                     ],
-                  ),
+                  ),*/
                 ],
               ),
             ),

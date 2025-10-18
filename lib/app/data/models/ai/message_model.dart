@@ -1,6 +1,3 @@
-
-
-
 class MessageModel {
   final bool? success;
   final Data? data;
@@ -66,6 +63,7 @@ class AiMetadata {
     };
   }
 }
+
 
 class Chat {
   final Context? context;

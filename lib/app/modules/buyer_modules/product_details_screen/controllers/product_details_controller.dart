@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/communication_helper.dart';
 import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
-import 'package:prop_mize/app/data/services/storage_services.dart';
 
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/repositories/properties/properties_repository.dart';
-import '../../../../data/services/current_user_id_services.dart';
+import '../../../../data/services/storage/current_user_id_services.dart';
 import '../../../../data/services/like_services.dart';
+import '../../../../data/services/storage/storage_services.dart';
 import '../../auth_screen/views/auth_bottom_sheet.dart';
 
 class ProductDetailsController extends GetxController

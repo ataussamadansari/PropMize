@@ -4,7 +4,8 @@ class Pagination
     this.page,
     this.limit,
     this.total,
-    this.pages});
+    this.pages
+  });
 
   Pagination.fromJson(dynamic json)
   {

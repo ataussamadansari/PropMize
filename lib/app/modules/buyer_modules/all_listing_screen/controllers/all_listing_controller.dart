@@ -4,12 +4,12 @@ import 'package:prop_mize/app/core/utils/debouncer.dart';
 import 'package:prop_mize/app/data/models/properties/contacted_seller/contacted_seller_request.dart';
 import 'package:prop_mize/app/data/models/properties/data.dart';
 import 'package:prop_mize/app/data/services/contact_seller_service.dart';
-import 'package:prop_mize/app/data/services/current_user_id_services.dart';
+import 'package:prop_mize/app/data/services/storage/current_user_id_services.dart';
 
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/repositories/properties/properties_repository.dart';
 import '../../../../data/services/like_services.dart';
-import '../../../../data/services/storage_services.dart';
+import '../../../../data/services/storage/storage_services.dart';
 import '../../auth_screen/views/auth_bottom_sheet.dart';
 import '../views/widgets/filter_bottom_sheet.dart';
 

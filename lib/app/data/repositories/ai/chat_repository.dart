@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:prop_mize/app/core/constants/api_constants.dart';
 import 'package:prop_mize/app/data/models/ai/chat_history_model.dart';
 import 'package:prop_mize/app/data/models/ai/message_model.dart';
+import 'package:prop_mize/app/data/models/ai/message_model_v1.dart';
 import 'package:prop_mize/app/data/models/api_response_model.dart';
-import 'package:prop_mize/app/data/services/api_services.dart';
+import 'package:prop_mize/app/data/services/api/api_services.dart';
 
 import '../../models/ai/ai_start_chat_model.dart';
 
@@ -57,7 +58,7 @@ class AiChatRepository
     }
 
     /// Message
-    Future<ApiResponse<MessageModel>> sendMessage(String message, String chatId, String userId) async {
+    Future<ApiResponse<MessageModelV1>> sendMessage(String message, String chatId, String userId) async {
         try {
             _cancelToken = CancelToken();
 
@@ -66,7 +67,7 @@ class AiChatRepository
 
             final response = await _apiServices.post(
                 url,
-                (data) => MessageModel.fromJson(data),
+                (data) => MessageModelV1.fromJson(data),
                 data: {
                     "content": message,
                     "userId": userId,
@@ -186,14 +187,14 @@ class AiChatRepository
         }
     }
 
-    Future<ApiResponse<MessageModel>> deleteById(String chatId) async {
+    Future<ApiResponse<MessageModelV1>> deleteById(String chatId) async {
         try {
             _cancelToken = CancelToken();
 
             final url = ApiConstants.chatDeleteById.replaceAll('{id}', chatId);
             final response = await _apiServices.delete(
                 url,
-                (data) => MessageModel.fromJson(data),
+                (data) => MessageModelV1.fromJson(data),
                 cancelToken: _cancelToken
             );
 

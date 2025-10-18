@@ -7,7 +7,7 @@ import '../models/api_response_model.dart';
 import '../models/properties/contacted_seller/contacted_seller_model.dart';
 import '../models/properties/contacted_seller/contacted_seller_request.dart';
 import '../repositories/properties/properties_repository.dart';
-import 'current_user_id_services.dart';
+import 'storage/current_user_id_services.dart';
 
 class ContactSellerService extends GetxService {
   final PropertiesRepository _repo = PropertiesRepository();

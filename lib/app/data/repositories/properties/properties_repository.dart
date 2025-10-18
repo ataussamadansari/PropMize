@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:prop_mize/app/core/constants/api_constants.dart';
 import 'package:prop_mize/app/data/models/api_response_model.dart';
 import 'package:prop_mize/app/data/models/properties/contacted_seller/contacted_seller_model.dart';
 import 'package:prop_mize/app/data/models/properties/contacted_seller/my_inquiries.dart';
 import 'package:prop_mize/app/data/models/properties/properties_model.dart';
 import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
-import 'package:prop_mize/app/data/services/api_services.dart';
+import 'package:prop_mize/app/data/services/api/api_services.dart';
 
 import '../../models/like/like_model.dart';
 import '../../models/properties/contacted_seller/contacted_seller_request.dart';
@@ -300,7 +301,8 @@ class PropertiesRepository
     Future<ApiResponse<PropertiesModel>> getLikedProperties({
         int page = 1,
         int limit = 10,
-    }) async {
+    }) async
+    {
         try {
             _cancelToken = CancelToken();
 
@@ -310,14 +312,34 @@ class PropertiesRepository
             };
 
             // Use get() instead of getList() since we want a single PropertiesModel object
-            final ApiResponse<PropertiesModel> res = await _apiServices.get(
+            final response = await _apiServices.get(
                 ApiConstants.likedProperties,
                     (data) => PropertiesModel.fromJson(data), // This converts the entire response
                 queryParameters: queryParams,
                 cancelToken: _cancelToken,
             );
 
-            return res;
+            debugPrint("response-status: ${response.success}");
+            debugPrint("response-statusCode: ${response.statusCode}");
+
+            debugPrint("response: ${PropertiesModel.fromJson(response.data)}");
+
+
+            if (response.statusCode == 200 && response.data != null)
+            {
+
+                return ApiResponse.success(
+                    response.data!,
+                    message: response.message
+                );
+            }
+            else
+            {
+                return ApiResponse.error(
+                    response.message,
+                    statusCode: response.statusCode
+                );
+            }
 
         } on DioException catch (e) {
             return ApiResponse.error(

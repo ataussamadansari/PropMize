@@ -28,7 +28,8 @@ class ChatHistoryModel {
 class Data {
   Data({
       this.chats, 
-      this.pagination,});
+      this.pagination,
+  });
 
   Data.fromJson(dynamic json) {
     if (json['chats'] != null) {

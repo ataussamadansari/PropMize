@@ -10,7 +10,8 @@ import 'package:prop_mize/app/data/repositories/ai/chat_repository.dart';
 import 'package:prop_mize/app/routes/app_routes.dart';
 
 import '../../../../data/models/ai/message_model.dart' hide Data;
-import '../../../../data/services/storage_services.dart';
+import '../../../../data/models/ai/message_model_v1.dart' hide Data;
+import '../../../../data/services/storage/storage_services.dart';
 import '../../auth_screen/controllers/auth_controller.dart';
 import '../../auth_screen/views/auth_bottom_sheet.dart';
 
@@ -26,7 +27,7 @@ class AssistantChatController extends GetxController
     // ===== Reactive Variables =====
     final chatHistoryList = Rxn<ChatHistoryModel>();
     final aiChat = Rxn<AiStartChatModel>();
-    final messageModel = Rxn<MessageModel>();
+    final messageModel = Rxn<MessageModelV1>();
     final RxBool isLoading = false.obs;
     final RxBool isChatLoading = false.obs;
     final RxBool hasError = false.obs;

@@ -9,12 +9,25 @@ import 'package:prop_mize/app/data/models/user/verify_otp/verify_otp_request.dar
 import 'package:prop_mize/app/data/models/user/verify_otp/verify_otp_response.dart';
 
 import '../../models/user/send_otp/send_otp_response.dart';
-import '../../services/api_services.dart';
+import '../../services/api/api_services.dart';
 
 class AuthRepository
 {
     final ApiServices _apiServices = ApiServices();
     CancelToken? _cancelToken;
+
+    // AuthRepository mein verify karo
+    Future<ApiResponse<VerifyOtpResponse>> googleLogin({
+        required String accessToken, // Actually ID token aa raha hai
+    }) async {
+        return _apiServices.post<VerifyOtpResponse>(
+            '/auth/google-login',
+                (data) => VerifyOtpResponse.fromJson(data),
+            data: {
+                'token': accessToken, // ID token backend ko bhej rahe hain
+            },
+        );
+    }
 
     Future<ApiResponse<SendOtpResponse>> sendOtp(SendOtpRequest request) async
     {
@@ -215,6 +228,7 @@ class AuthRepository
             );
         }
     }
+
 
     Future<void> cancelChat() async {
         _cancelToken?.cancel();

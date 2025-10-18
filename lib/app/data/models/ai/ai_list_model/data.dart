@@ -1,6 +1,5 @@
 import 'package:prop_mize/app/data/models/ai/ai_list_model/messages.dart';
 import 'package:prop_mize/app/data/models/ai/ai_list_model/related_leads.dart';
-import 'package:prop_mize/app/data/models/ai/ai_list_model/related_properties.dart';
 
 class Data {
   Data({
@@ -10,12 +9,13 @@ class Data {
     this.title,
     this.messages,
     this.status,
-    this.relatedProperties,
+    // this.relatedProperties,
     this.relatedLeads,
     this.isActive,
     this.createdAt,
     this.updatedAt,
-    this.v,});
+    // this.v,
+  });
 
   Data.fromJson(dynamic json) {
     id = json['_id'];
@@ -29,12 +29,12 @@ class Data {
       });
     }
     status = json['status'];
-    if (json['relatedProperties'] != null) {
+   /* if (json['relatedProperties'] != null) {
       relatedProperties = [];
       json['relatedProperties'].forEach((v) {
         relatedProperties?.add(RelatedProperties.fromJson(v));
       });
-    }
+    }*/
     if (json['relatedLeads'] != null) {
       relatedLeads = [];
       json['relatedLeads'].forEach((v) {
@@ -44,7 +44,7 @@ class Data {
     isActive = json['isActive'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    v = json['__v'];
+    // v = json['__v'];
   }
   String? id;
   String? user;
@@ -52,12 +52,12 @@ class Data {
   String? title;
   List<Messages>? messages;
   String? status;
-  List<RelatedProperties>? relatedProperties;
+  // List<RelatedProperties>? relatedProperties;
   List<RelatedLeads>? relatedLeads;
   bool? isActive;
   String? createdAt;
   String? updatedAt;
-  int? v;
+  // int? v;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -69,16 +69,16 @@ class Data {
       map['messages'] = messages?.map((v) => v.toJson()).toList();
     }
     map['status'] = status;
-    if (relatedProperties != null) {
+    /*if (relatedProperties != null) {
       map['relatedProperties'] = relatedProperties?.map((v) => v.toJson()).toList();
-    }
+    }*/
     if (relatedLeads != null) {
       map['relatedLeads'] = relatedLeads?.map((v) => v.toJson()).toList();
     }
     map['isActive'] = isActive;
     map['createdAt'] = createdAt;
     map['updatedAt'] = updatedAt;
-    map['__v'] = v;
+    // map['__v'] = v;
     return map;
   }
 }

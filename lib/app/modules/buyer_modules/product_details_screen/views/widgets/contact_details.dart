@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../../product_details_screen/controllers/product_details_controller.dart';
 
 import '../../../../../data/models/properties/lists/contact.dart';
-import '../../../../../data/services/current_user_id_services.dart';
+import '../../../../../data/services/storage/current_user_id_services.dart';
 
 class ContactDetails extends GetView<ProductDetailsController> {
   final Contact contact;

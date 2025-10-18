@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/services/contact_seller_service.dart';
-import 'package:prop_mize/app/data/services/current_user_id_services.dart';
-import 'package:prop_mize/app/data/services/like_services.dart';
-import 'package:prop_mize/app/data/services/storage_services.dart';
 
+import '../../data/services/auth/google_auth_service.dart';
+import '../../data/services/contact_seller_service.dart';
+import '../../data/services/like_services.dart';
+import '../../data/services/storage/current_user_id_services.dart';
+import '../../data/services/storage/storage_services.dart';
 import '../../modules/buyer_modules/auth_screen/controllers/auth_controller.dart';
 
 
@@ -24,5 +25,7 @@ class AppBindings extends Bindings {
 
     // ✅ AuthController - Add this line
     Get.lazyPut<AuthController>(() => AuthController(), fenix: true);
+
+    Get.lazyPut(() => GoogleAuthService());
   }
 }

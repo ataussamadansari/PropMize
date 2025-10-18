@@ -42,8 +42,9 @@ class SplashController extends GetxController {
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/services/storage_services.dart';
 import 'package:prop_mize/app/routes/app_routes.dart';
+
+import '../../../data/services/storage/storage_services.dart';
 
 class SplashController extends GetxController
 {

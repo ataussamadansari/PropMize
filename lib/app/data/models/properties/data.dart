@@ -168,7 +168,7 @@ class Data
     String? notes;
     List<ViewedBy>? viewedBy;
     List<LikedBy>? likedBy;
-    List<dynamic>? contactedBy;
+    List<ContactedBy>? contactedBy;
     String? expiresAt;
     String? createdAt;
     String? updatedAt;

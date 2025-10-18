@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/routes/app_routes.dart';
 
-import '../../../data/services/storage_services.dart';
+import '../../../data/services/storage/storage_services.dart';
 import '../../buyer_modules/auth_screen/controllers/auth_controller.dart';
 import '../../buyer_modules/auth_screen/views/auth_bottom_sheet.dart';
 

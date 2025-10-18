@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../data/repositories/properties/properties_repository.dart';
 import '../../core/utils/helpers.dart';
-import '../../data/models/properties/data.dart';
 import '../../modules/buyer_modules/auth_screen/views/auth_bottom_sheet.dart';
-import 'current_user_id_services.dart';
+import '../../data/models/properties/data.dart';
+import 'storage/current_user_id_services.dart';
 
 class LikeService extends GetxService
 {

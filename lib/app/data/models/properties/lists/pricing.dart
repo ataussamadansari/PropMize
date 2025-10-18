@@ -14,9 +14,9 @@ class Pricing
     securityDeposit = json['securityDeposit'];
     priceNegotiable = json['priceNegotiable'];
   }
-  dynamic basePrice;
-  dynamic maintenanceCharges;
-  dynamic securityDeposit;
+  int? basePrice;
+  int? maintenanceCharges;
+  int? securityDeposit;
   bool? priceNegotiable;
 
   Map<String, dynamic> toJson()
