@@ -115,7 +115,7 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                         padding: const EdgeInsets.symmetric(vertical: 4),
                                                         child: isAssistantMessage
                                                             ? ReceivedMessageBubble(chatMessage: message)
-                                                            : SendMessageBubble(chatMessage: message)
+                                                            : SendMessageBubble(chatMessage: message, )
                                                     );
                                                 }
                                             );
@@ -130,11 +130,11 @@ class AssistantChatView extends GetView<AssistantChatController>
                                         bool hasText = controller.messageET.value.trim().isNotEmpty;
 
                                         return Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                                             child: Row(
                                                 children: [
                                                     Expanded(
-                                                        child: TextField(
+                                                        /*child: TextField(
                                                             controller: controller.messageController,
                                                             enabled: !sending && !controller.hasError.value, // 👈 error ke time disable
                                                             textCapitalization: TextCapitalization.sentences,
@@ -146,36 +146,107 @@ class AssistantChatView extends GetView<AssistantChatController>
                                                                         : "Type your message...",
                                                                 border: InputBorder.none
                                                             )
+                                                        )*/
+
+                                                        child: TextField(
+                                                          controller: controller.messageController,
+                                                          enabled: !sending && !controller.hasError.value,
+                                                          textCapitalization: TextCapitalization.sentences,
+                                                          decoration: InputDecoration(
+                                                            hintText: sending
+                                                                ? "Sending..."
+                                                                : controller.hasError.value
+                                                                ? "Fix error to continue..."
+                                                                : "Type your message...",
+
+                                                            // ✅ FIXED: Proper border for all states
+                                                            border: OutlineInputBorder(
+                                                              borderRadius: BorderRadius.circular(12),
+                                                              borderSide: BorderSide(
+                                                                color: Colors.grey.shade300,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+
+                                                            // ✅ Disabled state border
+                                                            disabledBorder: OutlineInputBorder(
+                                                              borderRadius: BorderRadius.circular(12),
+                                                              borderSide: BorderSide(
+                                                                color: Colors.grey.shade200,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+
+                                                            // ✅ Enabled state border
+                                                            enabledBorder: OutlineInputBorder(
+                                                              borderRadius: BorderRadius.circular(12),
+                                                              borderSide: BorderSide(
+                                                                color: Colors.grey.shade300,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+
+                                                            // ✅ Focused state border
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderRadius: BorderRadius.circular(12),
+                                                              borderSide: BorderSide(
+                                                                color: AppColors.primary, // Your primary color
+                                                                width: 1,
+                                                              ),
+                                                            ),
+
+                                                            // ✅ Error state border
+                                                            errorBorder: OutlineInputBorder(
+                                                              borderRadius: BorderRadius.circular(12),
+                                                              borderSide: BorderSide(
+                                                                color: Colors.red,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+
+                                                            // ✅ Sending state styling
+                                                            /*filled: true,
+                                                            fillColor: sending ? Colors.grey.shade50 : Colors.white,*/
+
+                                                            // ✅ Optional: Content padding for better appearance
+                                                            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                                          ),
                                                         )
+
                                                     ),
+
+                                                    SizedBox(width: 4),
 
                                                     // 👇 Single button that toggles Send ↔ Cancel
                                                     IconButton(
-                                                        style: IconButton.styleFrom(
-                                                            backgroundColor: sending
-                                                                ? Colors.grey.shade500
-                                                                : AppColors.primary
-                                                        ),
+                                                      style: IconButton.styleFrom(
+                                                        backgroundColor: sending
+                                                            ? Colors.grey.shade500
+                                                            : (hasText && !controller.hasError.value
+                                                            ? AppColors.primary
+                                                            : Colors.grey.shade400),
+                                                      ),
                                                         icon: Icon(
-                                                            // sending ? Icons.stop : CupertinoIcons.paperplane,
-                                                            CupertinoIcons.paperplane,
-                                                            /*color: sending
+                                                            sending ? Icons.stop : CupertinoIcons.paperplane,
+                                                            color: sending
                                                                 ? Colors.red
-                                                                : (hasText ? AppColors.white : Colors.grey) */
-                                                            color: AppColors.white
+                                                                : (hasText ? AppColors.white : Colors.grey.shade700)
+                                                            // CupertinoIcons.paperplane,
+                                                            // color: AppColors.white
                                                         ),
                                                         onPressed: ()
                                                         {
-                                                          hasText ? controller.onSendMessageButtonPressed() : null;
-                                                           /* if (sending)
+                                                          // hasText ? controller.onSendMessageButtonPressed() : null;
+                                                            if (sending)
                                                             {
-                                                                // controller.cancelChat();
+                                                                controller.cancelChat();
                                                             }
                                                             else if (hasText && !controller.hasError.value)
-                                                            { // 👈 error ke time send na ho
+                                                            {
                                                                 controller.onSendMessageButtonPressed();
-                                                            }*/
-                                                        }
+                                                            }
+                                                        },
+                                                      tooltip: sending ? 'Cancel' : 'Send message', // Accessibility
                                                     )
                                                 ]
                                             )

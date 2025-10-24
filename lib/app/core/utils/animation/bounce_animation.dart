@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 
 class BounceAnimation extends StatefulWidget {
   final Widget child;
-  final int delay;
+  final Duration duration;
   final double scale;
+  final bool autoPlay;
+  final int repeatCount;
+  final bool infinite;
 
   const BounceAnimation({
-    super.key,
+    Key? key,
     required this.child,
-    this.delay = 0,
-    this.scale = 1.1,
-  });
+    this.duration = const Duration(milliseconds: 1500), // Slower default
+    this.scale = 1.2,
+    this.autoPlay = true,
+    this.repeatCount = 1,
+    this.infinite = false,
+  }) : super(key: key);
 
   @override
-  State<BounceAnimation> createState() => _BounceAnimationState();
+  _BounceAnimationState createState() => _BounceAnimationState();
 }
 
 class _BounceAnimationState extends State<BounceAnimation>
@@ -24,74 +30,57 @@ class _BounceAnimationState extends State<BounceAnimation>
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(
+      duration: widget.duration,
       vsync: this,
-      duration: const Duration(milliseconds: 800),
     );
 
-    final curve = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.elasticOut,
-    );
+    // Create a more natural bounce curve
+    _animation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween(begin: 1.0, end: widget.scale)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 40, // 40% of time for scaling up
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: widget.scale, end: 1.0)
+            .chain(CurveTween(curve: Curves.bounceOut)),
+        weight: 60, // 60% of time for bouncing back
+      ),
+    ]).animate(_controller);
 
-    _animation = Tween<double>(begin: 0, end: 1).animate(curve);
-
-    // Start animation after delay
-    Future.delayed(Duration(milliseconds: widget.delay), () {
-      if (mounted) {
+    if (widget.autoPlay) {
+      if (widget.infinite) {
+        _controller.repeat(reverse: false);
+      } else if (widget.repeatCount > 1) {
+        _controller.repeat(count: widget.repeatCount);
+      } else {
         _controller.forward();
       }
-    });
+    }
+  }
+
+  void play() => _controller.forward();
+  void bounce() => _controller.repeat();
+  void stop() => _controller.stop();
+  void reset() => _controller.reset();
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _animation.value,
+          child: widget.child,
+        );
+      },
+    );
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _animation,
-      child: widget.child,
-    );
-  }
-}
-
-// Alternative: Simple Bounce on Tap
-class BounceOnTap extends StatefulWidget {
-  final Widget child;
-  final VoidCallback? onTap;
-  final double scale;
-
-  const BounceOnTap({
-    super.key,
-    required this.child,
-    this.onTap,
-    this.scale = 0.95,
-  });
-
-  @override
-  State<BounceOnTap> createState() => _BounceOnTapState();
-}
-
-class _BounceOnTapState extends State<BounceOnTap> {
-  bool _isPressed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) => setState(() => _isPressed = false),
-      onTapCancel: () => setState(() => _isPressed = false),
-      onTap: widget.onTap,
-      child: AnimatedScale(
-        scale: _isPressed ? widget.scale : 1.0,
-        duration: const Duration(milliseconds: 150),
-        child: widget.child,
-      ),
-    );
   }
 }

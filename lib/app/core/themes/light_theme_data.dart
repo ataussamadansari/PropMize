@@ -10,7 +10,7 @@ class LightThemeData
             brightness: Brightness.light,
             primaryColor: AppColors.primary,
             scaffoldBackgroundColor: AppColors.backgroundLight,
-            fontFamily: "Inter",
+            fontFamily: "Poppins",
 
             // Color Scheme
             colorScheme: const ColorScheme.light(
@@ -25,8 +25,6 @@ class LightThemeData
                 surfaceContainerHighest: AppColors.lightCard100,
             ),
 
-            // Scaffold Background
-            // scaffoldBackgroundColor: AppColors.backgroundLight,
 
             // App Bar Theme
             appBarTheme: const AppBarTheme(

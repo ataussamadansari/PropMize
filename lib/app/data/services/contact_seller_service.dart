@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/utils/helpers.dart';
-import '../../modules/buyer_modules/auth_screen/views/auth_bottom_sheet.dart';
+import '../../modules/common_modules/auth_screen/views/auth_bottom_sheet.dart';
 import '../models/api_response_model.dart';
 import '../models/properties/contacted_seller/contacted_seller_model.dart';
 import '../models/properties/contacted_seller/contacted_seller_request.dart';

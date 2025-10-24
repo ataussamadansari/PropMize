@@ -1,18 +1,31 @@
 abstract class Routes
 {
-    static const splash = '/splash';
-    static const home = '/home';
 
-    // buyer
-    static const assistantChat = '/assistant-chat';
-    static const profile = '/profile';
-    static const productDetails = '/product/:id';
-    static const auth = '/auth';
+    /// Common -
     static const allListing = '/all-listing';
+    static const auth = '/auth';
+    static const helpAndSupport = '/help-and-support';
+    static const home = '/home';
+    static const notification = '/notification';
+    static const productDetails = '/product/:id';
+    static const profile = '/profile';
+    static const splash = '/splash';
+
+    /// Buyer -
+    static const assistantChat = '/assistant-chat';
     static const saveProperties = '/saved-properties';
     static const contacted = '/contacted';
+    static const buyerGuide = '/buyer-guide';
+    static const recentViewed = '/recent-viewed';
 
-    // seller
+    /// Seller -
+    static const sellerMain = '/seller-main';
     static const dashboard = '/dashboard';
+    static const analytics = '/analytics';
+    static const leads = '/leads';
+    static const myProperty = '/my-property';
+    static const plans = '/plans';
+    static const sellRentProperty = '/sell-rent-property';
+    static const sellerGuide = '/seller-guide';
 
 }

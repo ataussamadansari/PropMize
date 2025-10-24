@@ -13,6 +13,8 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
     Widget build(BuildContext context) {
         return Scaffold(
             appBar: AppBar(
+                elevation: 0, // Remove shadow
+                scrolledUnderElevation: 0, // Remove elevation when scrolled
                 title: const Text('Saved Properties'),
                 actions: [
                     Padding(

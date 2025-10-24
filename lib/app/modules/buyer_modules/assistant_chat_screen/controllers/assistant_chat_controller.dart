@@ -12,8 +12,8 @@ import 'package:prop_mize/app/routes/app_routes.dart';
 import '../../../../data/models/ai/message_model.dart' hide Data;
 import '../../../../data/models/ai/message_model_v1.dart' hide Data;
 import '../../../../data/services/storage/storage_services.dart';
-import '../../auth_screen/controllers/auth_controller.dart';
-import '../../auth_screen/views/auth_bottom_sheet.dart';
+import '../../../common_modules/auth_screen/controllers/auth_controller.dart';
+import '../../../common_modules/auth_screen/views/auth_bottom_sheet.dart';
 
 class AssistantChatController extends GetxController
 {
@@ -28,11 +28,14 @@ class AssistantChatController extends GetxController
     final chatHistoryList = Rxn<ChatHistoryModel>();
     final aiChat = Rxn<AiStartChatModel>();
     final messageModel = Rxn<MessageModelV1>();
-    final RxBool isLoading = false.obs;
-    final RxBool isChatLoading = false.obs;
+
     final RxBool hasError = false.obs;
     final RxString errorMessage = "".obs;
+
     final RxBool isSendingMessage = false.obs;
+
+    final RxBool isLoading = false.obs;
+    final RxBool isChatLoading = false.obs;
 
     // ===== Scroll & Input =====
     final ScrollController scrollController = ScrollController();
@@ -91,44 +94,59 @@ class AssistantChatController extends GetxController
             }
         );
 
-        /*// Observe login/logout changes (but prevent duplicate start)
-        ever(StorageServices.to.userId, (String userId)
-            {
-                if (userId.isNotEmpty)
-                {
-                    startNewChat();
-                }
-            }
-        );*/
 
         // Observe login/logout changes
         ever(StorageServices.to.userId, (String userId)
             {
+                showScrollToBottom.value = false;
                 if (userId.isNotEmpty)
                 {
-                    final token = StorageServices.to.getToken();
-                    final chatId = StorageServices.to.getChatId();
-                    if (token != null && token.isNotEmpty)
-                    {
-                        // ✅ Agar user login kare aur chatId already hai to use karo
-                        if (chatId != null && chatId.isNotEmpty) 
-                        {
-                            loadChatById(chatId);
-                        }
-                        else 
-                        {
-                            startNewChat();
-                        }
-                    }
+                    _handleUserLogin();
                 }
                 else
                 {
-                    startNewChat();
+                    _handleUserLogout();
                 }
             }
         );
-
     }
+
+    // ✅ NEW: Handle user login
+    Future<void> _handleUserLogin() async
+    {
+        final token = StorageServices.to.getToken();
+        if (token != null && token.isNotEmpty)
+        {
+            // ✅ IMPORTANT: Clear all guest data first
+            StorageServices.to.removeChatId();
+
+            // ✅ Check if user has existing chat
+            final userChatId = StorageServices.to.getChatId();
+            if (userChatId != null && userChatId.isNotEmpty)
+            {
+                await loadChatById(userChatId);
+            }
+            else
+            {
+                // ✅ Start fresh chat for logged-in user
+                startNewChat();
+            }
+
+            // ✅ Load user profile and history
+            await _loadUserProfile();
+        }
+    }
+
+    // ✅ NEW: Handle user logout
+    Future<void> _handleUserLogout() async
+    {
+        // ✅ Clear user-specific data
+        StorageServices.to.removeChatId();
+        chatHistoryList.value = null;
+
+        startNewChat();
+    }
+
 
     void _initializeAfterBuild()
     {
@@ -154,25 +172,11 @@ class AssistantChatController extends GetxController
         );
     }
 
-    /*void _initializeAfterBuild()
-    {
-        Future.delayed(Duration.zero, ()
-            {
-                if (StorageServices.to.chatId.isEmpty)
-                {
-                    startChat();
-                }
-                _loadUserProfile();
-            }
-        );
-    }*/
-
     /// Load user profile (if token available) and then load chat history.
     Future<void> _loadUserProfile() async
     {
         try
         {
-
             isChatLoading.value = true;
 
             final token = StorageServices.to.getToken();
@@ -328,7 +332,7 @@ class AssistantChatController extends GetxController
 
         try
         {
-            isChatLoading.value = true;
+            isLoading.value = true;
             clearError();
 
             final response = await _aiChatRepository.getChatById(chatId);
@@ -353,6 +357,7 @@ class AssistantChatController extends GetxController
         finally
         {
             isChatLoading.value = false;
+            isLoading.value = false;
         }
     }
 
@@ -590,6 +595,7 @@ class AssistantChatController extends GetxController
 
     void goToProductDetails(String id) => Get.toNamed('/product/$id');
     void goToAllListing() => Get.toNamed(Routes.allListing);
+    void goToNotification() => Get.toNamed(Routes.notification);
     void goToSavedProperties() => Get.toNamed(Routes.saveProperties);
     void goToContacted() => Get.toNamed(Routes.contacted);
     void goToProfile() => Get.toNamed(Routes.profile);
