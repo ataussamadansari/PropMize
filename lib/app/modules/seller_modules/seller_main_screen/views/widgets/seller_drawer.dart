@@ -47,7 +47,7 @@ class SellerDrawer extends GetView<DashboardController> {
                               trailing: "Switch",
                               onTap: ()
                               {
-                                isLoggedIn ? controller.authController.role(userId, "seller")
+                                isLoggedIn ? controller.authController.role(userId, "buyer")
                                     : controller.showBottomSheet();
                               }
                           ),

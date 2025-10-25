@@ -29,7 +29,7 @@ import '../modules/common_modules/all_listing_screen/views/all_listing_view.dart
 import '../modules/common_modules/home_screen/bindings/home_bindings.dart';
 import '../modules/common_modules/home_screen/views/home_view.dart';
 import '../modules/common_modules/notification_screen/bindings/notification_binding.dart';
-import '../modules/common_modules/notification_screen/views/notification_view.dart';
+import '../modules/common_modules/notification_screen/views/v1/notification_view.dart';
 import '../modules/common_modules/product_details_screen/bindings/product_details_binding.dart';
 import '../modules/common_modules/product_details_screen/views/product_details_view.dart';
 import '../modules/common_modules/profile_screen/bindings/profile_binding.dart';

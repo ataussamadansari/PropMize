@@ -2,7 +2,9 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import '../../../../common_modules/notification_screen/controllers/notification_controller.dart';
+import '../../../../../data/services/socket/v1/socket_notification_service.dart';
+import '../../../../../data/services/socket/v1/socket_service.dart';
+import '../../../../common_modules/notification_screen/controllers/v1/notification_controller.dart';
 import '../../../assistant_chat_screen/controllers/assistant_chat_controller.dart';
 
 class AssistantChatAppbar extends GetView<AssistantChatController> implements PreferredSizeWidget
@@ -10,7 +12,7 @@ class AssistantChatAppbar extends GetView<AssistantChatController> implements Pr
     const AssistantChatAppbar({super.key});
 
     @override
-    Widget build(BuildContext context) 
+    Widget build(BuildContext context)
     {
         final NotificationController notificationController = Get.find<NotificationController>();
         return AppBar(
@@ -19,7 +21,7 @@ class AssistantChatAppbar extends GetView<AssistantChatController> implements Pr
 
             leading: IconButton(onPressed: ()
                 {
-                    if (controller.globalKey.currentState != null) 
+                    if (controller.globalKey.currentState != null)
                     {
                         controller.globalKey.currentState!.openDrawer();
                     }
@@ -37,10 +39,10 @@ class AssistantChatAppbar extends GetView<AssistantChatController> implements Pr
                 // Notification Icon with Badge
                 Obx(()
                     {
-                      final unreadCount = notificationController.unreadCount.value;
+                        final unreadCount = notificationController.unreadCount.value;
 
                         return badges.Badge(
-                            position: badges.BadgePosition.topEnd(top: 4, end: 6),
+                            position: badges.BadgePosition.topEnd(top: 5, end: 5),
                             badgeContent: Text(
                                 unreadCount > 99
                                     ? '99+'
@@ -75,7 +77,7 @@ class AssistantChatAppbar extends GetView<AssistantChatController> implements Pr
                 IconButton(
                     onPressed: ()
                     {
-                        if (controller.globalKey.currentState != null) 
+                        if (controller.globalKey.currentState != null)
                         {
                             controller.globalKey.currentState!.openEndDrawer();
                         }

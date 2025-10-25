@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:prop_mize/app/core/constants/api_constants.dart';
 import 'package:prop_mize/app/data/models/api_response_model.dart';
 import 'package:prop_mize/app/data/models/notification/notification_model.dart';
 import 'package:prop_mize/app/data/services/api/api_services.dart';
+
+import '../../models/notification/unread_count.dart';
 
 class NotificationRepository {
     final ApiServices _apiServices = ApiServices();
@@ -45,11 +49,12 @@ class NotificationRepository {
         }
     }
 
-    Future<ApiResponse<Map<String, dynamic>>> getUnreadCount() async {
+    Future<ApiResponse<UnreadCount>> getUnreadCount() async {
         try {
             final response = await _apiServices.get(
                 ApiConstants.unreadCount,
-                    (json) => json,
+                (json) => UnreadCount.fromJson(json),
+                cancelToken: _cancelToken
             );
 
             if (response.statusCode == 200) {

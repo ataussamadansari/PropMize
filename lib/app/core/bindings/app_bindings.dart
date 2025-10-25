@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import '../../data/services/auth/google_auth_service.dart';
 import '../../data/services/contact_seller_service.dart';
 import '../../data/services/like_services.dart';
-import '../../data/services/socket/socket_notification_service.dart';
-import '../../data/services/socket/socket_service.dart';
+import '../../data/services/socket/v1/socket_notification_service.dart';
+import '../../data/services/socket/v1/socket_service.dart';
 import '../../data/services/storage/current_user_id_services.dart';
 import '../../data/services/storage/storage_services.dart';
 import '../../modules/common_modules/auth_screen/controllers/auth_controller.dart';
-import '../../modules/common_modules/notification_screen/controllers/notification_controller.dart';
+import '../../modules/common_modules/notification_screen/controllers/v1/notification_controller.dart';
 
 
 class AppBindings extends Bindings {
