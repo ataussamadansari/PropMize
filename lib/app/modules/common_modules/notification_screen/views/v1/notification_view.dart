@@ -44,15 +44,20 @@ class NotificationView extends GetView<NotificationController>
                         itemBuilder: (context, index)
                         {
                             final notification = controller.notifications[index];
-                            return ListTile(
-                                title: Text(notification.title ?? "No Title"),
-                                subtitle: Text(notification.message ?? "No Message"),
-                                trailing: notification.read! ?
-                                    null : Icon(Icons.circle, color: Colors.blue, size: 10),
-                                onTap: ()
-                                {
-                                    controller.markAsRead(notification.id!);
-                                }
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Card(
+                                child: ListTile(
+                                    title: Text(notification.title ?? "No Title"),
+                                    subtitle: Text(notification.message ?? "No Message"),
+                                    trailing: notification.read! ?
+                                        null : Icon(Icons.circle, color: Colors.blue, size: 10),
+                                    onTap: ()
+                                    {
+                                        controller.markAsRead(notification.id!);
+                                    }
+                                ),
+                              ),
                             );
                         }
                     );
