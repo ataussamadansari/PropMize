@@ -8,7 +8,7 @@ import 'package:prop_mize/app/core/utils/helpers.dart';
 import 'package:prop_mize/app/data/models/properties/data.dart';
 import 'package:prop_mize/app/data/services/storage/current_user_id_services.dart';
 
-import '../../../../../data/services/like_services.dart';
+import '../../../../../data/services/like/like_services.dart';
 import 'card_widgets/card_not_logged.dart';
 import 'card_widgets/contact_view.dart';
 

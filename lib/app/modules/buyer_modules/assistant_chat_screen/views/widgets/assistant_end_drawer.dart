@@ -184,7 +184,7 @@ class AssistantEndDrawer extends GetView<AssistantChatController>
                                                     ElevatedButton.icon(
                                                         onPressed: ()
                                                         {
-                                                            controller.showBottomSheet();
+                                                            controller.showAuthBottomSheet();
                                                         },
                                                         icon: const Icon(Icons.login),
                                                         label: const Text("Login Now"),

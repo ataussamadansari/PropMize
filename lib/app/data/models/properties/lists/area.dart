@@ -10,7 +10,7 @@ class Area
     value = json['value'];
     unit = json['unit'];
   }
-  int? value;
+  dynamic value;
   String? unit;
 
   Map<String, dynamic> toJson()

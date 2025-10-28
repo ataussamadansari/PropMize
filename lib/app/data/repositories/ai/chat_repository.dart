@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:prop_mize/app/core/constants/api_constants.dart';
 import 'package:prop_mize/app/data/models/ai/chat_history_model.dart';
-import 'package:prop_mize/app/data/models/ai/message_model.dart';
 import 'package:prop_mize/app/data/models/ai/message_model_v1.dart';
 import 'package:prop_mize/app/data/models/api_response_model.dart';
 import 'package:prop_mize/app/data/services/api/api_services.dart';

@@ -150,7 +150,8 @@ class HomeView extends GetView<HomeController> {
                 leadingIcon: Icons.search,
                 title: "Buy / Rent Properties",
                 subtitle: "Find your dream home or apartment",
-                onTap: controller.navigateHomeToAssistantChat
+                onTap: controller.navigateToBuyerMain
+                // onTap: controller.navigateHomeToAssistantChat
             ),
           ),
           SlideInAnimation(
@@ -169,7 +170,7 @@ class HomeView extends GetView<HomeController> {
                         message: "Please login to continue",
                         actionLabel: "Login",
                         onActionTap: () {
-                          controller.showBottomSheet();
+                          controller.showAuthBottomSheet();
                         }
                     );
                   }
@@ -630,7 +631,7 @@ class HomeView extends GetView<HomeController> {
                         message: "Please login to continue",
                         actionLabel: "Login",
                         onActionTap: () {
-                          controller.showBottomSheet();
+                          controller.showAuthBottomSheet();
                         }
                     );
                   }
@@ -875,7 +876,7 @@ class HomeView extends GetView<HomeController>
                                 actionLabel: "Login",
                                 onActionTap: ()
                                 {
-                                    controller.showBottomSheet();
+                                    controller.showAuthBottomSheet();
                                 }
                             );
                         }

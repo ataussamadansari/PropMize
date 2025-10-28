@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
+import 'package:prop_mize/app/data/models/ai/ai_list_model/properties.dart';
+import 'package:prop_mize/app/data/services/like/liked_properties_service.dart';
 
 import '../../data/services/auth/google_auth_service.dart';
 import '../../data/services/contact_seller_service.dart';
-import '../../data/services/like_services.dart';
+import '../../data/services/like/like_services.dart';
 import '../../data/services/socket/v1/socket_notification_service.dart';
 import '../../data/services/socket/v1/socket_service.dart';
 import '../../data/services/storage/current_user_id_services.dart';
@@ -22,6 +24,7 @@ class AppBindings extends Bindings {
 
     // ✅ LikeService
     Get.lazyPut<LikeService>(() => LikeService(), fenix: true);
+    Get.lazyPut<LikedPropertiesService>(() => LikedPropertiesService(), fenix: true);
 
     // ✅ ContactSellerService
     Get.lazyPut<ContactSellerService>(() => ContactSellerService(), fenix: true);

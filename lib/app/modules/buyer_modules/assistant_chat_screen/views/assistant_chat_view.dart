@@ -3,10 +3,6 @@ import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/global_widgets/shimmer/shimmer_chat_view.dart';
-import '../../assistant_chat_screen/views/widgets/assistant_chat_appbar.dart';
-import '../../assistant_chat_screen/views/widgets/assistant_chat_drawer.dart';
-import 'package:prop_mize/app/modules/buyer_modules/assistant_chat_screen/views/widgets/assistant_end_drawer.dart';
-
 import '../../../../global_widgets/chat/received_message_bubble.dart';
 import '../../../../global_widgets/chat/send_message_bubble.dart';
 import '../../../../global_widgets/typing_indicator.dart';
@@ -21,263 +17,261 @@ class AssistantChatView extends GetView<AssistantChatController>
     {
         return Scaffold(
             key: controller.globalKey,
-            appBar: AssistantChatAppbar(),
-            drawer: const AssistantChatDrawer(),
-            endDrawer: const AssistantEndDrawer(),
+            // appBar: AssistantChatAppbar(),
+            // drawer: const AssistantChatDrawer(),
+            // endDrawer: const AssistantEndDrawer(),
 
             // CHAT BODY
-            body: SafeArea(
-                child: Stack(
-                    children: [
-                        Column(
-                            children: [
-                                // Messages
-                                Expanded(
-                                    child: Obx(()
+            body: Stack(
+                children: [
+                    Column(
+                        children: [
+                            // Messages
+                            Expanded(
+                                child: Obx(()
+                                    {
+                                        if (controller.isChatLoading.value)
                                         {
-                                            if (controller.isChatLoading.value) 
-                                            {
-                                                return Center(
-                                                    child: ShimmerChatView()
-                                                );
-                                            }
-
-                                            // 👇 Agar error hai to error widget show karo
-                                            if (controller.hasError.value)
-                                            {
-                                                return Center(
-                                                    child: Padding(
-                                                        padding: const EdgeInsets.all(20.0),
-                                                        child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            children: [
-                                                                Icon(
-                                                                    Icons.error_outline,
-                                                                    color: Colors.red,
-                                                                    size: 50
-                                                                ),
-                                                                SizedBox(height: 16),
-                                                                Text(
-                                                                    controller.errorMessage.value,
-                                                                    textAlign: TextAlign.center,
-                                                                    style: TextStyle(
-                                                                        color: Colors.red,
-                                                                        fontSize: 16
-                                                                    )
-                                                                ),
-                                                                SizedBox(height: 20),
-                                                                ElevatedButton(
-                                                                    onPressed: ()
-                                                                    {
-                                                                        controller.messageId.value.isNotEmpty ?
-                                                                            controller.loadChatById(controller.messageId.value) :
-                                                                            controller.startNewChat();
-                                                                    },
-                                                                    style: ElevatedButton.styleFrom(
-                                                                        backgroundColor: AppColors.primary,
-                                                                        foregroundColor: Colors.white
-                                                                    ),
-                                                                    child: Text('Retry')
-                                                                )
-                                                            ]
-                                                        )
-                                                    )
-                                                );
-                                            }
-
-                                            final startMsg =
-                                                controller.aiChat.value?.data?.messages ?? [];
-
-                                            final chatMessages = startMsg;
-
-                                            return ListView.builder(
-                                                controller: controller.scrollController,
-                                                padding: const EdgeInsets.symmetric(
-                                                    vertical: 8, horizontal: 12),
-                                                itemCount: startMsg.length + (controller.isLoading.value ? 1 : 0),
-                                                itemBuilder: (context, index)
-                                                {
-                                                    if (index == chatMessages.length &&
-                                                        controller.isLoading.value)
-                                                    {
-                                                        // 👇 Loading bubble (last msg ke niche)
-                                                        return Padding(
-                                                            padding: const EdgeInsets.symmetric(vertical: 8),
-                                                            child: TypingIndicator()
-                                                        );
-                                                    }
-
-                                                    final message = chatMessages[index];
-                                                    final isAssistantMessage =
-                                                        controller.isAssistant(message);
-
-                                                    return Padding(
-                                                        padding: const EdgeInsets.symmetric(vertical: 4),
-                                                        child: isAssistantMessage
-                                                            ? ReceivedMessageBubble(chatMessage: message)
-                                                            : SendMessageBubble(chatMessage: message, )
-                                                    );
-                                                }
+                                            return Center(
+                                                child: ShimmerChatView()
                                             );
                                         }
-                                    )
-                                ),
 
-                                // Input Field - YEH WALA PART SAME RAHEGA
-                                Obx(()
-                                    {
-                                        bool sending = controller.isSendingMessage.value;
-                                        bool hasText = controller.messageET.value.trim().isNotEmpty;
-
-                                        return Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                                            child: Row(
-                                                children: [
-                                                    Expanded(
-                                                        /*child: TextField(
-                                                            controller: controller.messageController,
-                                                            enabled: !sending && !controller.hasError.value, // 👈 error ke time disable
-                                                            textCapitalization: TextCapitalization.sentences,
-                                                            decoration: InputDecoration(
-                                                                hintText: sending
-                                                                    ? "Sending..."
-                                                                    : controller.hasError.value
-                                                                        ? "Fix error to continue..." // 👈 error message
-                                                                        : "Type your message...",
-                                                                border: InputBorder.none
-                                                            )
-                                                        )*/
-
-                                                        child: TextField(
-                                                          controller: controller.messageController,
-                                                          enabled: !sending && !controller.hasError.value,
-                                                          textCapitalization: TextCapitalization.sentences,
-                                                          decoration: InputDecoration(
-                                                            hintText: sending
-                                                                ? "Sending..."
-                                                                : controller.hasError.value
-                                                                ? "Fix error to continue..."
-                                                                : "Type your message...",
-
-                                                            // ✅ FIXED: Proper border for all states
-                                                            border: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.circular(12),
-                                                              borderSide: BorderSide(
-                                                                color: Colors.grey.shade300,
-                                                                width: 1,
-                                                              ),
-                                                            ),
-
-                                                            // ✅ Disabled state border
-                                                            disabledBorder: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.circular(12),
-                                                              borderSide: BorderSide(
-                                                                color: Colors.grey.shade200,
-                                                                width: 1,
-                                                              ),
-                                                            ),
-
-                                                            // ✅ Enabled state border
-                                                            enabledBorder: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.circular(12),
-                                                              borderSide: BorderSide(
-                                                                color: Colors.grey.shade300,
-                                                                width: 1,
-                                                              ),
-                                                            ),
-
-                                                            // ✅ Focused state border
-                                                            focusedBorder: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.circular(12),
-                                                              borderSide: BorderSide(
-                                                                color: AppColors.primary, // Your primary color
-                                                                width: 1,
-                                                              ),
-                                                            ),
-
-                                                            // ✅ Error state border
-                                                            errorBorder: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.circular(12),
-                                                              borderSide: BorderSide(
+                                        // 👇 Agar error hai to error widget show karo
+                                        if (controller.hasError.value)
+                                        {
+                                            return Center(
+                                                child: Padding(
+                                                    padding: const EdgeInsets.all(20.0),
+                                                    child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                            Icon(
+                                                                Icons.error_outline,
                                                                 color: Colors.red,
-                                                                width: 1,
-                                                              ),
+                                                                size: 50
                                                             ),
-
-                                                            // ✅ Sending state styling
-                                                            /*filled: true,
-                                                            fillColor: sending ? Colors.grey.shade50 : Colors.white,*/
-
-                                                            // ✅ Optional: Content padding for better appearance
-                                                            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                                          ),
-                                                        )
-
-                                                    ),
-
-                                                    SizedBox(width: 4),
-
-                                                    // 👇 Single button that toggles Send ↔ Cancel
-                                                    IconButton(
-                                                      style: IconButton.styleFrom(
-                                                        backgroundColor: sending
-                                                            ? Colors.grey.shade500
-                                                            : (hasText && !controller.hasError.value
-                                                            ? AppColors.primary
-                                                            : Colors.grey.shade400),
-                                                      ),
-                                                        icon: Icon(
-                                                            sending ? Icons.stop : CupertinoIcons.paperplane,
-                                                            color: sending
-                                                                ? Colors.red
-                                                                : (hasText ? AppColors.white : Colors.grey.shade700)
-                                                            // CupertinoIcons.paperplane,
-                                                            // color: AppColors.white
-                                                        ),
-                                                        onPressed: ()
-                                                        {
-                                                          // hasText ? controller.onSendMessageButtonPressed() : null;
-                                                            if (sending)
-                                                            {
-                                                                controller.cancelChat();
-                                                            }
-                                                            else if (hasText && !controller.hasError.value)
-                                                            {
-                                                                controller.onSendMessageButtonPressed();
-                                                            }
-                                                        },
-                                                      tooltip: sending ? 'Cancel' : 'Send message', // Accessibility
+                                                            SizedBox(height: 16),
+                                                            Text(
+                                                                controller.errorMessage.value,
+                                                                textAlign: TextAlign.center,
+                                                                style: TextStyle(
+                                                                    color: Colors.red,
+                                                                    fontSize: 16
+                                                                )
+                                                            ),
+                                                            SizedBox(height: 20),
+                                                            ElevatedButton(
+                                                                onPressed: ()
+                                                                {
+                                                                    controller.messageId.value.isNotEmpty ?
+                                                                        controller.loadChatById(controller.messageId.value) :
+                                                                        controller.startNewChat();
+                                                                },
+                                                                style: ElevatedButton.styleFrom(
+                                                                    backgroundColor: AppColors.primary,
+                                                                    foregroundColor: Colors.white
+                                                                ),
+                                                                child: Text('Retry')
+                                                            )
+                                                        ]
                                                     )
-                                                ]
-                                            )
+                                                )
+                                            );
+                                        }
+
+                                        final startMsg =
+                                            controller.aiChat.value?.data?.messages ?? [];
+
+                                        final chatMessages = startMsg;
+
+                                        return ListView.builder(
+                                            controller: controller.scrollController,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8, horizontal: 12),
+                                            itemCount: startMsg.length + (controller.isLoading.value ? 1 : 0),
+                                            itemBuilder: (context, index)
+                                            {
+                                                if (index == chatMessages.length &&
+                                                    controller.isLoading.value)
+                                                {
+                                                    // 👇 Loading bubble (last msg ke niche)
+                                                    return Padding(
+                                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                                        child: TypingIndicator()
+                                                    );
+                                                }
+
+                                                final message = chatMessages[index];
+                                                final isAssistantMessage =
+                                                    controller.isAssistant(message);
+
+                                                return Padding(
+                                                    padding: const EdgeInsets.symmetric(vertical: 4),
+                                                    child: isAssistantMessage
+                                                        ? ReceivedMessageBubble(chatMessage: message)
+                                                        : SendMessageBubble(chatMessage: message, )
+                                                );
+                                            }
                                         );
                                     }
                                 )
-                            ]
-                        ),
+                            ),
 
-                        // 👇 Floating scroll-to-bottom button
-                        Obx(()
-                            {
-                                return controller.showScrollToBottom.value &&
-                                    !controller.hasError.value // 👈 error ke time hide
-                                    ? Positioned(
-                                        bottom: 70,
-                                        right: 20,
-                                        child: FloatingActionButton(
-                                            mini: true,
-                                            backgroundColor: Colors.blue,
-                                            onPressed: () =>
-                                            controller.scrollToBottom(force: true),
-                                            child: const Icon(Icons.arrow_downward,
-                                                color: Colors.white)
+                            // Input Field - YEH WALA PART SAME RAHEGA
+                            Obx(()
+                                {
+                                    bool sending = controller.isSendingMessage.value;
+                                    bool hasText = controller.messageET.value.trim().isNotEmpty;
+
+                                    return Container(
+                                        padding: const EdgeInsets.only(bottom: 24.0, left: 16.0, right: 16.0),
+                                        child: Row(
+                                            children: [
+                                                Expanded(
+                                                    /*child: TextField(
+                                                        controller: controller.messageController,
+                                                        enabled: !sending && !controller.hasError.value, // 👈 error ke time disable
+                                                        textCapitalization: TextCapitalization.sentences,
+                                                        decoration: InputDecoration(
+                                                            hintText: sending
+                                                                ? "Sending..."
+                                                                : controller.hasError.value
+                                                                    ? "Fix error to continue..." // 👈 error message
+                                                                    : "Type your message...",
+                                                            border: InputBorder.none
+                                                        )
+                                                    )*/
+
+                                                    child: TextField(
+                                                      controller: controller.messageController,
+                                                      enabled: !sending && !controller.hasError.value,
+                                                      textCapitalization: TextCapitalization.sentences,
+                                                      decoration: InputDecoration(
+                                                        hintText: sending
+                                                            ? "Sending..."
+                                                            : controller.hasError.value
+                                                            ? "Fix error to continue..."
+                                                            : "Type your message...",
+
+                                                        // ✅ FIXED: Proper border for all states
+                                                        border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(80),
+                                                          borderSide: BorderSide(
+                                                            color: Colors.grey.shade300,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+
+                                                        // ✅ Disabled state border
+                                                        disabledBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(80),
+                                                          borderSide: BorderSide(
+                                                            color: Colors.grey.shade200,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+
+                                                        // ✅ Enabled state border
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(80),
+                                                          borderSide: BorderSide(
+                                                            color: Colors.grey.shade300,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+
+                                                        // ✅ Focused state border
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(80),
+                                                          borderSide: BorderSide(
+                                                            color: AppColors.primary, // Your primary color
+                                                            width: 1,
+                                                          ),
+                                                        ),
+
+                                                        // ✅ Error state border
+                                                        errorBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(12),
+                                                          borderSide: BorderSide(
+                                                            color: Colors.red,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+
+                                                        // ✅ Sending state styling
+                                                        /*filled: true,
+                                                        fillColor: sending ? Colors.grey.shade50 : Colors.white,*/
+
+                                                        // ✅ Optional: Content padding for better appearance
+                                                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                                      ),
+                                                    )
+
+                                                ),
+
+                                                SizedBox(width: 4),
+
+                                                // 👇 Single button that toggles Send ↔ Cancel
+                                                IconButton(
+                                                  style: IconButton.styleFrom(
+                                                    backgroundColor: sending
+                                                        ? Colors.grey.shade500
+                                                        : (hasText && !controller.hasError.value
+                                                        ? AppColors.primary
+                                                        : Colors.grey.shade400),
+                                                  ),
+                                                    icon: Icon(
+                                                        sending ? Icons.stop : CupertinoIcons.paperplane,
+                                                        color: sending
+                                                            ? Colors.red
+                                                            : (hasText ? AppColors.white : Colors.grey.shade700)
+                                                        // CupertinoIcons.paperplane,
+                                                        // color: AppColors.white
+                                                    ),
+                                                    onPressed: ()
+                                                    {
+                                                      // hasText ? controller.onSendMessageButtonPressed() : null;
+                                                        if (sending)
+                                                        {
+                                                            controller.cancelChat();
+                                                        }
+                                                        else if (hasText && !controller.hasError.value)
+                                                        {
+                                                            controller.onSendMessageButtonPressed();
+                                                        }
+                                                    },
+                                                  tooltip: sending ? 'Cancel' : 'Send message', // Accessibility
+                                                )
+                                            ]
                                         )
+                                    );
+                                }
+                            )
+                        ]
+                    ),
+
+                    // 👇 Floating scroll-to-bottom button
+                    Obx(()
+                        {
+                            return controller.showScrollToBottom.value &&
+                                !controller.hasError.value // 👈 error ke time hide
+                                ? Positioned(
+                                    bottom: 70,
+                                    right: 20,
+                                    child: FloatingActionButton(
+                                        mini: true,
+                                        backgroundColor: Colors.blue,
+                                        onPressed: () =>
+                                        controller.scrollToBottom(force: true),
+                                        child: const Icon(Icons.arrow_downward,
+                                            color: Colors.white)
                                     )
-                                    : const SizedBox.shrink();
-                            }
-                        )
-                    ]
-                )
+                                )
+                                : const SizedBox.shrink();
+                        }
+                    )
+                ]
             )
         );
     }

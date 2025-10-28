@@ -132,24 +132,18 @@ class SplashController extends GetxController
                 final token = StorageServices.to.getToken();
                 final role = StorageServices.to.read('role');
 
-                print("🔹 SplashController -> token: $token | role: $role");
-
                 if (token != null && token.isNotEmpty) {
-                    print("✅ Token found! Navigating based on role...");
                     Future.delayed(Duration(milliseconds: 300), () {
                         if (role == "buyer") {
-                            print("➡️ Navigating to AssistantChat");
-                            Get.offAllNamed(Routes.assistantChat);
+                            // Get.offAllNamed(Routes.assistantChat);
+                            Get.offAllNamed(Routes.buyerMain);
                         } else if (role == "seller") {
-                            print("➡️ Navigating to Dashboard");
                             Get.offAllNamed(Routes.sellerMain);
                         } else {
-                            print("⚠️ Role not found, navigating to Home");
                             Get.offAllNamed(Routes.home);
                         }
                     });
                 } else {
-                    print("❌ Token null, navigating to Home");
                     Future.delayed(Duration(milliseconds: 300), () {
                         Get.offAllNamed(Routes.home);
                     });

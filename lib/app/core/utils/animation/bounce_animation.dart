@@ -9,17 +9,17 @@ class BounceAnimation extends StatefulWidget {
   final bool infinite;
 
   const BounceAnimation({
-    Key? key,
+    super.key,
     required this.child,
     this.duration = const Duration(milliseconds: 1500), // Slower default
     this.scale = 1.2,
     this.autoPlay = true,
     this.repeatCount = 1,
     this.infinite = false,
-  }) : super(key: key);
+  });
 
   @override
-  _BounceAnimationState createState() => _BounceAnimationState();
+  State<BounceAnimation> createState() => _BounceAnimationState();
 }
 
 class _BounceAnimationState extends State<BounceAnimation>

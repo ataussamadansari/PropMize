@@ -48,7 +48,7 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
                                             onTap: ()
                                             {
                                                 isLoggedIn ? controller.authController.role(userId, "seller")
-                                                    : controller.showBottomSheet();
+                                                    : controller.showAuthBottomSheet();
                                             }
                                         ),
                                         DrawerMenuItem(
@@ -135,7 +135,7 @@ class AssistantChatDrawer extends GetView<AssistantChatController> implements Pr
 
                                                 if (StorageServices.to.userId.value.isEmpty)
                                                 {
-                                                    controller.showBottomSheet();
+                                                    controller.showAuthBottomSheet();
                                                 }
                                                 else
                                                 {

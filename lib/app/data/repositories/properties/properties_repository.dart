@@ -1,22 +1,22 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:prop_mize/app/core/constants/api_constants.dart';
-import 'package:prop_mize/app/data/models/api_response_model.dart';
-import 'package:prop_mize/app/data/models/properties/contacted_seller/contacted_seller_model.dart';
-import 'package:prop_mize/app/data/models/properties/contacted_seller/my_inquiries.dart';
-import 'package:prop_mize/app/data/models/properties/properties_model.dart';
-import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
-import 'package:prop_mize/app/data/services/api/api_services.dart';
-
-import '../../models/like/like_model.dart';
-import '../../models/properties/contacted_seller/contacted_seller_request.dart';
+import '../../../core/constants/api_constants.dart';
+import '../../../data/models/api_response_model.dart';
+import '../../../data/models/like/like_model.dart';
+import '../../../data/models/properties/contacted_seller/contacted_seller_model.dart';
+import '../../../data/models/properties/contacted_seller/contacted_seller_request.dart';
+import '../../../data/models/properties/contacted_seller/my_inquiries.dart';
+import '../../../data/models/properties/properties_model.dart';
+import '../../../data/models/properties/property_by_id_model.dart';
+import '../../../data/services/api/api_services.dart';
 
 class PropertiesRepository
 {
     final ApiServices _apiServices = ApiServices();
     CancelToken? _cancelToken;
 
-    /// Get all properties with pagination and filters
+    // ---------------------------------------------------------------------------
+    // 🏠 Get All Properties (Paginated + Filtered)
+    // ---------------------------------------------------------------------------
     Future<ApiResponse<PropertiesModel>> getProperties({
         int page = 1,
         int limit = 10,
@@ -27,18 +27,12 @@ class PropertiesRepository
         {
             _cancelToken = CancelToken();
 
-            // Build query parameters
-            final Map<String, dynamic> queryParams =
-                {
-                    'page': page,
-                    'limit': limit
-                };
-
-            // Add filters if provided
-            if (filters != null)
+            final queryParams = 
             {
-                queryParams.addAll(filters);
-            }
+                'page': page,
+                'limit': limit,
+                if (filters != null) ...filters
+            };
 
             final response = await _apiServices.get(
                 ApiConstants.properties,
@@ -47,50 +41,35 @@ class PropertiesRepository
                 cancelToken: _cancelToken
             );
 
-            if (response.statusCode == 200 && response.data != null)
-            {
-                return ApiResponse.success(
-                    response.data!,
-                    message: response.message
-                );
-            }
-            else
-            {
-                return ApiResponse.error(
-                    response.message,
-                    statusCode: response.statusCode
-                );
-            }
+            return _handleApiResponse(response);
         }
         on DioException catch (e)
         {
-            return ApiResponse.error(
-                e.message ?? "Something went wrong",
-                statusCode: e.response?.statusCode,
-                errors: e.response?.data
-            );
+            return _handleDioError<PropertiesModel>(e);
         }
     }
 
-    /// Get properties with search
+    // ---------------------------------------------------------------------------
+    // 🔍 Search Properties
+    // ---------------------------------------------------------------------------
     Future<ApiResponse<PropertiesModel>> searchProperties({
         required String query,
         int page = 1,
         int limit = 10,
-        Map<String, dynamic>? filters // add this
+        Map<String, dynamic>? filters
     }) async
     {
         try
         {
             _cancelToken = CancelToken();
 
-            final Map<String, dynamic> queryParams =
-                {
-                    'q': query,
-                    'page': page,
-                    'limit': limit,
-                    if (filters != null) ...filters // merge filters
-                };
+            final queryParams = 
+            {
+                'q': query,
+                'page': page,
+                'limit': limit,
+                if (filters != null) ...filters
+            };
 
             final response = await _apiServices.get(
                 ApiConstants.searchProperties,
@@ -99,32 +78,17 @@ class PropertiesRepository
                 cancelToken: _cancelToken
             );
 
-            if (response.statusCode == 200 && response.data != null)
-            {
-                return ApiResponse.success(
-                    response.data!,
-                    message: response.message
-                );
-            }
-            else
-            {
-                return ApiResponse.error(
-                    response.message,
-                    statusCode: response.statusCode
-                );
-            }
+            return _handleApiResponse(response);
         }
         on DioException catch (e)
         {
-            return ApiResponse.error(
-                e.message ?? "Something went wrong",
-                statusCode: e.response?.statusCode,
-                errors: e.response?.data
-            );
+            return _handleDioError<PropertiesModel>(e);
         }
     }
 
-    /// Get properties by filters
+    // ---------------------------------------------------------------------------
+    // 🧩 Get Properties By Filters
+    // ---------------------------------------------------------------------------
     Future<ApiResponse<PropertiesModel>> getPropertiesByFilters({
         required Map<String, dynamic> filters,
         int page = 1,
@@ -135,13 +99,12 @@ class PropertiesRepository
         {
             _cancelToken = CancelToken();
 
-            final Map<String, dynamic> queryParams =
-                {
-                    'page': page,
-                    'limit': limit
-                };
-            filters.addAll(queryParams);
-            // queryParams.addAll(filters);
+            final queryParams = 
+            {
+                'page': page,
+                'limit': limit,
+                ...filters
+            };
 
             final response = await _apiServices.get(
                 ApiConstants.properties,
@@ -150,38 +113,23 @@ class PropertiesRepository
                 cancelToken: _cancelToken
             );
 
-            if (response.statusCode == 200 && response.data != null)
-            {
-                return ApiResponse.success(
-                    response.data!,
-                    message: response.message
-                );
-            }
-            else
-            {
-                return ApiResponse.error(
-                    response.message,
-                    statusCode: response.statusCode
-                );
-            }
+            return _handleApiResponse(response);
         }
         on DioException catch (e)
         {
-            return ApiResponse.error(
-                e.message ?? "Something went wrong",
-                statusCode: e.response?.statusCode,
-                errors: e.response?.data
-            );
+            return _handleDioError<PropertiesModel>(e);
         }
     }
 
+    // ---------------------------------------------------------------------------
+    // 🏡 Get Property By ID
+    // ---------------------------------------------------------------------------
     Future<ApiResponse<PropertyByIdModel>> getPropertyById(String id) async
     {
         try
         {
             _cancelToken = CancelToken();
 
-            // URL me chatId replace kar do
             final url = ApiConstants.singleProperty.replaceFirst("{id}", id);
 
             final response = await _apiServices.get(
@@ -190,167 +138,123 @@ class PropertiesRepository
                 cancelToken: _cancelToken
             );
 
-            if (response.statusCode == 200 && response.data != null)
-            {
-                return ApiResponse.success(
-                    response.data!,
-                    message: response.message
-                );
-            }
-            else
-            {
-                return ApiResponse.error(
-                    response.message,
-                    statusCode: response.statusCode
-                );
-            }
+            return _handleApiResponse(response);
         }
         on DioException catch (e)
         {
-            return ApiResponse.error(
-                e.message ?? "Something went wrong",
-                statusCode: e.response?.statusCode,
-                errors: e.response?.data
-            );
+            return _handleDioError<PropertyByIdModel>(e);
         }
     }
 
-    /// ✅ CORRECTED: Contacted Seller Method
+    // ---------------------------------------------------------------------------
+    // 📞 Contacted Seller
+    // ---------------------------------------------------------------------------
     Future<ApiResponse<ContactedSellerModel>> contactedSeller(ContactedSellerRequest request) async
     {
         try
         {
-            // ✅ Use _apiServices instead of _apiProvider
             final response = await _apiServices.post(
-                ApiConstants.leads, // ✅ Correct endpoint
-                (data) => ContactedSellerModel.fromJson(data), // ✅ Add fromJson
+                ApiConstants.leads,
+                (data) => ContactedSellerModel.fromJson(data),
                 data: request.toJson(),
                 cancelToken: _cancelToken
             );
 
-            if (response.success && response.data != null) 
-            {
-                return ApiResponse.success(
-                    response.data!,
-                    message: response.message
-                );
-            }
-            else 
-            {
-                return ApiResponse.error(
-                    response.message,
-                    statusCode: response.statusCode
-                );
-            }
+            return _handleApiResponse(response);
         }
         on DioException catch (e)
         {
-            return ApiResponse.error(
-                e.message ?? "Network error occurred",
-                statusCode: e.response?.statusCode
-            );
+            return _handleDioError<ContactedSellerModel>(e);
         }
         catch (e)
         {
-            return ApiResponse.error("Failed to contact seller: ${e.toString()}");
+            return ApiResponse.error("❌ Failed to contact seller: ${e.toString()}");
         }
     }
 
-    /// Like - Dislike
+    // ---------------------------------------------------------------------------
+    // ❤️ Like / Dislike Property
+    // ---------------------------------------------------------------------------
     Future<ApiResponse<LikeModel>> like(String id) async
     {
         try
         {
             _cancelToken = CancelToken();
-
-            // URL me chatId replace kar do
             final url = ApiConstants.likeProperty.replaceFirst("{id}", id);
 
-            final res = await _apiServices.post(
+            final response = await _apiServices.post(
                 url,
                 (data) => LikeModel.fromJson(data),
                 cancelToken: _cancelToken
             );
 
-            if (res.statusCode == 200 && res.data != null)
-            {
-                return ApiResponse.success(
-                    res.data!,
-                    message: res.message
-                );
-            }
-            else
-            {
-                return ApiResponse.error(
-                    res.message,
-                    statusCode: res.statusCode
-                );
-            }
+            return _handleApiResponse(response);
         }
         on DioException catch (e)
         {
-            return ApiResponse.error(
-                e.message ?? "Something went wrong",
-                statusCode: e.response?.statusCode,
-                errors: e.response?.data
-            );
+            return _handleDioError<LikeModel>(e);
         }
     }
 
-    /// Liked Properties - CORRECTED VERSION
+    // ---------------------------------------------------------------------------
+    // 💾 Get Liked Properties
+    // ---------------------------------------------------------------------------
     Future<ApiResponse<PropertiesModel>> getLikedProperties({
         int page = 1,
-        int limit = 10,
+        int limit = 10
     }) async
     {
-        try {
+        try
+        {
             _cancelToken = CancelToken();
 
-            final Map<String, dynamic> queryParams = {
+            final queryParams = 
+            {
                 'page': page,
-                'limit': limit,
+                'limit': limit
             };
 
-            // Use get() instead of getList() since we want a single PropertiesModel object
             final response = await _apiServices.get(
                 ApiConstants.likedProperties,
-                    (data) => PropertiesModel.fromJson(data), // This converts the entire response
+                (data) => PropertiesModel.fromJson(data),
                 queryParameters: queryParams,
-                cancelToken: _cancelToken,
+                cancelToken: _cancelToken
             );
 
-            debugPrint("response-status: ${response.success}");
-            debugPrint("response-statusCode: ${response.statusCode}");
-
-            debugPrint("response: ${PropertiesModel.fromJson(response.data)}");
-
-
-            if (response.statusCode == 200 && response.data != null)
-            {
-
-                return ApiResponse.success(
-                    response.data!,
-                    message: response.message
-                );
-            }
-            else
-            {
-                return ApiResponse.error(
-                    response.message,
-                    statusCode: response.statusCode
-                );
-            }
-
-        } on DioException catch (e) {
-            return ApiResponse.error(
-                e.message ?? "Something went wrong",
-                statusCode: e.response?.statusCode,
-                errors: e.response?.data,
-            );
+            return _handleApiResponse(response);
+        }
+        on DioException catch (e)
+        {
+            return _handleDioError<PropertiesModel>(e);
         }
     }
 
-    /// Contacted Leads
+    // ---------------------------------------------------------------------------
+    // 👁️ Get Recent Viewed Properties
+    // ---------------------------------------------------------------------------
+    Future<ApiResponse<PropertiesModel>> getRecentViewedProperties() async
+    {
+        try
+        {
+            _cancelToken = CancelToken();
+
+            final response = await _apiServices.get(
+                ApiConstants.recentlyViewed,
+                    (data) => PropertiesModel.fromJson(data),
+                cancelToken: _cancelToken
+            );
+
+            return _handleApiResponse(response);
+        }
+        on DioException catch (e)
+        {
+            return _handleDioError<PropertiesModel>(e);
+        }
+    }
+
+    // ---------------------------------------------------------------------------
+    // 📬 Get Contacted Leads (My Inquiries)
+    // ---------------------------------------------------------------------------
     Future<ApiResponse<MyInquiries>> getContactedLeads({
         int page = 1,
         int limit = 10
@@ -360,47 +264,59 @@ class PropertiesRepository
         {
             _cancelToken = CancelToken();
 
-            final Map<String, dynamic> queryParams = 
+            final queryParams = 
             {
                 'page': page,
                 'limit': limit
             };
 
-            final res = await _apiServices.get(
+            final response = await _apiServices.get(
                 ApiConstants.myInquiries,
                 (data) => MyInquiries.fromJson(data),
                 queryParameters: queryParams,
                 cancelToken: _cancelToken
             );
 
-            if (res.statusCode == 200 && res.data != null) 
-            {
-                return ApiResponse<MyInquiries>.success(
-                    res.data!,
-                    message: res.message
-                );
-            }
-            else 
-            {
-                return ApiResponse<MyInquiries>.error(
-                    res.message,
-                    statusCode: res.statusCode
-                );
-            }
+            return _handleApiResponse(response);
         }
         on DioException catch (e)
         {
-            return ApiResponse.error(
-                e.message ?? "Something went wrong",
-                statusCode: e.response?.statusCode,
-                errors: e.response?.data
-            );
+            return _handleDioError<MyInquiries>(e);
         }
     }
 
-    /// Cancel ongoing requests
-    void cancelRequests()
+    // ---------------------------------------------------------------------------
+    // ❌ Cancel Ongoing Requests
+    // ---------------------------------------------------------------------------
+    void cancelRequests() 
     {
-        _cancelToken?.cancel('Request cancelled');
+        if (_cancelToken != null && !_cancelToken!.isCancelled) 
+        {
+            _cancelToken?.cancel('🔴 Request manually cancelled');
+        }
+    }
+
+    // ---------------------------------------------------------------------------
+    // 🧩 Helper Functions
+    // ---------------------------------------------------------------------------
+    ApiResponse<T> _handleApiResponse<T>(ApiResponse<T> response) 
+    {
+        if (response.statusCode == 200 && response.data != null) 
+        {
+            return ApiResponse.success(response.data!, message: response.message);
+        }
+        else 
+        {
+            return ApiResponse.error(response.message, statusCode: response.statusCode);
+        }
+    }
+
+    ApiResponse<T> _handleDioError<T>(DioException e) 
+    {
+        return ApiResponse.error(
+            e.message ?? "Something went wrong",
+            statusCode: e.response?.statusCode,
+            errors: e.response?.data
+        );
     }
 }

@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import '../modules/buyer_modules/buyer_home_screen/bindings/buyer_main_binding.dart';
+import '../modules/buyer_modules/buyer_home_screen/views/buyer_main_view.dart';
 import '../modules/buyer_modules/buyer_guide_screen/bindings/buyer_guide_binding.dart';
 import '../modules/buyer_modules/buyer_guide_screen/views/buyer_guide_view.dart';
 import '../modules/buyer_modules/recent_viewed_screen/bindings/recent_viewed_binding.dart';
@@ -56,6 +58,7 @@ class AppPages
         GetPage(name: Routes.splash, page: () => SplashView(), binding: SplashBinding()),
 
         /// Buyer -
+        GetPage(name: Routes.buyerMain, page: () => BuyerMainView(), binding: BuyerMainBinding()),
         GetPage(name: Routes.assistantChat, page: () => AssistantChatView(), binding: AssistantChatBinding()),
         GetPage(name: Routes.buyerGuide, page: () => BuyerGuideView(), binding: BuyerGuideBinding()),
         GetPage(name: Routes.contacted, page: () => ContactedView(), binding: ContactedBinding()),

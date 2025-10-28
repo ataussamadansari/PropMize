@@ -12,6 +12,7 @@ abstract class Routes
     static const splash = '/splash';
 
     /// Buyer -
+    static const buyerMain = '/buyer-main';
     static const assistantChat = '/assistant-chat';
     static const saveProperties = '/saved-properties';
     static const contacted = '/contacted';

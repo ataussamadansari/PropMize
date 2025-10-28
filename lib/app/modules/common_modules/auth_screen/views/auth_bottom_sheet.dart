@@ -12,9 +12,7 @@ class AuthBottomSheet extends GetView<AuthController>
     @override
     Widget build(BuildContext context)
     {
-        return Obx(
-            ()
-            {
+        return Obx(() {
                 Color borderColor;
 
                 switch (controller.phoneValidationState.value)

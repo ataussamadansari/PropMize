@@ -97,8 +97,6 @@ class ApiProvider
     Future<void> _handleTokenExpiration() async
     {
         _storageService.removeToken();
-        // Navigate to login screen or perform other actions
-        getx.Get.offAllNamed('/login');
     }
 
     // Create API call

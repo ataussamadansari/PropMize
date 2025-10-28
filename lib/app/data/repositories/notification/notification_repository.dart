@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:prop_mize/app/core/constants/api_constants.dart';
 import 'package:prop_mize/app/data/models/api_response_model.dart';

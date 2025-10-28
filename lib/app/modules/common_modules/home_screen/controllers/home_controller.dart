@@ -25,12 +25,11 @@ class HomeController extends GetxController
         role = StorageServices.to.read('role');
     }
 
-    void showBottomSheet()
+    void showAuthBottomSheet()
     {
         Get.bottomSheet(
             AuthBottomSheet(),
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent
+            isScrollControlled: true
         );
     }
 
@@ -39,6 +38,14 @@ class HomeController extends GetxController
         WidgetsBinding.instance.addPostFrameCallback((_)
             {
                 Get.offAllNamed(Routes.assistantChat);
+            }
+        );
+    }
+
+    void navigateToBuyerMain() {
+        WidgetsBinding.instance.addPostFrameCallback((_)
+            {
+                Get.offAllNamed(Routes.buyerMain);
             }
         );
     }

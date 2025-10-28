@@ -29,11 +29,11 @@ class GoogleAuthService extends GetxService
                 serverClientId: "639312196993-c4kc9aataiq1pnma67rdjmcvbo1bvu7e.apps.googleusercontent.com"
             );
             isInitialized.value = true;
-            print('✅ Google Sign-In initialized');
+            debugPrint('✅ Google Sign-In initialized');
         }
         catch (e)
         {
-            print('❌ Google Sign-In initialization failed: $e');
+            debugPrint('❌ Google Sign-In initialization failed: $e');
         }
     }
 
@@ -55,9 +55,9 @@ class GoogleAuthService extends GetxService
             // ✅ UPDATED: authentication ab synchronous hai
             final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
-            print('✅ Google Sign-In Successful');
-            print('📧 Email: ${googleUser.email}');
-            print('👤 Name: ${googleUser.displayName}');
+            debugPrint('✅ Google Sign-In Successful');
+            debugPrint('📧 Email: ${googleUser.email}');
+            debugPrint('👤 Name: ${googleUser.displayName}');
 
             // Backend ko token bhejo
             final response = await _authRepo.googleLogin(
@@ -93,7 +93,7 @@ class GoogleAuthService extends GetxService
         on GoogleSignInException catch (e)
         {
             isLoading.value = false;
-            print('❌ Google Sign-In error: ${e.code.name} - ${e.description}');
+            debugPrint('❌ Google Sign-In error: ${e.code.name} - ${e.description}');
             return 
             {
                 'success': false,
@@ -103,7 +103,7 @@ class GoogleAuthService extends GetxService
         catch (e)
         {
             isLoading.value = false;
-            print('❌ Unexpected Google Sign-In error: $e');
+            debugPrint('❌ Unexpected Google Sign-In error: $e');
             return 
             {
                 'success': false,
@@ -141,11 +141,11 @@ class GoogleAuthService extends GetxService
         try
         {
             await _googleSignIn.signOut();
-            print('✅ Google Sign-Out successful');
+            debugPrint('✅ Google Sign-Out successful');
         }
         catch (e)
         {
-            print('❌ Google Sign-Out error: $e');
+            debugPrint('❌ Google Sign-Out error: $e');
         }
     }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prop_mize/app/core/themes/app_colors.dart';
 
 class DrawerMenuItem extends StatelessWidget {
   final String title;
@@ -7,6 +8,7 @@ class DrawerMenuItem extends StatelessWidget {
   final String? trailing;
   final IconData leading;
   final VoidCallback onTap;
+  final bool selected;
 
   const DrawerMenuItem({
     super.key,
@@ -15,11 +17,17 @@ class DrawerMenuItem extends StatelessWidget {
     required this.leading,
      this.trailing,
     required this.onTap,
+    this.selected = false,
   });
 
   @override
   Widget build(BuildContext context) {
+
     return ListTile(
+      selectedTileColor: AppColors.primary.withValues(alpha: 0.25),
+      dense: true,
+      splashColor: AppColors.primaryLight,
+      selected: selected,
       leading: Icon(leading),
       title: Text(title, style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
       subtitle: Text(subtitle, style: context.textTheme.bodySmall),

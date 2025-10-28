@@ -15,7 +15,7 @@ import 'widgets/pricing_card_item.dart';
 import 'widgets/property_history.dart';
 import 'widgets/property_overview.dart';
 
-import '../../../../data/services/like_services.dart';
+import '../../../../data/services/like/like_services.dart';
 import '../../../../global_widgets/shimmer/properties_details/product_details_shimmer.dart';
 import 'widgets/contact_bottom_bar.dart';
 

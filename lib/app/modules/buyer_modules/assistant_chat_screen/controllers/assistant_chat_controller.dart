@@ -580,12 +580,11 @@ class AssistantChatController extends GetxController
         messageController.clear();
     }
 
-    void showBottomSheet()
+    void showAuthBottomSheet()
     {
         Get.bottomSheet(
             AuthBottomSheet(),
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent
+            isScrollControlled: true
         );
     }
 

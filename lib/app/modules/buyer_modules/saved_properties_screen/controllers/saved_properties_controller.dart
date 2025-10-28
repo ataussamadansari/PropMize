@@ -1,150 +1,116 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/properties/data.dart';
+import '../../../../data/models/properties/data.dart';
 
-import '../../../../data/repositories/properties/properties_repository.dart';
-import '../../../../data/services/like_services.dart';
+import '../../../../data/services/like/like_services.dart';
+import '../../../../data/services/like/liked_properties_service.dart';
 import '../../../../data/services/storage/storage_services.dart';
+import '../../../common_modules/auth_screen/views/auth_bottom_sheet.dart';
 
-class SavedPropertiesController extends GetxController {
-  final PropertiesRepository _propertiesRepository = PropertiesRepository();
-  final LikeService likeService = Get.find<LikeService>();
+class SavedPropertiesController extends GetxController
+{
+    // =========================================================
+    // DEPENDENCIES
+    // =========================================================
+    final LikeService likeService = Get.find<LikeService>();
+    final LikedPropertiesService likedPropertiesService = Get.find<LikedPropertiesService>(); // 🔥 NEW
 
-  // Properties
-  final RxList<Data> properties = <Data>[].obs;
-  final RxBool isLoading = false.obs;
-  final RxBool isLoadMore = false.obs;
-  final RxBool hasMore = true.obs;
-  final RxInt currentPage = 1.obs;
-  final RxString errorMessage = ''.obs;
-  final RxBool hasError = false.obs;
+    // =========================================================
+    // STATE VARIABLES
+    // =========================================================
+    // final RxList<Data> properties = <Data>[].obs;
+    RxList<Data> get properties => likedPropertiesService.likedProperties;
+    RxBool get isLoading => likedPropertiesService.isLoading;
+    RxBool get hasMore => likedPropertiesService.hasMore;
+    RxInt get currentPage => likedPropertiesService.currentPage;
+    RxString get errorMessage => likedPropertiesService.errorMessage;
+    RxBool get hasError => likedPropertiesService.hasError;
 
-  // Current user id
-  final String? currentUserId = StorageServices.to.read("userId");
 
-  @override
-  void onInit() {
-    super.onInit();
-    loadLikedProperties();
+    // =========================================================
+    // COMPUTED GETTERS
+    // =========================================================
+    RxString get currentUserId => StorageServices.to.userId;
+    bool get isUserAuthenticated => currentUserId.isNotEmpty;
 
-    // Listen for like status changes and remove unliked properties
-    ever(likeService.likedStatus, (_) {
-      _syncPropertiesWithLikeService();
-    });
-  }
+    // =========================================================
+    // LIFECYCLE METHODS
+    // =========================================================
+    @override
+    void onInit() 
+    {
+        super.onInit();
+        // Load liked properties on init
+        likedPropertiesService.loadLikedProperties();
 
-  void _syncPropertiesWithLikeService() {
-    properties.removeWhere((property) => !likeService.isLiked(property.id!));
-    properties.refresh();
-  }
+        // 🔄 Listen to authentication changes
+        ever(StorageServices.to.userId, (String userId)
+            {
+                if (userId.isNotEmpty) 
+                {
+                    loadLikedProperties();
+                }
+                else
+                {
+                    _clearDataOnLogout();
+                }
+            }
+        );
+    }
 
-  Future<void> loadLikedProperties({bool reset = true}) async {
-    try {
-      if (reset) {
-        isLoading.value = true;
-        currentPage.value = 1;
+    // =========================================================
+    // DATA FETCHING (Delegate to service)
+    // =========================================================
+    Future<void> loadLikedProperties() async {
+        await likedPropertiesService.loadLikedProperties(reset: true);
+    }
+
+    Future<void> loadMoreProperties() async {
+        await likedPropertiesService.loadMoreLikedProperties();
+    }
+
+    Future<void> refreshProperties() async {
+        await likedPropertiesService.refreshLikedProperties();
+    }
+
+
+    // =========================================================
+    // AUTHENTICATION HANDLING
+    // =========================================================
+    void _clearDataOnLogout() 
+    {
         properties.clear();
+        isLoading.value = false;
         hasMore.value = true;
+        currentPage.value = 1;
         hasError.value = false;
         errorMessage.value = '';
-      } else {
-        isLoadMore.value = true;
-      }
-
-      final response = await _propertiesRepository.getLikedProperties(
-        page: currentPage.value,
-        limit: 10,
-      );
-
-      if (response.success && response.data != null) {
-        // Access the data list from PropertiesModel
-        final newProperties = response.data!.data ?? [];
-
-        // Sync with global like service
-        _syncWithLikeService(newProperties);
-
-        if (reset) {
-          properties.value = newProperties;
-        } else {
-          properties.addAll(newProperties);
-        }
-
-        // Check if there are more pages
-        hasMore.value = newProperties.length == 10;
-
-        debugPrint('✅ Properties loaded successfully: ${properties.length}');
-      } else {
-        _handleError(response.message);
-      }
-    } catch (e, stackTrace) {
-      _handleError('Failed to load properties: ${e.toString()}');
-      debugPrint('❌ Error in loadLikedProperties: $e');
-      debugPrint('📋 Stack trace: $stackTrace');
-    } finally {
-      isLoading.value = false;
-      isLoadMore.value = false;
     }
-  }
 
-  void _syncWithLikeService(List<Data> newProperties) {
-    for (final property in newProperties) {
-      likeService.syncWithProperty(property);
+
+    // =========================================================
+    // PROPERTY MANAGEMENT
+    // =========================================================
+    void removeProperty(String propertyId) {
+        likedPropertiesService.removeLikedProperty(propertyId);
     }
-  }
 
-  void _handleError(String message) {
-    hasError.value = true;
-    errorMessage.value = message;
-  }
-
-  // ---------------- LOAD MORE ----------------
-  Future<void> loadMoreProperties() async {
-    if (isLoadMore.value || !hasMore.value || isLoading.value) return;
-
-    try {
-      currentPage.value++;
-      await loadLikedProperties(reset: false);
-    } catch (e) {
-      currentPage.value--; // Revert page on error
-      _handleError(e.toString());
+    bool containsProperty(String propertyId) {
+        return likedPropertiesService.containsProperty(propertyId);
     }
-  }
 
-  // ---------------- REFRESH ----------------
-  Future<void> refreshProperties() async {
-    await loadLikedProperties(reset: true);
-  }
-
-  // ---------------- PROPERTY MANAGEMENT ----------------
-
-  // Remove a property from the list (when unliked from elsewhere)
-  void removeProperty(String propertyId) {
-    properties.removeWhere((property) => property.id == propertyId);
-    properties.refresh();
-  }
-
-  // Add a property to the list (when liked from elsewhere)
-  void addProperty(Data property) {
-    if (!properties.any((p) => p.id == property.id)) {
-      properties.insert(0, property); // Add at the beginning
-      likeService.syncWithProperty(property);
+    // =========================================================
+    // NAVIGATION
+    // =========================================================
+    void navigateToPropertyDetails(String propertyId) 
+    {
+        Get.toNamed('/product/$propertyId');
     }
-  }
 
-  // Check if property exists in the list
-  bool containsProperty(String propertyId) {
-    return properties.any((property) => property.id == propertyId);
-  }
-
-  // ---------------- NAVIGATION ----------------
-  void navigateToPropertyDetails(String propertyId) {
-    Get.toNamed('/product/$propertyId');
-  }
-
-  // ---------------- DISPOSE ----------------
-  @override
-  void onClose() {
-    // Cancel any ongoing requests if needed
-    super.onClose();
-  }
+    void showAuthBottomSheet() 
+    {
+        Get.bottomSheet(
+            const AuthBottomSheet(),
+            isScrollControlled: true
+        );
+    }
 }

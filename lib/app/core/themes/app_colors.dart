@@ -5,9 +5,9 @@ class AppColors {
   static const Color primary = Color(0xFF0066FF);
   static const Color primaryDark = Color(0xFF0052CC);
   static const Color primaryLight = Color(0xFF3385FF);
-  static const Color secondary = Color(0xFFFF6B35);
-  static const Color secondaryDark = Color(0xFFCC552A);
-  static const Color secondaryLight = Color(0xFFFF895D);
+  static const Color secondary = Color(0xFF0066FF);
+  static const Color secondaryDark = Color(0xFF0052CC);
+  static const Color secondaryLight = Color(0xFF3385FF);
 
   // Neutral Colors (Both modes)
   static const Color white = Color(0xFFFFFFFF);
@@ -69,9 +69,8 @@ class AppColors {
   static const Gradient secondaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFFF6B35), Color(0xFFE55A2B)],
+    colors: [secondary, Color(0XFF02E2FE)],
   );
-
 
   static const lightCard100 = Color(0x40DBDBDB);
   static const darkCard100 = Color(0x40A9A9A9);

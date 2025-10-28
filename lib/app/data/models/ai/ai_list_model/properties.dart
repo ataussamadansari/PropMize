@@ -1,14 +1,3 @@
-import 'area.dart';
-import 'address.dart';
-import 'contact.dart';
-import 'contacted_by.dart';
-import 'seo.dart';
-import 'pricing.dart';
-import 'features.dart';
-import 'near_by_places.dart';
-import 'viewed_by.dart';
-import 'liked_by.dart';
-
 class Properties {
   Properties({
     this.id,

@@ -1,4 +1,3 @@
-// lib/app/core/utils/animation/ola_background.dart
 import 'package:flutter/material.dart';
 
 import '../../core/utils/animation/animated_builder_widget.dart';
@@ -12,14 +11,14 @@ class OlaBackground extends StatelessWidget {
   final double dotOpacity;
 
   const OlaBackground({
-    Key? key,
+    super.key,
     required this.primaryColor,
     this.children,
     this.showWaves = true,
     this.showDots = true,
     this.waveOpacity = 0.08,
     this.dotOpacity = 0.1,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

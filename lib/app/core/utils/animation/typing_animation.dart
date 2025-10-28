@@ -1,4 +1,3 @@
-// lib/app/core/utils/animation/typing_animation.dart
 import 'package:flutter/material.dart';
 
 class TypingAnimation extends StatefulWidget {
@@ -26,7 +25,6 @@ class TypingAnimation extends StatefulWidget {
 class _TypingAnimationState extends State<TypingAnimation>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<int> _textAnimation;
 
   int _currentTextIndex = 0;
   int _currentLength = 0;

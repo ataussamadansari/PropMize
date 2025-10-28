@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import '../../../../global_widgets/is_login_screen/not_logged_screen.dart';
+import '../../../common_modules/all_listing_screen/views/widgets/property_card_widget.dart';
 import '../controllers/saved_properties_controller.dart';
-
-import '../../../../core/themes/app_colors.dart';
 import '../../../../global_widgets/shimmer/shimmer_loader.dart';
 
 class SavedPropertiesView extends GetView<SavedPropertiesController> {
@@ -12,83 +12,6 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
     @override
     Widget build(BuildContext context) {
         return Scaffold(
-            appBar: AppBar(
-                elevation: 0, // Remove shadow
-                scrolledUnderElevation: 0, // Remove elevation when scrolled
-                title: const Text('Saved Properties'),
-                actions: [
-                    Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Obx(() => TweenAnimationBuilder<int>(
-                            duration: const Duration(milliseconds: 750),
-                            curve: Curves.easeOutCubic,
-                            tween: IntTween(
-                                begin: 0,
-                                end: controller.properties.length,
-                            ),
-                            builder: (BuildContext context, int value, Widget? child) {
-                                return Text(
-                                    'Saved: $value',
-                                    style: context.textTheme.bodyLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primary,
-                                    ),
-                                );
-                            },
-                        )),
-                    )
-
-                    /*Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Obx(() => TweenAnimationBuilder<int>(
-                            duration: const Duration(milliseconds: 1200),
-                            tween: IntTween(
-                                begin: 0,
-                                end: controller.properties.length,
-                            ),
-                            builder: (BuildContext context, int value, Widget? child) {
-                                return Text(
-                                    'Saved: $value',
-                                    style: context.textTheme.bodyLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primary,
-                                    ),
-                                );
-                            },
-                        )),
-                    )*/
-
-                    /*Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Obx(() => TweenAnimationBuilder<int>(
-                            duration: const Duration(milliseconds: 800),
-                            tween: IntTween(
-                                begin: 0,
-                                end: controller.properties.length,
-                            ),
-                            builder: (BuildContext context, int value, Widget? child) {
-                                return Text(
-                                    'Saved: $value',
-                                    style: context.textTheme.bodyLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primary,
-                                    ),
-                                );
-                            },
-                        )),
-                    )*/
-                    /* Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Obx(() => Text(
-                            'Saved: ${controller.properties.length}',
-                            style: context.textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
-                            ),
-                        )),
-                    )*/
-                ],
-            ),
             body: Obx(() {
                 // Show loading indicator when initially loading
                 if (controller.isLoading.value && controller.properties.isEmpty) {
@@ -131,8 +54,16 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
                     );
                 }
 
+                if(!controller.isUserAuthenticated) {
+                    return NotLoggedScreen(
+                        heading: 'Get started',
+                        message: 'Keep track of all the properties you’ve saved.',
+                        onPressed: () => controller.showAuthBottomSheet(),
+                    );
+                }
+
                 // Show empty state
-                if (controller.properties.isEmpty) {
+                if (controller.isUserAuthenticated && controller.properties.isEmpty) {
                     return Center(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -162,36 +93,40 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
                 }
 
                 // Show properties list with load more functionality
-                return NotificationListener<ScrollNotification>(
-                    onNotification: (scrollNotification) {
-                        if (scrollNotification is ScrollEndNotification &&
-                            scrollNotification.metrics.pixels ==
-                                scrollNotification.metrics.maxScrollExtent &&
-                            controller.hasMore.value) {
-                            controller.loadMoreProperties();
-                        }
-                        return false;
+                return RefreshIndicator(
+                    onRefresh: () async {
+                        await controller.refreshProperties();
                     },
-                    child: ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                        itemCount: controller.properties.length + (controller.hasMore.value ? 1 : 0),
-                        itemBuilder: (context, index) {
-                            // Load more indicator
-                            if (index == controller.properties.length) {
-                                return const Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                                    child: Center(
-                                        child: CircularProgressIndicator(),
-                                    ),
-                                );
-                            }
+                  child: NotificationListener<ScrollNotification>(
+                      onNotification: (scrollNotification) {
+                          if (scrollNotification is ScrollEndNotification &&
+                              scrollNotification.metrics.pixels ==
+                                  scrollNotification.metrics.maxScrollExtent &&
+                              controller.hasMore.value) {
+                              controller.loadMoreProperties();
+                          }
+                          return false;
+                      },
+                      child: ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                          itemCount: controller.properties.length + (controller.hasMore.value ? 1 : 0),
+                          itemBuilder: (context, index) {
+                              // Load more indicator
+                              if (index == controller.properties.length) {
+                                  return const Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                                      child: Center(
+                                          child: CircularProgressIndicator(),
+                                      ),
+                                  );
+                              }
 
-                            final property = controller.properties[index];
+                              final property = controller.properties[index];
 
-                            print(property);
-                            return null;
-                        },
-                    ),
+                              return PropertyCardWidget(property: property, controller: controller);
+                          },
+                      ),
+                  ),
                 );
             }),
         );

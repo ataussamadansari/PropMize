@@ -57,12 +57,11 @@ class DashboardController extends GetxController
         }
     }
 
-    void showBottomSheet()
+    void showAuthBottomSheet()
     {
         Get.bottomSheet(
             AuthBottomSheet(),
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent
+            isScrollControlled: true
         );
     }
 

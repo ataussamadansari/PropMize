@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import '../../../../core/utils/helpers.dart';
 import '../../../repositories/notification/notification_repository.dart';
 import '../../storage/storage_services.dart';
@@ -274,11 +273,8 @@ class SocketNotificationService extends GetxService
             if (data is Map)
             {
                 final count = data['count'] as int;
-                if (count != null)
-                {
-                    unreadCount.value = count;
-                    debugPrint('26. ✅ Unread Count Updated: $count');
-                }
+                  unreadCount.value = count;
+                  debugPrint('26. ✅ Unread Count Updated: $count');
             }
         }
         catch (e)

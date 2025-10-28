@@ -8,7 +8,7 @@ import 'package:prop_mize/app/data/services/storage/current_user_id_services.dar
 
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/repositories/properties/properties_repository.dart';
-import '../../../../data/services/like_services.dart';
+import '../../../../data/services/like/like_services.dart';
 import '../../../../data/services/storage/storage_services.dart';
 import '../../auth_screen/views/auth_bottom_sheet.dart';
 import '../views/widgets/filter_bottom_sheet.dart';
@@ -22,6 +22,8 @@ class AllListingController extends GetxController
     final CurrentUserIdServices currentUserIdServices = Get.find<CurrentUserIdServices>();
 
     final phone = StorageServices.to.read("phone");
+
+    final RxInt limit = 10.obs;
 
     // Search
     final TextEditingController searchController = TextEditingController();
@@ -97,12 +99,12 @@ class AllListingController extends GetxController
                 ? await _propertiesRepo.searchProperties(
                     query: searchText.value,
                     page: currentPage.value,
-                    limit: 10,
+                    limit: limit.value,
                     filters: filters.isNotEmpty ? filters : null
                 )
                 : await _propertiesRepo.getProperties(
                     page: currentPage.value,
-                    limit: 10,
+                    limit: limit.value,
                     filters: filters.isNotEmpty ? filters : null
                 );
 
@@ -124,7 +126,7 @@ class AllListingController extends GetxController
                     properties.addAll(newProperties);
                 }
 
-                hasMore.value = newProperties.length == 10; // Pagination check
+                hasMore.value = newProperties.length == limit.value; // Pagination check
             }
             else 
             {
@@ -194,8 +196,7 @@ class AllListingController extends GetxController
                     actionLabel: 'Login',
                     onActionTap: () => Get.bottomSheet(
                         AuthBottomSheet(),
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
+                        isScrollControlled: true
                     ),
                 );
                 return;

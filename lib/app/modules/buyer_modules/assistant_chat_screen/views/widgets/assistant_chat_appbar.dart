@@ -2,8 +2,6 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import '../../../../../data/services/socket/v1/socket_notification_service.dart';
-import '../../../../../data/services/socket/v1/socket_service.dart';
 import '../../../../common_modules/notification_screen/controllers/v1/notification_controller.dart';
 import '../../../assistant_chat_screen/controllers/assistant_chat_controller.dart';
 

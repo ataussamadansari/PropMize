@@ -2,13 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/modules/seller_modules/dashboard_screen/controllers/dashboard_controller.dart';
-import 'package:prop_mize/app/routes/app_routes.dart';
 
 import '../../../../../core/utils/helpers.dart';
 import '../../../../../data/services/storage/storage_services.dart';
 import '../../../../../global_widgets/drawer/drawer_menu_item.dart';
-import '../../../../buyer_modules/assistant_chat_screen/views/widgets/drawer/header_view.dart';
-import '../../../../common_modules/auth_screen/controllers/auth_controller.dart';
 
 class SellerDrawer extends GetView<DashboardController> {
   const SellerDrawer({super.key});
@@ -48,7 +45,7 @@ class SellerDrawer extends GetView<DashboardController> {
                               onTap: ()
                               {
                                 isLoggedIn ? controller.authController.role(userId, "buyer")
-                                    : controller.showBottomSheet();
+                                    : controller.showAuthBottomSheet();
                               }
                           ),
                           DrawerMenuItem(
@@ -93,7 +90,7 @@ class SellerDrawer extends GetView<DashboardController> {
 
                                 if (StorageServices.to.userId.value.isEmpty)
                                 {
-                                  controller.showBottomSheet();
+                                  controller.showAuthBottomSheet();
                                 }
                                 else
                                 {

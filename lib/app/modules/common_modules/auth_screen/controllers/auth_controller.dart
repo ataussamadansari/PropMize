@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/data/models/user/user_me.dart';
 import 'package:prop_mize/app/data/models/user/verify_otp/verify_otp_response.dart';
-import 'package:prop_mize/app/data/services/like_services.dart';
+import 'package:prop_mize/app/data/services/like/like_services.dart';
 
 import '../../../../data/repositories/auth/auth_repository.dart';
 import '../../../../core/utils/helpers.dart';
@@ -110,7 +110,8 @@ class AuthController extends GetxController
         if (role == 'seller') {
             goToDashboard();
         } else {
-            goToAssistantChat();
+            // goToAssistantChat();
+            goToBuyerMain();
         }
     }
 
@@ -563,10 +564,10 @@ class AuthController extends GetxController
                     isError: false
                 );
 
-                newRole == "seller" ? goToDashboard() : goToAssistantChat();
+                newRole == "seller" ? goToDashboard() : goToBuyerMain() /*goToAssistantChat()*/;
 
             } else {
-                _setError(response.message ?? "Failed to update role");
+                _setError(response.message);
             }
         } catch (e) {
             _setError(e.toString());
@@ -596,6 +597,12 @@ class AuthController extends GetxController
     void goToAssistantChat() {
         WidgetsBinding.instance.addPostFrameCallback((_) {
             Get.offAllNamed(Routes.assistantChat);
+        });
+    }
+
+    void goToBuyerMain() {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+            Get.offAllNamed(Routes.buyerMain);
         });
     }
 

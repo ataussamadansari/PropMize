@@ -3,7 +3,6 @@ import 'lists/area.dart';
 import 'lists/contact.dart';
 import 'lists/contacted_by.dart';
 import 'lists/features.dart';
-import 'lists/leads.dart';
 import 'lists/liked_by.dart';
 import 'lists/near_by_places.dart';
 import 'lists/pricing.dart';
@@ -56,7 +55,75 @@ class Data
         this.updatedAt,
         this.v});
 
-    Data.fromJson(dynamic json)
+    Data.fromJson(dynamic json) {
+        area = json['area'] != null ? Area.fromJson(json['area']) : null;
+        address = json['address'] != null ? Address.fromJson(json['address']) : null;
+        seo = json['seo'] != null ? Seo.fromJson(json['seo']) : null;
+        pricing = json['pricing'] != null ? Pricing.fromJson(json['pricing']) : null;
+        contact = json['contact'] != null ? Contact.fromJson(json['contact']) : null;
+        features = json['features'] != null ? Features.fromJson(json['features']) : null;
+        nearbyPlaces = json['nearbyPlaces'] != null ? NearbyPlaces.fromJson(json['nearbyPlaces']) : null;
+        id = json['_id'];
+        title = json['title'];
+        description = json['description'];
+        propertyType = json['propertyType'];
+        listingType = json['listingType'];
+        price = json['price'];
+        currency = json['currency'];
+        bedrooms = json['bedrooms'];
+        bathrooms = json['bathrooms'];
+        balconies = json['balconies'];
+        parking = json['parking'];
+        furnished = json['furnished'];
+        floor = json['floor'];
+        totalFloors = json['totalFloors'];
+        age = json['age'];
+        images = json['images'] != null ? json['images'].cast<String>() : [];
+        videos = json['videos'] != null ? json['videos'].cast<String>() : [];
+        amenities = json['amenities'] != null ? json['amenities'].cast<String>() : [];
+        seller = json['seller'] != null ? Seller.fromJson(json['seller']) : null;
+        status = json['status'];
+        featured = json['featured'];
+        premium = json['premium'];
+        views = json['views'];
+        likes = json['likes'] != null ? json['likes'].cast<String>() : [];
+        leads = json['leads'] != null ? json['leads'].cast<String>() : [];
+        approvalStatus = json['approvalStatus'];
+        notes = json['notes'];
+        if (json['viewedBy'] != null) {
+            viewedBy = [];
+            json['viewedBy'].forEach((v) {
+                viewedBy?.add(ViewedBy.fromJson(v));
+            });
+        } else {
+            viewedBy = null;
+        }
+
+        if (json['likedBy'] != null) {
+            likedBy = [];
+            json['likedBy'].forEach((v) {
+                likedBy?.add(LikedBy.fromJson(v));
+            });
+        } else {
+            likedBy = null;
+        }
+
+        if (json['contactedBy'] != null) {
+            contactedBy = [];
+            json['contactedBy'].forEach((v) {
+                contactedBy?.add(ContactedBy.fromJson(v));
+            });
+        } else {
+            contactedBy = null;
+        }
+        expiresAt = json['expiresAt'];
+        createdAt = json['createdAt'];
+        updatedAt = json['updatedAt'];
+        v = json['__v'];
+    }
+
+
+    /*Data.fromJson(dynamic json)
     {
         area = json['area'] != null ? Area.fromJson(json['area']) : null;
         address = json['address'] != null ? Address.fromJson(json['address']) : null;
@@ -131,7 +198,8 @@ class Data
         createdAt = json['createdAt'];
         updatedAt = json['updatedAt'];
         v = json['__v'];
-    }
+    }*/
+
     Area? area;
     Address? address;
     Seo? seo;
@@ -163,7 +231,8 @@ class Data
     bool? premium;
     int? views;
     List<String>? likes;
-    List<Leads>? leads;
+    List<String>? leads;
+    // List<Leads>? leads;
     String? approvalStatus;
     String? notes;
     List<ViewedBy>? viewedBy;
@@ -210,16 +279,34 @@ class Data
         map['description'] = description;
         map['propertyType'] = propertyType;
         map['listingType'] = listingType;
+        if (price != null)
+        {
+            map['price'] = price;
+        }
         map['price'] = price;
         map['currency'] = currency;
-        map['bedrooms'] = bedrooms;
-        map['bathrooms'] = bathrooms;
-        map['balconies'] = balconies;
-        map['parking'] = parking;
+        if(bedrooms != null) {
+          map['bedrooms'] = bedrooms;
+        }
+        if(bathrooms != null) {
+          map['bathrooms'] = bathrooms;
+        }
+        if(balconies != null) {
+            map['balconies'] = balconies;
+        }
+        if(parking != null) {
+            map['parking'] = parking;
+        }
         map['furnished'] = furnished;
-        map['floor'] = floor;
-        map['totalFloors'] = totalFloors;
-        map['age'] = age;
+        if(floor != null) {
+            map['floor'] = floor;
+        }
+        if(totalFloors != null) {
+            map['totalFloors'] = totalFloors;
+        }
+        if(age != null) {
+            map['age'] = age;
+        }
         map['images'] = images;
         map['videos'] = videos;
         map['amenities'] = amenities;
@@ -230,11 +317,14 @@ class Data
         map['status'] = status;
         map['featured'] = featured;
         map['premium'] = premium;
-        map['views'] = views;
+        if(views != null) {
+            map['views'] = views;
+        }
         map['likes'] = likes;
         if (leads != null)
         {
-            map['leads'] = leads?.map((v) => v.toJson()).toList();
+            map['leads'] = leads;
+            // map['leads'] = leads?.map((v) => v.toJson()).toList();
         }
         map['approvalStatus'] = approvalStatus;
         map['notes'] = notes;
