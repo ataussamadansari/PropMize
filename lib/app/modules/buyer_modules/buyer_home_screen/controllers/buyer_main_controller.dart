@@ -42,7 +42,6 @@ class BuyerMainController extends GetxController {
     Timer? _autoHideTimer;
     final Duration _autoHideDuration = const Duration(seconds: 3);
 
-
     final List<Widget> pages = [
         ContactedView(),
         SavedPropertiesView(),
@@ -106,7 +105,6 @@ class BuyerMainController extends GetxController {
             }
         }
     }
-
 
 
     void _startAutoHideTimer() {
@@ -185,6 +183,8 @@ class BuyerMainController extends GetxController {
     void goToSavedProperties() => Get.toNamed(Routes.saveProperties);
     void goToContacted() => Get.toNamed(Routes.contacted);
     void goToProfile() => Get.toNamed(Routes.profile);
+    void goToBuyerGuide() => Get.toNamed(Routes.buyerGuide);
+    void goToHelpSupport() => Get.toNamed(Routes.helpAndSupport);
 
     @override
     void onClose() {

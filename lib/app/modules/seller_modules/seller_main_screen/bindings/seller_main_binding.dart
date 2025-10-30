@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:prop_mize/app/modules/common_modules/all_listing_screen/controllers/all_listing_controller.dart';
 import 'package:prop_mize/app/modules/common_modules/profile_screen/controllers/profile_controller.dart';
 import 'package:prop_mize/app/modules/seller_modules/leads_screen/controllers/leads_controller.dart';
 import 'package:prop_mize/app/modules/seller_modules/my_property_screen/controllers/my_property_controller.dart';
@@ -12,11 +13,11 @@ class SellerMainBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<SellerMainController>(() => SellerMainController());
 
-
     Get.lazyPut<DashboardController>(() => DashboardController());
     Get.lazyPut<LeadsController>(() => LeadsController());
     Get.lazyPut<SellRentPropertyController>(() => SellRentPropertyController());
     Get.lazyPut<MyPropertyController>(() => MyPropertyController());
     Get.lazyPut<ProfileController>(() => ProfileController());
+    Get.lazyPut<AllListingController>(() => AllListingController());
   }
 }

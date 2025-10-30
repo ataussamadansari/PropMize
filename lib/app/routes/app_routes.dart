@@ -24,6 +24,7 @@ abstract class Routes
     static const dashboard = '/dashboard';
     static const analytics = '/analytics';
     static const leads = '/leads';
+    static const leadDetails = '/leads/:leadId';
     static const myProperty = '/my-property';
     static const plans = '/plans';
     static const sellRentProperty = '/sell-rent-property';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/seller_main_controller.dart';
-import 'widgets/seller_action_menu.dart';
-import 'widgets/seller_body_content.dart';
+import 'package:prop_mize/app/global_widgets/shimmer/shimmer_dashboard_view.dart';
 import 'widgets/seller_bottom_nav.dart';
+import 'widgets/seller_main_app_bar.dart';
+import '../controllers/seller_main_controller.dart';
 import 'widgets/seller_drawer.dart';
 
 class SellerMainView extends GetView<SellerMainController>
@@ -13,26 +13,45 @@ class SellerMainView extends GetView<SellerMainController>
     @override
     Widget build(BuildContext context)
     {
-        return Scaffold(
-            key: controller.scaffoldKey,
-            endDrawer: const SellerDrawer(),
-            body: SafeArea(
-                child: Stack(
-                    children: [
-                        const SellerBodyContent(),
-                        Positioned(
-                            top: 0,
-                            right: 0,
-                            child: SellerActionMenu()
-                        )
-                    ]
-                )
+        DateTime? _lastPointerDown;
+        bool _isScrollGesture = false;
+
+        return Listener(
+            onPointerDown: (event) {
+                _lastPointerDown = DateTime.now();
+                _isScrollGesture = false;
+            },
+            onPointerMove: (event) {
+                if (_lastPointerDown != null &&
+                    DateTime.now().difference(_lastPointerDown!) <
+                        const Duration(milliseconds: 150)) {
+                    _isScrollGesture = true;
+                }
+            },
+            onPointerUp: (event) {
+                // If user just tapped (not scrolled)
+                if (!_isScrollGesture) {
+                    controller.onUserInteraction();
+                }
+            },
+            behavior: HitTestBehavior.translucent,
+            child: Scaffold(
+                key: controller.globalKey,
+                appBar: const SellerMainAppBar(),
+                endDrawer: const SellerDrawer(),
+                body: Obx(() {
+
+                    return NotificationListener<ScrollNotification>(
+                        onNotification: (scrollInfo) {
+                            controller.handleScrollNotification(scrollInfo);
+                            return false;
+                        },
+                        child: controller.pages[controller.currentIndex.value],
+                    );
+                }),
+                bottomNavigationBar: const SellerBottomNav(),
             ),
-            bottomNavigationBar: const SellerBottomNav(),
-            floatingActionButton: FloatingActionButton(
-                onPressed: () => controller.gotoHelpSupport(),
-                shape: ShapeBorder.lerp(StadiumBorder(), CircleBorder(), 1),
-                child: Icon(Icons.support_agent))
         );
+
     }
 }

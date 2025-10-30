@@ -173,7 +173,7 @@ class ContactedView extends GetView<ContactedController> {
           const SizedBox(height: 4),
           if (property?.price != null)
             Text(
-              '₹ ${AppHelpers.formatCurrency(property!.price!)}',
+              AppHelpers.formatCurrency(property!.price!),
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

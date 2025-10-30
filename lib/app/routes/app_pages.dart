@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:prop_mize/app/modules/seller_modules/lead_details_screen/bindings/lead_details_binding.dart';
+import 'package:prop_mize/app/modules/seller_modules/lead_details_screen/views/lead_details_view.dart';
 import '../modules/buyer_modules/buyer_home_screen/bindings/buyer_main_binding.dart';
 import '../modules/buyer_modules/buyer_home_screen/views/buyer_main_view.dart';
 import '../modules/buyer_modules/buyer_guide_screen/bindings/buyer_guide_binding.dart';
@@ -49,7 +51,7 @@ class AppPages
     static final routes = [
 
         /// Common -
-        GetPage(name: Routes.allListing, page: () => AllListingView(), binding: AllListingBinding()),
+        GetPage(name: Routes.allListing, page: () => AllListingView(isSeller: true), binding: AllListingBinding()),
         GetPage(name: Routes.helpAndSupport, page: () => HelpAndSupportView(), binding: HelpAndSupportBinding()),
         GetPage(name: Routes.home, page: () => HomeView(), binding: HomeBinding()),
         GetPage(name: Routes.notification, page: () => NotificationView(), binding: NotificationBinding()),
@@ -70,6 +72,7 @@ class AppPages
         GetPage(name: Routes.analytics, page: () => AnalyticsView(), binding: AnalyticsBinding()),
         GetPage(name: Routes.dashboard, page: () => DashboardView(), binding: DashboardBinding()),
         GetPage(name: Routes.leads, page: () => LeadsView(), binding: LeadsBinding()),
+        GetPage(name: Routes.leadDetails, page: () => LeadDetailsView(), binding: LeadDetailsBinding()),
         GetPage(name: Routes.myProperty, page: () => MyPropertyView(), binding: MyPropertyBinding()),
         GetPage(name: Routes.plans, page: () => PlansView(), binding: PlansBinding()),
         GetPage(name: Routes.sellRentProperty, page: () => SellRentPropertyView(), binding: SellRentPropertyBinding()),

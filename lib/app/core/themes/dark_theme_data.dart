@@ -8,6 +8,9 @@ class DarkThemeData
     {
         return ThemeData(
             brightness: Brightness.dark,
+            primaryColor: AppColors.primary,
+            // scaffoldBackgroundColor: AppColors.backgroundDark,
+            fontFamily: "Poppins",
 
             // Color Scheme
             colorScheme: const ColorScheme.dark(

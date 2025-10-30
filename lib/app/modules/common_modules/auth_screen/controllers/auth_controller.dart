@@ -416,7 +416,7 @@ class AuthController extends GetxController
         }
     }
 
-    void logout()
+    bool logout()
     {
         StorageServices.to.removeToken();
         StorageServices.to.removeUserId();
@@ -429,6 +429,7 @@ class AuthController extends GetxController
         StorageServices.to.remove('email');
         Get.find<CurrentUserIdServices>().clearUserId();
         AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Logout", message: "Logout successful");
+        return true;
     }
 
     Future<ApiResponse<UserMe>> updateProfile(dynamic updateData, {File? image}) async

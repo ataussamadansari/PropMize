@@ -1,6 +1,5 @@
-import 'package:prop_mize/app/data/models/properties/data.dart';
-
 import 'lists/pagination.dart';
+import 'data.dart';
 
 class PropertiesModel {
   PropertiesModel({

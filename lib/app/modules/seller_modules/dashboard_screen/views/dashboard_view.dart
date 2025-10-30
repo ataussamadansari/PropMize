@@ -1,47 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
+import 'package:prop_mize/app/core/utils/number_count_helper.dart';
+import 'package:prop_mize/app/global_widgets/shimmer/shimmer_dashboard_view.dart';
+import 'package:prop_mize/app/modules/seller_modules/dashboard_screen/views/widgets/state_card.dart';
 
+import '../../seller_main_screen/controllers/seller_main_controller.dart';
 import '../controllers/dashboard_controller.dart';
+import 'widgets/inquiry_item.dart';
+import 'widgets/property_item.dart';
 
 class DashboardView extends GetView<DashboardController>
 {
     const DashboardView({super.key});
 
     @override
-    Widget build(BuildContext context) 
+    Widget build(BuildContext context)
     {
         return Scaffold(
-            body: Obx(() {
-                return ListView(
-                    padding: const EdgeInsets.all(16.0),
-                    children: [
-                        // Welcome Header
-                        _buildWelcomeHeader(),
-                        const SizedBox(height: 24),
+          body: Obx(()
+                {
+                    if(controller.isLoading.value)
+                    {
+                        return  ListView(
+                          children: [
+                            ShimmerDashboardView(),
+                          ],
+                        );
+                    }
 
-                        // Stats Cards
-                        _buildStatsCards(),
-                        const SizedBox(height: 24),
+                    if(controller.hasError.value)
+                    {
+                        return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                                Text(
+                                    controller.errorMessage.value,
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500
+                                    )
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton(
+                                    onPressed: ()
+                                    {
+                                        controller.loadDashboardData();
+                                    },
+                                    child: const Text("Retry")
+                                )
+                            ]
+                        );
+                    }
 
-                        // Recent Inquiries
-                        _buildRecentInquiries(),
-                        const SizedBox(height: 24),
+                    return ListView(
+                        padding: const EdgeInsets.all(16.0),
+                        children: [
+                            // Welcome Header
+                            _buildWelcomeHeader(),
+                            const SizedBox(height: 24),
 
-                        // Top Performing Properties
-                        _buildTopProperties(),
-                        const SizedBox(height: 24),
+                            // Stats Cards
+                            _buildStatsCards(),
+                            const SizedBox(height: 24),
 
-                        // Quick Actions
-                        _buildQuickActions()
-                    ]
-                );
-              }
+                            // Recent Inquiries
+                            _buildRecentInquiries(),
+                            const SizedBox(height: 24),
+
+                            // Top Performing Properties
+                            _buildTopProperties()
+                        ]
+                    );
+                }
             )
         );
     }
 
-    Widget _buildWelcomeHeader() 
+    Widget _buildWelcomeHeader()
     {
         return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +108,7 @@ class DashboardView extends GetView<DashboardController>
                         fontWeight: FontWeight.w300,
                         color: Colors.grey[600]
                     )
-                ),
+                )
 
                 /*Text(
                     "to Propmize",
@@ -85,359 +122,140 @@ class DashboardView extends GetView<DashboardController>
         );
     }
 
-    Widget _buildStatsCards() 
-    {
-        return GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 1.2,
+    Widget _buildStatsCards() {
+      final stats = controller.sellerDashboardModel.value?.data?.stats;
+
+      return GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        childAspectRatio: 1.5,
+        children: [
+          StateCard(
+            title: "Total Listing",
+            value: NumberCountHelper.formatCount(stats?.totalProperties ?? 0),
+            icon: Icons.list_alt,
+            color: Colors.blue,
+          ),
+          StateCard(
+            title: "Total Views",
+            value: NumberCountHelper.formatCount(stats?.totalViews ?? 0),
+            icon: Icons.remove_red_eye,
+            color: Colors.green,
+          ),
+          StateCard(
+            title: "Inquiries",
+            value: NumberCountHelper.formatCount(stats?.totalLeads ?? 0),
+            icon: Icons.chat_bubble_outline,
+            color: Colors.orange,
+          ),
+          StateCard(
+            title: "Revenue",
+            value: "₹2.4L",
+            icon: Icons.currency_rupee,
+            color: Colors.purple,
+          ),
+        ],
+      );
+    }
+
+    Widget _buildRecentInquiries() {
+      final recentLeads = controller.sellerDashboardModel.value?.data?.recentLeads ?? [];
+
+      return Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                _buildStatCard(
-                    title: "Total Listing",
-                    value: "24",
-                    icon: Icons.list_alt,
-                    color: Colors.blue
-                ),
-                _buildStatCard(
-                    title: "Total Views",
-                    value: "1.2K",
-                    icon: Icons.remove_red_eye,
-                    color: Colors.green
-                ),
-                _buildStatCard(
-                    title: "Inquiries",
-                    value: "48",
-                    icon: Icons.chat_bubble_outline,
-                    color: Colors.orange
-                ),
-                _buildStatCard(
-                    title: "Revenue",
-                    value: "₹2.4L",
-                    icon: Icons.currency_rupee,
-                    color: Colors.purple
-                )
-            ]
-        );
-    }
-
-    Widget _buildStatCard({
-        required String title,
-        required String value,
-        required IconData icon,
-        required Color color
-    }) 
-    {
-        return Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                        Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: color.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12)
-                            ),
-                            child: Icon(icon, color: color, size: 20)
-                        ),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                                Text(
-                                    value,
-                                    style: const TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w700
-                                    )
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                    title,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[600]
-                                    )
-                                )
-                            ]
-                        )
-                    ]
-                )
-            )
-        );
-    }
-
-    Widget _buildRecentInquiries() 
-    {
-        return Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                                Text(
-                                    "Recent Inquiries",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600
-                                    )
-                                ),
-                                TextButton(
-                                    onPressed: ()
-                                    {
-                                        // Navigate to all inquiries
-                                    },
-                                    child: Text(
-                                        "View All",
-                                        style: TextStyle(color: AppColors.primary)
-                                    )
-                                )
-                            ]
-                        ),
-                        const SizedBox(height: 12),
-                        _buildInquiryItem(
-                            image: "https://picsum.photos/id/233/200/300",
-                            propertyName: "3BHK Luxury Apartment",
-                            buyerName: "Rahul Sharma",
-                            date: "2 hours ago",
-                            status: "New",
-                            statusColor: Colors.orange
-                        ),
-                        _buildInquiryItem(
-                            image: "https://picsum.photos/id/235/200/300",
-                            propertyName: "2BHK in HSR Layout",
-                            buyerName: "Priya Singh",
-                            date: "1 day ago",
-                            status: "Contacted",
-                            statusColor: Colors.blue
-                        ),
-                        _buildInquiryItem(
-                            image: "https://picsum.photos/id/237/200/300",
-                            propertyName: "Villa in Koramangala",
-                            buyerName: "Amit Kumar",
-                            date: "2 days ago",
-                            status: "Interested",
-                            statusColor: Colors.green
-                        )
-                    ]
-                )
-            )
-        );
-    }
-
-    Widget _buildInquiryItem({
-        required String image,
-        required String propertyName,
-        required String buyerName,
-        required String date,
-        required String status,
-        required Color statusColor
-    }) 
-    {
-        return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey.withValues(alpha: 0.1),
-                border: Border.all(color: Colors.grey.withAlpha(100))
-            ),
-            child: Row(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                    CircleAvatar(
-                        radius: 20,
-                        backgroundImage: NetworkImage(image)
+                  Text(
+                    "Recent Inquiries",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                                Text(
-                                    propertyName,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14
-                                    )
-                                ),
-                                Text(
-                                    buyerName,
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey[600]
-                                    )
-                                )
-                            ]
-                        )
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.find<SellerMainController>().viewAllInquiries();
+                    },
+                    child: Text(
+                      "View All",
+                      style: TextStyle(color: AppColors.primary),
                     ),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                            Text(
-                                date,
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    color: Colors.grey[500]
-                                )
-                            ),
-                            const SizedBox(height: 4),
-                            Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                    color: statusColor.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8)
-                                ),
-                                child: Text(
-                                    status,
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        color: statusColor,
-                                        fontWeight: FontWeight.w600
-                                    )
-                                )
-                            )
-                        ]
-                    )
-                ]
-            )
-        );
-    }
-
-    Widget _buildTopProperties() 
-    {
-        return Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                                Text(
-                                    "Top Performing Properties",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600
-                                    )
-                                ),
-                                TextButton(
-                                    onPressed: ()
-                                    {
-                                        // Navigate to all properties
-                                    },
-                                    child: Text(
-                                        "View All",
-                                        style: TextStyle(color: AppColors.primary)
-                                    )
-                                )
-                            ]
-                        ),
-                        const SizedBox(height: 12),
-                        _buildPropertyItem(
-                            icon: Icons.apartment,
-                            propertyName: "Skyline Residency",
-                            views: "450",
-                            inquiries: "23"
-                        ),
-                        _buildPropertyItem(
-                            icon: Icons.house,
-                            propertyName: "Green Valley Villa",
-                            views: "380",
-                            inquiries: "18"
-                        ),
-                        _buildPropertyItem(
-                            icon: Icons.business,
-                            propertyName: "Tech Park Office",
-                            views: "290",
-                            inquiries: "15"
-                        )
-                    ]
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              if (recentLeads.isEmpty)
+                Text(
+                  "No recent inquiries",
+                  style: TextStyle(color: Colors.grey),
                 )
-            )
-        );
+              else
+                ...recentLeads.take(5).map((lead) => InquiryItem(recentLeads: lead)),
+            ],
+          ),
+        ),
+      );
     }
 
-    Widget _buildPropertyItem({
-        required IconData icon,
-        required String propertyName,
-        required String views,
-        required String inquiries
-    }) 
-    {
-        return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey.withValues(alpha: 0.1),
-                border: Border.all(color: Colors.grey.withAlpha(100))
-            ),
-            child: Row(
+    Widget _buildTopProperties() {
+      final topProperties = controller.sellerDashboardModel.value?.data?.topProperties ?? [];
+
+      return Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                    Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12)
-                        ),
-                        child: Icon(icon, color: AppColors.primary, size: 20)
+                  Text(
+                    "Top Performing Properties",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                        child: Text(
-                            propertyName,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14
-                            )
-                        )
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.find<SellerMainController>().viewAllProperties();
+                    },
+                    child: Text(
+                      "View All",
+                      style: TextStyle(color: AppColors.primary),
                     ),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                            Row(
-                                children: [
-                                    Icon(Icons.remove_red_eye, size: 14, color: Colors.grey[600]),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                        "$views views",
-                                        style: TextStyle(fontSize: 12, color: Colors.grey[600])
-                                    )
-                                ]
-                            ),
-                            const SizedBox(height: 4),
-                            Row(
-                                children: [
-                                    Icon(Icons.chat_bubble_outline, size: 14, color: Colors.grey[600]),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                        "$inquiries inquiries",
-                                        style: TextStyle(fontSize: 12, color: Colors.grey[600])
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                ]
-            )
-        );
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              if (topProperties.isEmpty)
+                Text(
+                  "No properties data available",
+                  style: TextStyle(color: Colors.grey),
+                )
+              else
+                ...topProperties.take(5).map((property) => PropertyItem(topProperties: property)),
+            ],
+          ),
+        ),
+      );
     }
 
-    Widget _buildQuickActions() 
+
+
+    Widget _buildQuickActions()
     {
         return Card(
             elevation: 2,
@@ -507,7 +325,7 @@ class DashboardView extends GetView<DashboardController>
         required String title,
         required IconData icon,
         required VoidCallback onTap
-    }) 
+    })
     {
         return InkWell(
             onTap: onTap,

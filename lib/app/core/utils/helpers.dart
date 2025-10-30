@@ -86,7 +86,7 @@ class AppHelpers
     }
 
     /// ✅ Currency format helper
-    static String formatCurrency(num value, {String symbol = '₹'}) 
+    static String formatCurrency(num value, {String symbol = '₹ '})
     {
         final format = NumberFormat.currency(
             locale: 'en_IN', // Indian locale

@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../data/services/storage/storage_services.dart';
-import '../../../assistant_chat_screen/views/widgets/drawer/header_view.dart';
 
-import '../../../../../core/utils/helpers.dart';
 import '../../../../../global_widgets/drawer/drawer_menu_item.dart';
 import '../../controllers/buyer_main_controller.dart';
+import 'drawer/header_view.dart';
 
 class BuyerMainDrawer extends GetView<BuyerMainController>
 {
@@ -25,6 +24,7 @@ class BuyerMainDrawer extends GetView<BuyerMainController>
                                 final userId = controller.currentUserId.value;
                                 final user = controller.authController.profile.value?.data;
                                 final avatarUrl = user?.avatar ?? "";
+
                                 return Column(
                                     children: [
                                         HeaderView(isLoggedIn: isLoggedIn, user: user, avatarUrl: avatarUrl),
@@ -126,7 +126,7 @@ class BuyerMainDrawer extends GetView<BuyerMainController>
                                             onTap: ()
                                             {
                                                 // controller.globalKey.currentState?.closeDrawer();
-                                                AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
+                                                controller.goToBuyerGuide();
                                             }
                                         ),
                                         DrawerMenuItem(
@@ -136,7 +136,7 @@ class BuyerMainDrawer extends GetView<BuyerMainController>
                                             onTap: ()
                                             {
                                                 // controller.globalKey.currentState?.closeDrawer();
-                                                AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Alert", message: "Coming Soon...");
+                                                controller.goToHelpSupport();
                                             }
                                         ),
                                         Divider(color: Colors.grey.withAlpha(100)),

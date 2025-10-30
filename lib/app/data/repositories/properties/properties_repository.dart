@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:prop_mize/app/data/models/properties/my_property_model.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../data/models/api_response_model.dart';
 import '../../../data/models/like/like_model.dart';
@@ -284,6 +285,40 @@ class PropertiesRepository
             return _handleDioError<MyInquiries>(e);
         }
     }
+
+    // ---------------------------------------------------------------------------
+    // 💾 Get My Properties
+    // ---------------------------------------------------------------------------
+    Future<ApiResponse<MyPropertyModel>> getMyProperties({
+        int page = 1,
+        int limit = 10
+    }) async
+    {
+        try
+        {
+            _cancelToken = CancelToken();
+
+            final queryParams =
+            {
+                'page': page,
+                'limit': limit
+            };
+
+            final response = await _apiServices.get(
+                ApiConstants.myProperties,
+                    (data) => MyPropertyModel.fromJson(data),
+                queryParameters: queryParams,
+                cancelToken: _cancelToken
+            );
+
+            return _handleApiResponse(response);
+        }
+        on DioException catch (e)
+        {
+            return _handleDioError<MyPropertyModel>(e);
+        }
+    }
+
 
     // ---------------------------------------------------------------------------
     // ❌ Cancel Ongoing Requests

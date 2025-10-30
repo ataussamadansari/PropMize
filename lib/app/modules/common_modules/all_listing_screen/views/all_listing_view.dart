@@ -10,12 +10,24 @@ import 'widgets/search_filter_widget.dart';
 
 class AllListingView extends GetView<AllListingController>
 {
-    const AllListingView({super.key});
+    final bool isSeller;
+    const AllListingView({super.key, this.isSeller = false});
 
     @override
     Widget build(BuildContext context)
     {
         return Scaffold(
+          appBar: isSeller ? AppBar(
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            leading: IconButton(onPressed: (){
+              Get.back();
+            },
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.primary.withAlpha(90)
+                ),
+                icon: const Icon(Icons.arrow_back)),
+          ): null,
             body: Column(
                 children: [
                     // Header
@@ -48,7 +60,7 @@ class AllListingView extends GetView<AllListingController>
                         child: Obx(()
                             {
 
-                                if (controller.isLoading.value && controller.properties.isEmpty) 
+                                if (controller.isLoading.value && controller.properties.isEmpty)
                                 {
                                     return ListView.builder(
                                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -96,45 +108,46 @@ class AllListingView extends GetView<AllListingController>
                                 }
 
                                 return RefreshIndicator(
-                                  onRefresh: () async{
-                                    await controller.loadProperties();
-                                  },
-                                  child: NotificationListener<ScrollNotification>(
-                                      onNotification: (scrollNotification)
-                                      {
-                                          if (scrollNotification is ScrollEndNotification &&
-                                              scrollNotification.metrics.pixels ==
-                                                  scrollNotification.metrics.maxScrollExtent &&
-                                              controller.hasMore.value)
-                                          {
-                                              controller.loadMoreProperties();
-                                          }
-                                          return false;
-                                      },
-                                      child: ListView.builder(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                          itemCount: controller.properties.length + (controller.hasMore.value ? 1 : 0),
-                                          itemBuilder: (context, index)
-                                          {
-                                              if (index == controller.properties.length)
-                                              {
-                                                  return const Padding(
-                                                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                                                      child: Center(
-                                                          child: CircularProgressIndicator()
-                                                      )
-                                                  );
-                                              }
+                                    onRefresh: () async
+                                    {
+                                        await controller.loadProperties();
+                                    },
+                                    child: NotificationListener<ScrollNotification>(
+                                        onNotification: (scrollNotification)
+                                        {
+                                            if (scrollNotification is ScrollEndNotification &&
+                                                scrollNotification.metrics.pixels ==
+                                                    scrollNotification.metrics.maxScrollExtent &&
+                                                controller.hasMore.value)
+                                            {
+                                                controller.loadMoreProperties();
+                                            }
+                                            return false;
+                                        },
+                                        child: ListView.builder(
+                                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                            itemCount: controller.properties.length + (controller.hasMore.value ? 1 : 0),
+                                            itemBuilder: (context, index)
+                                            {
+                                                if (index == controller.properties.length)
+                                                {
+                                                    return const Padding(
+                                                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                                                        child: Center(
+                                                            child: CircularProgressIndicator()
+                                                        )
+                                                    );
+                                                }
 
-                                              final property = controller.properties[index];
-                                              return PropertyCardWidget(
-                                                  property: property,
-                                                  // index: index,
-                                                  controller: controller
-                                              );
-                                          }
-                                      )
-                                  ),
+                                                final property = controller.properties[index];
+                                                return PropertyCardWidget(
+                                                    property: property,
+                                                    // index: index,
+                                                    controller: controller
+                                                );
+                                            }
+                                        )
+                                    )
                                 );
                             }
                         )
@@ -169,8 +182,8 @@ class AllListingView extends GetView<AllListingController>
                         primaryColor: Colors.blue, // Different color
                         waveOpacity: 0.08, // More subtle
                         dotOpacity: 0.1
-                        // showWaves: true,
-                        // showDots: true,
+                    // showWaves: true,
+                    // showDots: true,
                     ),
 
                     // Back Button
@@ -225,7 +238,7 @@ class AllListingView extends GetView<AllListingController>
                                         {
                                             if (controller.isLoading.value && controller.properties.isEmpty)
                                             {
-                                                if (controller.isLoading.value && controller.properties.isEmpty) 
+                                                if (controller.isLoading.value && controller.properties.isEmpty)
                                                 {
                                                     return ListView.builder(
                                                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
