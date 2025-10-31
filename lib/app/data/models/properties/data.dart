@@ -14,6 +14,8 @@ class Data
 {
     Data({
         this.area,
+        this.buildUpArea,
+        this.superBuildUpArea,
         this.address,
         this.seo,
         this.pricing,
@@ -57,6 +59,8 @@ class Data
 
     Data.fromJson(dynamic json) {
         area = json['area'] != null ? Area.fromJson(json['area']) : null;
+        buildUpArea = json['buildUpArea'] != null ? BuildUpArea.fromJson(json['buildUpArea']) : null;
+        superBuildUpArea = json['superBuildUpArea'] != null ? SuperBuildUpArea.fromJson(json['superBuildUpArea']) : null;
         address = json['address'] != null ? Address.fromJson(json['address']) : null;
         seo = json['seo'] != null ? Seo.fromJson(json['seo']) : null;
         pricing = json['pricing'] != null ? Pricing.fromJson(json['pricing']) : null;
@@ -201,6 +205,8 @@ class Data
     }*/
 
     Area? area;
+    BuildUpArea? buildUpArea;
+    SuperBuildUpArea? superBuildUpArea;
     Address? address;
     Seo? seo;
     Pricing? pricing;

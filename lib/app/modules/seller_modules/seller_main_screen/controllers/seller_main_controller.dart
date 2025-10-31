@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/modules/common_modules/all_listing_screen/views/all_listing_view.dart';
 import 'package:prop_mize/app/modules/seller_modules/analytics_screen/views/analytics_view.dart';
 import 'package:prop_mize/app/modules/seller_modules/dashboard_screen/views/dashboard_view.dart';
 import 'package:prop_mize/app/modules/seller_modules/leads_screen/views/leads_view.dart';
@@ -13,8 +12,6 @@ import 'package:prop_mize/app/routes/app_routes.dart';
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/services/storage/storage_services.dart';
 import '../../../common_modules/auth_screen/controllers/auth_controller.dart';
-import '../../dashboard_screen/controllers/dashboard_controller.dart';
-import '../../plans_screen/views/plans_view.dart';
 
 
 class SellerMainController extends GetxController {
@@ -207,7 +204,6 @@ class SellerMainController extends GetxController {
   void logout() {
     bool res = authController.logout();
     if(res) {
-      print("Logout");
       gotoHome();
     }
   }
@@ -224,6 +220,6 @@ class SellerMainController extends GetxController {
 
   void viewAllInquiries() => currentIndex.value = 1;
   void gotoAddProperty() => currentIndex.value = 2;
-  void viewAllProperties() => currentIndex.value = 3;
+  void viewAllMyProperties() => currentIndex.value = 3;
 
 }

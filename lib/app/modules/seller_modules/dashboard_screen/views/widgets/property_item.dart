@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
-import 'package:prop_mize/app/core/utils/DateTimeHelper.dart';
 import 'package:prop_mize/app/data/models/seller_dashboard/seller_dashboard_model.dart';
 
 class PropertyItem extends StatelessWidget {

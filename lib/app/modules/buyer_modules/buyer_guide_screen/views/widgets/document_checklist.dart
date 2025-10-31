@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/themes/app_colors.dart';
-
 class DocumentChecklist extends StatelessWidget {
   const DocumentChecklist({super.key});
 

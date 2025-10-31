@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../../../data/models/properties/my_property_model.dart';
+import '../../../../data/models/properties/my_property/my_property_model.dart';
 import '../../../../data/repositories/properties/properties_repository.dart';
 
 class MyPropertyController extends GetxController {
@@ -55,7 +55,7 @@ class MyPropertyController extends GetxController {
         currentPage.value++;
       } else {
         hasError.value = true;
-        errorMessage.value = response.message ?? 'Failed to load properties.';
+        errorMessage.value = response.message;
       }
     } catch (e) {
       hasError.value = true;

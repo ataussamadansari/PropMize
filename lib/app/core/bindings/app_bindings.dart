@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/ai/ai_list_model/properties.dart';
 import 'package:prop_mize/app/data/services/like/liked_properties_service.dart';
 
 import '../../data/services/auth/google_auth_service.dart';

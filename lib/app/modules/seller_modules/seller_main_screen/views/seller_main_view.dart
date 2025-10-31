@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/global_widgets/shimmer/shimmer_dashboard_view.dart';
 import 'widgets/seller_bottom_nav.dart';
 import 'widgets/seller_main_app_bar.dart';
 import '../controllers/seller_main_controller.dart';

@@ -230,7 +230,7 @@ class DashboardView extends GetView<DashboardController>
                   ),
                   TextButton(
                     onPressed: () {
-                      Get.find<SellerMainController>().viewAllProperties();
+                      Get.find<SellerMainController>().viewAllMyProperties();
                     },
                     child: Text(
                       "View All",

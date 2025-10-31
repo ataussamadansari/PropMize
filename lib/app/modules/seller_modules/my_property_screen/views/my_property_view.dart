@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:prop_mize/app/data/models/properties/my_property_model.dart';
+import 'package:prop_mize/app/data/models/properties/my_property/my_property_model.dart';
 import 'package:prop_mize/app/global_widgets/shimmer/shimmer_my_property_view.dart';
 
 import '../controllers/my_property_controller.dart';
@@ -115,7 +115,7 @@ class MyPropertyView extends GetView<MyPropertyController>
                     Stack(
                         children: [
                             CachedNetworkImage(
-                                imageUrl: property.images?.first ?? 'https://via.placeholder.com/400x200?text=No+Image',
+                                imageUrl: property.images!.isNotEmpty ? property.images!.first : 'https://via.placeholder.com/400x200?text=No+Image',
                                 height: 180,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
@@ -131,14 +131,13 @@ class MyPropertyView extends GetView<MyPropertyController>
                                 )
                             ),
                             Positioned(
-                                top: 8,
-                                right: 8,
+                                right: 6,
                                 child: Chip(
                                     label: Text(
                                         property.status?.capitalizeFirst ?? 'Unknown',
                                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)
                                     ),
-                                    backgroundColor: Colors.green.withOpacity(0.8),
+                                    backgroundColor: property.status == "active" ? Colors.green.withOpacity(0.8) : Colors.grey.withValues(alpha: 0.8),
                                     padding: const EdgeInsets.symmetric(horizontal: 4),
                                     visualDensity: VisualDensity.compact
                                 )
@@ -195,6 +194,8 @@ class MyPropertyView extends GetView<MyPropertyController>
                                             property.pricing!.priceNegotiable! ? '(Negotiable)' : '',
                                             style: TextStyle(fontSize: 12, color: Colors.grey[700])
                                         ),
+                                        SizedBox(width: 8.0),
+                                        Spacer(),
                                         Text(
                                             DateFormat.yMMMd().format(DateTime.parse(property.createdAt ?? DateTime.now().toIso8601String())),
                                             style: const TextStyle(fontSize: 12, color: Colors.grey)
@@ -208,7 +209,6 @@ class MyPropertyView extends GetView<MyPropertyController>
                     // Action Buttons
                     Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                        decoration: BoxDecoration(color: Colors.grey[50]),
                         child: Row(
                             children: [
                                 Expanded(
@@ -221,7 +221,6 @@ class MyPropertyView extends GetView<MyPropertyController>
                                         label: const Text("Edit"),
                                         style: ElevatedButton.styleFrom(
                                             foregroundColor: Colors.white,
-                                            backgroundColor: Colors.blue,
                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
                                         )
                                     )

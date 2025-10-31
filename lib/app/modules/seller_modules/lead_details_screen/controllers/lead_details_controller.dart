@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
 import 'package:prop_mize/app/data/models/leads/lead_details_model.dart';

@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/data/models/leads/leads_model.dart';
 import 'package:prop_mize/app/data/repositories/leads/leads_repository.dart';
 
-import '../../../../routes/app_routes.dart';
-
 class LeadsController extends GetxController {
   final LeadsRepository _leadsRepository = LeadsRepository();
 

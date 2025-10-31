@@ -102,7 +102,9 @@ class Transport
     map['name'] = name;
     map['distance'] = distance;
     map['unit'] = unit;
-    map['_id'] = id;
+    if (id != null && id!.isNotEmpty) {
+      map['_id'] = id;
+    }
     return map;
   }
 
@@ -134,7 +136,9 @@ class Malls
     map['name'] = name;
     map['distance'] = distance;
     map['unit'] = unit;
-    map['_id'] = id;
+    if (id != null && id!.isNotEmpty) {
+      map['_id'] = id;
+    }
     return map;
   }
 
@@ -166,7 +170,9 @@ class Hospitals
     map['name'] = name;
     map['distance'] = distance;
     map['unit'] = unit;
-    map['_id'] = id;
+    if (id != null && id!.isNotEmpty) {
+      map['_id'] = id;
+    }
     return map;
   }
 
@@ -198,7 +204,9 @@ class Schools
     map['name'] = name;
     map['distance'] = distance;
     map['unit'] = unit;
-    map['_id'] = id;
+    if (id != null && id!.isNotEmpty) {
+      map['_id'] = id;
+    }
     return map;
   }
 

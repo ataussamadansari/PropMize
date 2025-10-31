@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:prop_mize/app/data/models/properties/my_property_model.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:prop_mize/app/data/models/properties/analytics/analytics_model.dart';
+import 'package:prop_mize/app/data/models/properties/my_property/my_property_model.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../data/models/api_response_model.dart';
 import '../../../data/models/like/like_model.dart';
@@ -28,12 +31,12 @@ class PropertiesRepository
         {
             _cancelToken = CancelToken();
 
-            final queryParams = 
-            {
-                'page': page,
-                'limit': limit,
-                if (filters != null) ...filters
-            };
+            final queryParams =
+                {
+                    'page': page,
+                    'limit': limit,
+                    if (filters != null) ...filters
+                };
 
             final response = await _apiServices.get(
                 ApiConstants.properties,
@@ -64,13 +67,13 @@ class PropertiesRepository
         {
             _cancelToken = CancelToken();
 
-            final queryParams = 
-            {
-                'q': query,
-                'page': page,
-                'limit': limit,
-                if (filters != null) ...filters
-            };
+            final queryParams =
+                {
+                    'q': query,
+                    'page': page,
+                    'limit': limit,
+                    if (filters != null) ...filters
+                };
 
             final response = await _apiServices.get(
                 ApiConstants.searchProperties,
@@ -100,12 +103,12 @@ class PropertiesRepository
         {
             _cancelToken = CancelToken();
 
-            final queryParams = 
-            {
-                'page': page,
-                'limit': limit,
-                ...filters
-            };
+            final queryParams =
+                {
+                    'page': page,
+                    'limit': limit,
+                    ...filters
+                };
 
             final response = await _apiServices.get(
                 ApiConstants.properties,
@@ -209,11 +212,11 @@ class PropertiesRepository
         {
             _cancelToken = CancelToken();
 
-            final queryParams = 
-            {
-                'page': page,
-                'limit': limit
-            };
+            final queryParams =
+                {
+                    'page': page,
+                    'limit': limit
+                };
 
             final response = await _apiServices.get(
                 ApiConstants.likedProperties,
@@ -241,7 +244,7 @@ class PropertiesRepository
 
             final response = await _apiServices.get(
                 ApiConstants.recentlyViewed,
-                    (data) => PropertiesModel.fromJson(data),
+                (data) => PropertiesModel.fromJson(data),
                 cancelToken: _cancelToken
             );
 
@@ -265,11 +268,11 @@ class PropertiesRepository
         {
             _cancelToken = CancelToken();
 
-            final queryParams = 
-            {
-                'page': page,
-                'limit': limit
-            };
+            final queryParams =
+                {
+                    'page': page,
+                    'limit': limit
+                };
 
             final response = await _apiServices.get(
                 ApiConstants.myInquiries,
@@ -299,14 +302,14 @@ class PropertiesRepository
             _cancelToken = CancelToken();
 
             final queryParams =
-            {
-                'page': page,
-                'limit': limit
-            };
+                {
+                    'page': page,
+                    'limit': limit
+                };
 
             final response = await _apiServices.get(
                 ApiConstants.myProperties,
-                    (data) => MyPropertyModel.fromJson(data),
+                (data) => MyPropertyModel.fromJson(data),
                 queryParameters: queryParams,
                 cancelToken: _cancelToken
             );
@@ -318,14 +321,100 @@ class PropertiesRepository
             return _handleDioError<MyPropertyModel>(e);
         }
     }
+    // ---------------------------------------------------------------------------
+    // 💾 Get Analytics Properties
+    // ---------------------------------------------------------------------------
+    Future<ApiResponse<AnalyticsModel>> analyticsProperty({
+        String period = '30d'
+    }) async
+    {
+        try
+        {
+            _cancelToken = CancelToken();
 
+            final queryParams =
+                {
+                    'period': period
+                };
+
+            final response = await _apiServices.get(
+                ApiConstants.sellerPropertiesAnalytics,
+                (data) => AnalyticsModel.fromJson(data),
+                queryParameters: queryParams,
+                cancelToken: _cancelToken
+            );
+
+            return _handleApiResponse(response);
+        }
+        on DioException catch (e)
+        {
+            return _handleDioError<AnalyticsModel>(e);
+        }
+    }
+
+    // ---------------------------------------------------------------------------
+    // 💾 Create Property
+    // ---------------------------------------------------------------------------
+    Future<ApiResponse<PropertyByIdModel>> createProperty(Map<String, dynamic> payload) async
+    {
+        try
+        {
+            _cancelToken = CancelToken();
+
+            // 1. Extract image paths and remove them from the main payload
+            final List<String> imagePaths = List<String>.from(payload.remove('images') ?? []);
+
+            // 2. Create MultipartFile objects from paths
+            final List<MultipartFile> imageFiles = [];
+            for (final path in imagePaths) {
+                final fileName = path.split('/').last;
+                imageFiles.add(await MultipartFile.fromFile(path, filename: fileName));
+            }
+
+            // 3. Create FormData and add image files
+            final formData = FormData.fromMap({
+                'images': imageFiles,
+            });
+
+            // 4. Add all other payload fields to the FormData
+            // Complex objects (Maps, Lists) must be sent as JSON encoded strings
+            payload.forEach((key, value) {
+                if (value != null) {
+                    if (value is Map || value is List) {
+                        formData.fields.add(MapEntry(key, json.encode(value)));
+                    } else {
+                        formData.fields.add(MapEntry(key, value.toString()));
+                    }
+                }
+            });
+
+            // 5. Use the post method from ApiServices, but pass FormData
+            // Make sure your ApiServices().post can handle a 'data' of type dynamic
+            final response = await _apiServices.post(
+                ApiConstants.properties,
+                    (data) => PropertyByIdModel.fromJson(data),
+                data: formData,
+                cancelToken: _cancelToken,
+            );
+
+            return _handleApiResponse(response);
+        }
+        on DioException catch (e)
+        {
+            return _handleDioError<PropertyByIdModel>(e);
+        }
+        catch (e)
+        {
+            return ApiResponse.error("❌ Failed to create property: ${e.toString()}");
+        }
+    }
 
     // ---------------------------------------------------------------------------
     // ❌ Cancel Ongoing Requests
     // ---------------------------------------------------------------------------
-    void cancelRequests() 
+    void cancelRequests()
     {
-        if (_cancelToken != null && !_cancelToken!.isCancelled) 
+        if (_cancelToken != null && !_cancelToken!.isCancelled)
         {
             _cancelToken?.cancel('🔴 Request manually cancelled');
         }
@@ -334,19 +423,19 @@ class PropertiesRepository
     // ---------------------------------------------------------------------------
     // 🧩 Helper Functions
     // ---------------------------------------------------------------------------
-    ApiResponse<T> _handleApiResponse<T>(ApiResponse<T> response) 
+    ApiResponse<T> _handleApiResponse<T>(ApiResponse<T> response)
     {
-        if (response.statusCode == 200 && response.data != null) 
+        if (response.statusCode == 200 && response.data != null)
         {
             return ApiResponse.success(response.data!, message: response.message);
         }
-        else 
+        else
         {
             return ApiResponse.error(response.message, statusCode: response.statusCode);
         }
     }
 
-    ApiResponse<T> _handleDioError<T>(DioException e) 
+    ApiResponse<T> _handleDioError<T>(DioException e)
     {
         return ApiResponse.error(
             e.message ?? "Something went wrong",

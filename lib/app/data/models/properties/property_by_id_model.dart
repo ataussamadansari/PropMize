@@ -1,4 +1,4 @@
-import 'package:prop_mize/app/data/models/properties/data.dart';
+import 'data.dart';
 
 class PropertyByIdModel {
   PropertyByIdModel({

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:prop_mize/app/core/constants/api_constants.dart';
-import 'package:prop_mize/app/data/models/leads/leads_model.dart';
 import 'package:prop_mize/app/data/models/seller_dashboard/seller_dashboard_model.dart';
 
 import '../../models/api_response_model.dart';

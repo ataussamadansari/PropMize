@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:prop_mize/app/core/constants/api_constants.dart';
 import 'package:prop_mize/app/data/models/leads/lead_details_model.dart';
 import 'package:prop_mize/app/data/models/leads/leads_model.dart';
