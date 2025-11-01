@@ -124,42 +124,51 @@ class DashboardView extends GetView<DashboardController>
 
     Widget _buildStatsCards() {
       final stats = controller.sellerDashboardModel.value?.data?.stats;
+      final cards = [
+        StateCard(
+          title: "Total Listing",
+          value: NumberCountHelper.formatCount(stats?.totalProperties ?? 0),
+          icon: Icons.list_alt_rounded,
+          color: Colors.blue.shade700,
+        ),
+        StateCard(
+          title: "Total Views",
+          value: NumberCountHelper.formatCount(stats?.totalViews ?? 0),
+          icon: Icons.remove_red_eye_outlined,
+          color: Colors.green.shade700,
+        ),
+        StateCard(
+          title: "Inquiries",
+          value: NumberCountHelper.formatCount(stats?.totalLeads ?? 0),
+          icon: Icons.chat_bubble_outline_rounded,
+          color: Colors.orange.shade800,
+        ),
+        StateCard(
+          title: "Revenue",
+          value: "₹${NumberCountHelper.formatCount(240000)}",
+          icon: Icons.currency_rupee_rounded,
+          color: Colors.purple.shade700,
+        ),
+      ];
 
-      return GridView.count(
-        crossAxisCount: 2,
+      return GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        childAspectRatio: 1.5,
-        children: [
-          StateCard(
-            title: "Total Listing",
-            value: NumberCountHelper.formatCount(stats?.totalProperties ?? 0),
-            icon: Icons.list_alt,
-            color: Colors.blue,
-          ),
-          StateCard(
-            title: "Total Views",
-            value: NumberCountHelper.formatCount(stats?.totalViews ?? 0),
-            icon: Icons.remove_red_eye,
-            color: Colors.green,
-          ),
-          StateCard(
-            title: "Inquiries",
-            value: NumberCountHelper.formatCount(stats?.totalLeads ?? 0),
-            icon: Icons.chat_bubble_outline,
-            color: Colors.orange,
-          ),
-          StateCard(
-            title: "Revenue",
-            value: "₹2.4L",
-            icon: Icons.currency_rupee,
-            color: Colors.purple,
-          ),
-        ],
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          // Each item will have a maximum width, allowing the grid to show more columns on wider screens.
+          maxCrossAxisExtent: 200.0,
+          mainAxisSpacing: 12.0,
+          crossAxisSpacing: 12.0,
+          // Adjust aspect ratio for a slightly taller, more balanced look.
+          childAspectRatio: 1.8,
+        ),
+        itemCount: cards.length,
+        itemBuilder: (context, index) {
+          return cards[index];
+        },
       );
     }
+
 
     Widget _buildRecentInquiries() {
       final recentLeads = controller.sellerDashboardModel.value?.data?.recentLeads ?? [];
@@ -246,7 +255,10 @@ class DashboardView extends GetView<DashboardController>
                   style: TextStyle(color: Colors.grey),
                 )
               else
-                ...topProperties.take(5).map((property) => PropertyItem(topProperties: property)),
+                ...topProperties
+                    .where((p) => p.views!.isGreaterThan(0) && p.leads!.isGreaterThan(0))
+                    .take(5)
+                    .map((property) => PropertyItem(topProperties: property)),
             ],
           ),
         ),

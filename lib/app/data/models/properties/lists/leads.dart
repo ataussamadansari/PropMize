@@ -1,4 +1,3 @@
-
 import 'buyer.dart';
 
 class Leads
@@ -12,12 +11,13 @@ class Leads
   Leads.fromJson(dynamic json)
   {
     id = json['_id'];
-    buyer = json['buyer'] != null ? Buyer.fromJson(json['buyer']) : null;
+    // buyer = json['buyer'] != null ? Buyer.fromJson(json['buyer']) : null;
+    buyer = json['buyer'];
     status = json['status'];
     createdAt = json['createdAt'];
   }
   String? id;
-  Buyer? buyer;
+  String? buyer;
   String? status;
   String? createdAt;
 
@@ -25,10 +25,11 @@ class Leads
   {
     final map = <String, dynamic>{};
     map['_id'] = id;
-    if (buyer != null)
+    /*if (buyer != null)
     {
       map['buyer'] = buyer?.toJson();
-    }
+    }*/
+    map['buyer'] = buyer;
     map['status'] = status;
     map['createdAt'] = createdAt;
     return map;

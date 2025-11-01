@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:prop_mize/app/data/models/properties/my_property/my_property_model.dart';
+// import 'package:prop_mize/app/data/models/properties/my_property/my_property_model.dart';
+import '../../../../data/models/properties/data.dart';
 import 'package:prop_mize/app/global_widgets/shimmer/shimmer_my_property_view.dart';
 
+import '../../seller_main_screen/controllers/seller_main_controller.dart';
 import '../controllers/my_property_controller.dart';
 
 class MyPropertyView extends GetView<MyPropertyController>
@@ -215,7 +217,7 @@ class MyPropertyView extends GetView<MyPropertyController>
                                     child: ElevatedButton.icon(
                                         onPressed: ()
                                         {
-                                            // TODO: Implement Edit action
+                                          controller.gotoEditProperty(property);
                                         },
                                         icon: const Icon(Icons.edit, size: 18),
                                         label: const Text("Edit"),
@@ -229,7 +231,7 @@ class MyPropertyView extends GetView<MyPropertyController>
                                 IconButton(
                                     onPressed: ()
                                     {
-                                        // TODO: Implement Delete action
+                                        controller.deleteProperty(property.id!);
                                     },
                                     icon: const Icon(Icons.delete_outline, color: Colors.red),
                                     style: IconButton.styleFrom(

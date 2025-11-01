@@ -1,3 +1,4 @@
+/*
 class MyPropertyModel {
   MyPropertyModel({
       this.success, 
@@ -679,4 +680,4 @@ class Pagination {
     return map;
   }
 
-}
+}*/

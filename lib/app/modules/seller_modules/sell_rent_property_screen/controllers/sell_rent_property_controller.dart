@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
+import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 import 'package:prop_mize/app/data/repositories/properties/properties_repository.dart';
 import 'package:prop_mize/app/modules/seller_modules/seller_main_screen/controllers/seller_main_controller.dart';
 
+import '../../../../data/models/api_response_model.dart';
+import '../../../../data/models/properties/data.dart';
 import '../../../../data/models/properties/lists/near_by_places.dart';
 
 class SellRentPropertyController extends GetxController
 {
     final PropertiesRepository _propertiesRepo = PropertiesRepository();
     final pageController = PageController();
+
+    /// for editing
+    // Add these Rx variables for editing mode
+    final RxBool isEditingMode = false.obs;
+    final RxString editingPropertyId = ''.obs;
+    ///
 
     // ----- Stepper State -----
     final RxInt currentStep = 0.obs;
@@ -142,14 +151,188 @@ class SellRentPropertyController extends GetxController
     final RxBool showAddMall = false.obs;
     final RxBool showAddTransport = false.obs;
 
+    /// for editing
+    // Method to load existing property data for editing
+    void loadPropertyForEditing(Data data) {
+
+        isEditingMode.value = true;
+        editingPropertyId.value = data.id ?? '';
+
+        debugPrint("Loading property for editing: ID = ${editingPropertyId.value}");
+
+        // Load basic details
+        propertyType.value = _capitalizeFirst(data.propertyType ?? 'apartment');
+        listingType.value = _formatListingTypeForDisplay(data.listingType ?? 'sale');
+        titleController.text = data.title ?? '';
+        descriptionController.text = data.description ?? '';
+
+        // Load area details
+        areaController.text = data.area?.value?.toString() ?? '';
+        areaUnit.value = _formatUnitForDisplay(data.area?.unit ?? 'sqft');
+
+        // Load built-up area if exists
+        if (data.buildUpArea?.value != null) {
+            showBuildUpArea.value = true;
+            buildUpAreaController.text = data.buildUpArea!.value!.toString();
+            buildUpAreaUnit.value = _formatUnitForDisplay(data.buildUpArea?.unit ?? 'sqft');
+        }
+
+        // Load super built-up area if exists
+        if (data.superBuildUpArea?.value != null) {
+            showSuperBuildUpArea.value = true;
+            superBuildUpAreaController.text = data.superBuildUpArea!.value!.toString();
+            superBuildUpAreaUnit.value = _formatUnitForDisplay(data.superBuildUpArea?.unit ?? 'sqft');
+        }
+
+        // Load other basic details
+        propertyAgeController.text = data.age?.toString() ?? '';
+        furnishingStatus.value = _formatListingFurnished(data.furnished ?? "unfurnished");
+        bedroomsController.text = data.bedrooms?.toString() ?? '';
+        bathroomsController.text = data.bathrooms?.toString() ?? '';
+        balconiesController.text = data.balconies?.toString() ?? '';
+        parkingController.text = data.parking?.toString() ?? '';
+        floorController.text = data.floor?.toString() ?? '';
+        totalFloorsController.text = data.totalFloors?.toString() ?? '';
+
+        // Load location details
+        streetController.text = data.address?.street ?? '';
+        areaNameController.text = data.address?.area ?? '';
+        cityController.text = data.address?.city ?? '';
+        stateController.text = data.address?.state ?? '';
+        zipCodeController.text = data.address?.zipCode ?? '';
+        countryController.text = data.address?.country ?? 'India';
+        landmarkController.text = data.address?.landmark ?? '';
+
+        // Load features
+        facing.value = _formatFacingType(data.features?.facing ?? 'north');
+        flooringTypeController.text = data.features?.flooringType ?? '';
+        waterSupplyController.text = data.features?.waterSupply ?? '';
+
+        // Load boolean features
+        powerBackup.value = data.features?.powerBackup ?? false;
+        servantRoom.value = data.features?.servantRoom ?? false;
+        poojaRoom.value = data.features?.poojaRoom ?? false;
+        studyRoom.value = data.features?.studyRoom ?? false;
+        storeRoom.value = data.features?.storeRoom ?? false;
+        swimmingPool.value = data.features?.swimmingPool ?? false;
+        gym.value = data.features?.gym ?? false;
+        lift.value = data.features?.lift ?? false;
+        security.value = data.features?.security ?? false;
+
+        // Load amenities
+        amenities.value = List<String>.from(data.amenities ?? []);
+
+        // Load pricing
+        priceController.text = data.price?.toString() ?? '';
+
+        // Load contact info
+        contactNameController.text = data.contact?.name ?? '';
+        contactPhoneController.text = data.contact?.phone ?? '';
+        contactWhatsappController.text = data.contact?.whatsapp ?? '';
+        contactType.value = _capitalizeFirst(data.contact?.type ?? 'Owner');
+
+        // ✅ CORRECTED: Load nearby places from data
+        nearbySchools.value = data.nearbyPlaces?.schools?.cast<Schools>() ?? <Schools>[].obs;
+        nearbyHospitals.value = data.nearbyPlaces?.hospitals?.cast<Hospitals>() ?? <Hospitals>[].obs;
+        nearbyMalls.value = data.nearbyPlaces?.malls?.cast<Malls>() ?? <Malls>[].obs;
+        nearbyTransport.value = data.nearbyPlaces?.transport?.cast<Transport>() ?? <Transport>[].obs;
+
+        // Load images
+        images.value = List<String>.from(data.images ?? []);
+
+        additionalNotesController.text = data.notes ?? '';
+    }
+
+
+    // Helper methods
+    /*String _capitalizeFirst(String text) {
+        if (text.isEmpty) return text;
+        return text[0].toUpperCase() + text.substring(1);
+    }*/
+
+    // Helper methods for formatting
+    String _capitalizeFirst(String text) {
+        if (text.isEmpty) return text;
+        final words = text.split(' ');
+        final capitalizedWords = words.map((word) {
+            if (word.isEmpty) return word;
+            return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        });
+        return capitalizedWords.join(' ');
+    }
+
+    String _formatListingFurnished(String furnishing) {
+        switch (furnishing.toLowerCase()) {
+            case 'unfurnished':
+                return 'Unfurnished';
+            case 'semi-furnished':
+                return 'Semi-Furnished';
+            case 'furnished':
+                return 'Furnished';
+            default:
+                return 'Unfurnished';
+        }
+    }
+
+    // ✅ ADD: Helper method to format listing type for display
+    String _formatListingTypeForDisplay(String listingType) {
+        switch (listingType.toLowerCase()) {
+            case 'sale':
+                return 'For Sale';
+            case 'rent':
+                return 'For Rent';
+            case 'lease':
+                return 'For Lease';
+            default:
+                return 'For Sale';
+        }
+    }
+
+    String _formatFacingType(String facing) {
+        switch(facing.toLowerCase()) {
+            case 'north': return 'North';
+            case 'south': return 'South';
+            case 'east': return 'East';
+            case 'west': return 'West';
+            case 'northeast': return 'North-East';
+            case 'northwest': return 'North-West';
+            case 'southeast': return 'South-East';
+            case 'southwest': return 'South-West';
+            default: return 'North';
+        }
+    }
+
+    String _formatUnitForDisplay(String unit) {
+        switch (unit.toLowerCase()) {
+            case 'sqft': return 'Sq. Ft.';
+            case 'sqm': return 'Sq. M.';
+            case 'acre': return 'Acre';
+            case 'hectare': return 'Hectare';
+            case 'meter': return 'Meter';
+            case 'km': return 'Km';
+            default: return 'Sq. Ft.';
+        }
+    }
+    ///
+
+    @override
+    void onInit() 
+    {
+        super.onInit();
+    }
+
+
+
     // Method to add a school to the list
-    void addSchool() {
-        if (schoolNameController.text.isNotEmpty && schoolDistanceController.text.isNotEmpty) {
+    void addSchool() 
+    {
+        if (schoolNameController.text.isNotEmpty && schoolDistanceController.text.isNotEmpty) 
+        {
             nearbySchools.add(Schools(
-                name: schoolNameController.text,
-                distance: int.tryParse(schoolDistanceController.text),
-                unit: schoolDistanceUnit.value,
-            ));
+                    name: schoolNameController.text,
+                    distance: int.tryParse(schoolDistanceController.text),
+                    unit: schoolDistanceUnit.value
+                ));
             // Clear inputs and hide the form
             schoolNameController.clear();
             schoolDistanceController.clear();
@@ -158,13 +341,15 @@ class SellRentPropertyController extends GetxController
     }
 
     // Method to add a hospital to the list
-    void addHospital() {
-        if (hospitalNameController.text.isNotEmpty && hospitalDistanceController.text.isNotEmpty) {
+    void addHospital() 
+    {
+        if (hospitalNameController.text.isNotEmpty && hospitalDistanceController.text.isNotEmpty) 
+        {
             nearbyHospitals.add(Hospitals(
-                name: hospitalNameController.text,
-                distance: int.tryParse(hospitalDistanceController.text),
-                unit: hospitalDistanceUnit.value,
-            ));
+                    name: hospitalNameController.text,
+                    distance: int.tryParse(hospitalDistanceController.text),
+                    unit: hospitalDistanceUnit.value
+                ));
             hospitalNameController.clear();
             hospitalDistanceController.clear();
             showAddHospital.value = false;
@@ -172,13 +357,15 @@ class SellRentPropertyController extends GetxController
     }
 
     // Method to add a mall to the list
-    void addMall() {
-        if (mallNameController.text.isNotEmpty && mallDistanceController.text.isNotEmpty) {
+    void addMall() 
+    {
+        if (mallNameController.text.isNotEmpty && mallDistanceController.text.isNotEmpty) 
+        {
             nearbyMalls.add(Malls(
-                name: mallNameController.text,
-                distance: int.tryParse(mallDistanceController.text),
-                unit: mallDistanceUnit.value,
-            ));
+                    name: mallNameController.text,
+                    distance: int.tryParse(mallDistanceController.text),
+                    unit: mallDistanceUnit.value
+                ));
             mallNameController.clear();
             mallDistanceController.clear();
             showAddMall.value = false;
@@ -186,15 +373,18 @@ class SellRentPropertyController extends GetxController
     }
 
     // Method to add a transport option to the list
-    void addTransport() {
-        if (transportNameController.text.isNotEmpty && transportDistanceController.text.isNotEmpty) {
+    void addTransport() 
+    {
+        if (transportNameController.text.isNotEmpty && transportDistanceController.text.isNotEmpty) 
+        {
             nearbyTransport.add(Transport(
-                name: transportNameController.text,
-                distance: int.tryParse(transportDistanceController.text),
-                unit: transportDistanceUnit.value,
-            ));
+                    name: transportNameController.text,
+                    distance: int.tryParse(transportDistanceController.text),
+                    unit: transportDistanceUnit.value
+                ));
             transportNameController.clear();
             transportDistanceController.clear();
+            showAddTransport.value = false;
             showAddTransport.value = false;
         }
     }
@@ -203,31 +393,37 @@ class SellRentPropertyController extends GetxController
     final ImagePicker _picker = ImagePicker();
 
     /// Pick multiple images from the gallery
-    Future<void> pickImages() async {
+    Future<void> pickImages() async
+    {
         final List<XFile> pickedFiles = await _picker.pickMultiImage(
             imageQuality: 80
         );
 
-        if(pickedFiles.isNotEmpty) {
-            for(var file in pickedFiles) {
+        if (pickedFiles.isNotEmpty) 
+        {
+            for (var file in pickedFiles)
+            {
                 images.add(file.path);
             }
-        } else {
+        }
+        else 
+        {
             // User canceled the picker
             AppHelpers.showSnackBar(
                 title: "No Images Selected",
-                message: "You didn't select any new images.",
+                message: "You didn't select any new images."
             );
         }
     }
 
     /// Remove an image from the list
-    void removeImage(int index) {
-        if (index >= 0 && index < images.length) {
+    void removeImage(int index) 
+    {
+        if (index >= 0 && index < images.length) 
+        {
             images.removeAt(index);
         }
     }
-
 
     // ----- Stepper Navigation -----
 
@@ -235,7 +431,8 @@ class SellRentPropertyController extends GetxController
     void nextStep()
     {
         // On the final review step, the button text is "Submit", so this will trigger submitProperty
-        if (currentStep.value >= formKeys.length) {
+        if (currentStep.value >= formKeys.length) 
+        {
             submitProperty();
             return;
         }
@@ -291,8 +488,10 @@ class SellRentPropertyController extends GetxController
     }
 
     /// Converts the display unit (e.g., "Sq. Ft.") to the API format (e.g., "sqft").
-    String _formatUnit(String unit) {
-        switch (unit) {
+    String _formatUnit(String unit) 
+    {
+        switch (unit)
+        {
             case 'Sq. Ft.':
                 return 'sqft';
             case 'Sq. M.':
@@ -302,108 +501,97 @@ class SellRentPropertyController extends GetxController
             case 'Hectare':
                 return 'hectare';
             default:
-                return 'sqft';
+            return 'sqft';
         }
     }
 
     // ----- Data Submission -----
-    Future<void> submitProperty() async
+    /*Future<void> submitProperty() async
     {
         isLoading.value = true;
         errorMessage.value = '';
 
         // Construct the payload from all controllers
         final Map<String, dynamic> payload =
-        {
-            "title": titleController.text,
-            "description": descriptionController.text,
-            "propertyType": propertyType.value.toLowerCase(),
-            "listingType": listingType.value.toLowerCase().replaceAll('for ', ''),
-            "price": num.tryParse(priceController.text) ?? 0,
-            "area": {
-                "value": num.tryParse(areaController.text),
-                "unit": _formatUnit(areaUnit.value)
-            },
-            if (buildUpAreaController.text.isNotEmpty)
-                "buildUpArea": {
+            {
+                "title": titleController.text,
+                "description": descriptionController.text,
+                "propertyType": propertyType.value.toLowerCase(),
+                "listingType": listingType.value.toLowerCase().replaceAll('for ', ''),
+                "price": num.tryParse(priceController.text) ?? 0,
+                "area":
+                {
+                    "value": num.tryParse(areaController.text),
+                    "unit": _formatUnit(areaUnit.value)
+                },
+                if (buildUpAreaController.text.isNotEmpty)
+                "buildUpArea":
+                {
                     "value": num.tryParse(buildUpAreaController.text),
                     "unit": _formatUnit(buildUpAreaUnit.value)
                 },
-            if (superBuildUpAreaController.text.isNotEmpty)
-                "superBuildUpArea": {
+                if (superBuildUpAreaController.text.isNotEmpty)
+                "superBuildUpArea":
+                {
                     "value": num.tryParse(superBuildUpAreaController.text),
                     "unit": _formatUnit(superBuildUpAreaUnit.value)
                 },
-            "furnished": furnishingStatus.value.toLowerCase(),
-            "age": int.tryParse(propertyAgeController.text) ?? 0,
-            "bedrooms": int.tryParse(bedroomsController.text),
-            "bathrooms": int.tryParse(bathroomsController.text),
-            "balconies": int.tryParse(balconiesController.text),
-            "parking": int.tryParse(parkingController.text),
-            "floor": int.tryParse(floorController.text),
-            "totalFloors": int.tryParse(totalFloorsController.text),
-            "address":
-            {
-                "street": streetController.text,
-                "area": areaNameController.text,
-                "city": cityController.text,
-                "state": stateController.text,
-                "zipCode": zipCodeController.text,
-                "country": countryController.text,
-                "landmark": landmarkController.text
-            },
-            "features":
-            {
-                "facing": facing.value.toLowerCase().replaceAll('-', ''), // "north-east" -> "northeast"
-                "flooringType": flooringTypeController.text,
-                "waterSupply": waterSupplyController.text,
-                "powerBackup": powerBackup.value,
-                "servantRoom": servantRoom.value,
-                "poojaRoom": poojaRoom.value,
-                "studyRoom": studyRoom.value,
-                "storeRoom": storeRoom.value,
-                "garden": garden.value,
-                "swimmingPool": swimmingPool.value,
-                "gym": gym.value,
-                "lift": lift.value,
-                "security": security.value
-            },
-            // FIX 1: Send amenities as a List<String>
-            "amenities": amenities.toList(),
-            /*"amenities":
-            {
-                "powerBackup": amenitiesPowerBackup.value,
-                "childPlayArea": childPlayArea.value,
-                "garden": garden.value,
-                "clubHouse": clubHouse.value,
-                "parking": parking.value,
-                "cctv": cctv.value,
-                "fireSafety": fireSafety.value,
-                "intercom": intercom.value,
-                "wifi": wifi.value,
-                "communityHall": communityHall.value,
-                "joggingTrack": joggingTrack.value,
-                "sportFacility": sportFacility.value
-            },*/
-            "nearbyPlaces": {
-                "schools": nearbySchools.map((school) => school.toJson()).toList(),
-                "hospitals": nearbyHospitals.map((hospital) => hospital.toJson()).toList(),
-                "malls": nearbyMalls.map((mall) => mall.toJson()).toList(),
-                "transport": nearbyTransport.map((transport) => transport.toJson()).toList(),
-            },
-            "images": images.toList(),
-            "contact":
-            {
-                "name": contactNameController.text,
-                "phone": contactPhoneController.text,
-                "whatsapp": contactWhatsappController.text,
-                "type": contactType.value.toLowerCase()
-            },
-            "notes": additionalNotesController.text,
-            "pricing": { // Default pricing structure
-                "priceNegotiable": true
-            }
-        };
+                "furnished": furnishingStatus.value.toLowerCase(),
+                "age": int.tryParse(propertyAgeController.text) ?? 0,
+                "bedrooms": int.tryParse(bedroomsController.text),
+                "bathrooms": int.tryParse(bathroomsController.text),
+                "balconies": int.tryParse(balconiesController.text),
+                "parking": int.tryParse(parkingController.text),
+                "floor": int.tryParse(floorController.text),
+                "totalFloors": int.tryParse(totalFloorsController.text),
+                "address":
+                {
+                    "street": streetController.text,
+                    "area": areaNameController.text,
+                    "city": cityController.text,
+                    "state": stateController.text,
+                    "zipCode": zipCodeController.text,
+                    "country": countryController.text,
+                    "landmark": landmarkController.text
+                },
+                "features":
+                {
+                    "facing": facing.value.toLowerCase().replaceAll('-', ''), // "north-east" -> "northeast"
+                    "flooringType": flooringTypeController.text,
+                    "waterSupply": waterSupplyController.text,
+                    "powerBackup": powerBackup.value,
+                    "servantRoom": servantRoom.value,
+                    "poojaRoom": poojaRoom.value,
+                    "studyRoom": studyRoom.value,
+                    "storeRoom": storeRoom.value,
+                    "garden": garden.value,
+                    "swimmingPool": swimmingPool.value,
+                    "gym": gym.value,
+                    "lift": lift.value,
+                    "security": security.value
+                },
+                "amenities": amenities.toList(),
+                "nearbyPlaces":
+                {
+                    "schools": nearbySchools.map((school) => school.toJson()).toList(),
+                    "hospitals": nearbyHospitals.map((hospital) => hospital.toJson()).toList(),
+                    "malls": nearbyMalls.map((mall) => mall.toJson()).toList(),
+                    "transport": nearbyTransport.map((transport) => transport.toJson()).toList()
+                },
+                "images": images.toList(),
+                "contact":
+                {
+                    "name": contactNameController.text,
+                    "phone": contactPhoneController.text,
+                    "whatsapp": contactWhatsappController.text,
+                    "type": contactType.value.toLowerCase()
+                },
+                "notes": additionalNotesController.text,
+                "pricing":
+                { // Default pricing structure
+                    "priceNegotiable": true
+                }
+            };
 
         // Remove null values from nested objects for cleaner API calls
         (payload['features'] as Map).removeWhere((key, value) => value == null || (value is String && value.isEmpty));
@@ -445,6 +633,170 @@ class SellRentPropertyController extends GetxController
         {
             isLoading.value = false;
         }
+    }*/
+
+    // Update submit method to handle both create and update
+    Future<void> submitProperty() async {
+        isLoading.value = true;
+        errorMessage.value = '';
+
+        // Construct the payload from all controllers
+        final Map<String, dynamic> payload =
+        {
+            "title": titleController.text,
+            "description": descriptionController.text,
+            "propertyType": propertyType.value.toLowerCase(),
+            "listingType": listingType.value.toLowerCase().replaceAll('for ', ''),
+            "price": int.tryParse(priceController.text) ?? 0,
+            "area":
+            {
+                "value": int.tryParse(areaController.text),
+                "unit": _formatUnit(areaUnit.value)
+            },
+            if (buildUpAreaController.text.isNotEmpty)
+                "buildUpArea":
+                {
+                    "value": int.tryParse(buildUpAreaController.text),
+                    "unit": _formatUnit(buildUpAreaUnit.value)
+                },
+            if (superBuildUpAreaController.text.isNotEmpty)
+                "superBuildUpArea":
+                {
+                    "value": int.tryParse(superBuildUpAreaController.text),
+                    "unit": _formatUnit(superBuildUpAreaUnit.value)
+                },
+            "furnished": furnishingStatus.value.toLowerCase(),
+            "age": int.tryParse(propertyAgeController.text) ?? 0,
+            "bedrooms": int.tryParse(bedroomsController.text),
+            "bathrooms": int.tryParse(bathroomsController.text),
+            "balconies": int.tryParse(balconiesController.text),
+            "parking": int.tryParse(parkingController.text),
+            "floor": int.tryParse(floorController.text),
+            "totalFloors": int.tryParse(totalFloorsController.text),
+            "address":
+            {
+                "street": streetController.text,
+                "area": areaNameController.text,
+                "city": cityController.text,
+                "state": stateController.text,
+                "zipCode": zipCodeController.text,
+                "country": countryController.text,
+                "landmark": landmarkController.text
+            },
+            "features":
+            {
+                "facing": facing.value.toLowerCase().replaceAll('-', ''), // "north-east" -> "northeast"
+                "flooringType": flooringTypeController.text,
+                "waterSupply": waterSupplyController.text,
+                "powerBackup": powerBackup.value,
+                "servantRoom": servantRoom.value,
+                "poojaRoom": poojaRoom.value,
+                "studyRoom": studyRoom.value,
+                "storeRoom": storeRoom.value,
+                "garden": garden.value,
+                "swimmingPool": swimmingPool.value,
+                "gym": gym.value,
+                "lift": lift.value,
+                "security": security.value
+            },
+            "amenities": amenities.toList(),
+            "nearbyPlaces":
+            {
+                "schools": nearbySchools.map((school) => school.toJson()).toList(),
+                "hospitals": nearbyHospitals.map((hospital) => hospital.toJson()).toList(),
+                "malls": nearbyMalls.map((mall) => mall.toJson()).toList(),
+                "transport": nearbyTransport.map((transport) => transport.toJson()).toList()
+            },
+            "images": images.toList(),
+            "contact":
+            {
+                "name": contactNameController.text,
+                "phone": contactPhoneController.text,
+                "whatsapp": contactWhatsappController.text,
+                "type": contactType.value.toLowerCase()
+            },
+            "notes": additionalNotesController.text,
+            "pricing":
+            { // Default pricing structure
+                "priceNegotiable": true
+            }
+        };
+
+        // Remove null values from nested objects for cleaner API calls
+        (payload['features'] as Map).removeWhere((key, value) => value == null || (value is String && value.isEmpty));
+        (payload['address'] as Map).removeWhere((key, value) => value == null || (value is String && value.isEmpty));
+
+
+        try {
+            ApiResponse<PropertyByIdModel> response;
+
+            if (isEditingMode.value) {
+                // UPDATE existing property
+                response = await _propertiesRepo.updateProperty(
+                    editingPropertyId.value,
+                    payload
+                );
+            } else {
+                // CREATE new property
+                response = await _propertiesRepo.createProperty(payload);
+            }
+
+            if (response.success) {
+                AppHelpers.showSnackBar(
+                    title: "Success",
+                    message: isEditingMode.value
+                        ? "Property updated successfully!"
+                        : "Property listed successfully!",
+                    isError: false
+                );
+
+                Future.delayed(Duration.zero);
+                Get.find<SellerMainController>().viewAllMyProperties();
+            } else {
+                errorMessage.value = response.message;
+                AppHelpers.showSnackBar(
+                    title: "Error",
+                    message: response.message,
+                    isError: true
+                );
+            }
+        } catch(e) {
+            errorMessage.value = "An unexpected error occurred: $e";
+            AppHelpers.showSnackBar(
+                title: "Error",
+                message: errorMessage.value,
+                isError: true
+            );
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
+    // Reset form for new property
+    void resetForm() {
+        isEditingMode.value = false;
+        editingPropertyId.value = '';
+        currentStep.value = 0;
+        pageController.jumpToPage(0);
+
+        // Clear all controllers
+        titleController.clear();
+        descriptionController.clear();
+        areaController.clear();
+        // ... clear all other controllers
+
+        // Reset all Rx values
+        propertyType.value = 'Apartment';
+        listingType.value = 'For Sale';
+        // ... reset all other Rx values
+
+        // Clear lists
+        images.clear();
+        amenities.clear();
+        nearbySchools.clear();
+        nearbyHospitals.clear();
+        nearbyMalls.clear();
+        nearbyTransport.clear();
     }
 
     @override
@@ -480,5 +832,6 @@ class SellRentPropertyController extends GetxController
         additionalNotesController.dispose();
         super.onClose();
     }
+
 }
 

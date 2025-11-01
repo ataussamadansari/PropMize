@@ -8,14 +8,18 @@ import 'widgets/step_review_submit.dart';
 import '../controllers/sell_rent_property_controller.dart';
 
 class SellRentPropertyView extends GetView<SellRentPropertyController> {
-  const SellRentPropertyView({super.key});
+  final String? propertyId;
+  const SellRentPropertyView({super.key, this.propertyId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create New Property'),
-        centerTitle: false,
+        title: Obx(() => Text(
+            controller.isEditingMode.value
+                ? 'Edit Property'
+                : 'Create New Property'
+        )),
       ),
       body: Column(
         children: [
@@ -89,7 +93,46 @@ class SellRentPropertyView extends GetView<SellRentPropertyController> {
     );
   }
 
+  // Update navigation buttons to show "Update" instead of "Submit"
   Widget _buildNavigationButtons() {
+    return Obx(() => Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (controller.currentStep.value > 0)
+            OutlinedButton.icon(
+              onPressed: controller.previousStep,
+              style: OutlinedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+              ),
+              icon: const Icon(Icons.skip_previous),
+              label: const Text('Back'),
+            )
+          else
+            const SizedBox(),
+
+          Obx(() => controller.isLoading.value
+              ? const CircularProgressIndicator()
+              : ElevatedButton.icon(
+            onPressed: controller.nextStep,
+            iconAlignment: IconAlignment.end,
+            icon: Icon(controller.currentStep.value == 3
+                ? Icons.check
+                : Icons.skip_next
+            ),
+            label: Text(
+                controller.currentStep.value == 3
+                    ? (controller.isEditingMode.value ? 'Update' : 'Submit')
+                    : 'Next'
+            ),
+          )),
+        ],
+      ),
+    ));
+  }
+
+  /*Widget _buildNavigationButtons() {
     return Obx(() => Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -118,5 +161,5 @@ class SellRentPropertyView extends GetView<SellRentPropertyController> {
         ],
       ),
     ));
-  }
+  }*/
 }

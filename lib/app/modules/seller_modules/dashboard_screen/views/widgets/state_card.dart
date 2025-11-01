@@ -16,6 +16,102 @@ class StateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Use LayoutBuilder to get the constraints of the card itself
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double cardWidth = constraints.maxWidth;
+        // Determine if the layout is very constrained (e.g., small phone, split screen)
+        final bool isSmall = cardWidth < 150;
+
+        return Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            // Reduce padding on very small cards
+            padding: EdgeInsets.all(isSmall ? 10 : 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // ✅ Left side text column
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                    mainAxisSize: MainAxisSize.min, // prevents overflow
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.scaleDown, // scales down text if space is tight
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            // Adjust font size based on card width
+                            fontSize: isSmall ? 20 : 24,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          maxLines: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: isSmall ? 12 : 14,
+                          color: Colors.grey[600],
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8), // Add spacing to prevent text from touching the icon
+                // ✅ Right side icon container
+                Container(
+                  padding: EdgeInsets.all(isSmall ? 8 : 10), // Reduce icon padding
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: color,
+                    // Adjust icon size based on card width
+                    size: isSmall ? 20 : 24,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+
+// ==============================================================
+/*
+import 'package:flutter/material.dart';
+
+class StateCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const StateCard({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
 
     return Card(
@@ -77,6 +173,7 @@ class StateCard extends StatelessWidget {
     );
   }
 }
+*/
 
 
 /*

@@ -32,40 +32,53 @@ class PropertyItem extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                  child: Text(
-                      topProperties.title!,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          topProperties.title!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14
+                          )
+                      ),
+                      Row(
+                          spacing: 4,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.remove_red_eye, size: 14, color: Colors.grey[600]),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                      "${topProperties.views} views",
+                                      style: TextStyle(fontSize: 12, color: Colors.grey[600])
+                                  )
+                                ]
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.chat_bubble_outline, size: 14, color: Colors.grey[600]),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                      "${topProperties.leads} inquiries",
+                                      style: TextStyle(fontSize: 12, color: Colors.grey[600])
+                                  )
+                                ]
+                            )
+                          ]
                       )
+                    ],
                   )
               ),
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Row(
-                        children: [
-                          Icon(Icons.remove_red_eye, size: 14, color: Colors.grey[600]),
-                          const SizedBox(width: 4),
-                          Text(
-                              "${topProperties.views} views",
-                              style: TextStyle(fontSize: 12, color: Colors.grey[600])
-                          )
-                        ]
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                        children: [
-                          Icon(Icons.chat_bubble_outline, size: 14, color: Colors.grey[600]),
-                          const SizedBox(width: 4),
-                          Text(
-                              "${topProperties.leads} inquiries",
-                              style: TextStyle(fontSize: 12, color: Colors.grey[600])
-                          )
-                        ]
-                    )
-                  ]
-              )
+              SizedBox(width: 8,),
+              Icon(Icons.trending_up, color: Colors.green,),
             ]
         )
     );
