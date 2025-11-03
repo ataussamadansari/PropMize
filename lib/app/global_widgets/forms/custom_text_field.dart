@@ -29,11 +29,11 @@ class CustomTextField extends StatelessWidget {
             text: labelText,
             style: const TextStyle(fontWeight: FontWeight.w500),
             children: isRequired
-                ? [const TextSpan(text: '*', style: TextStyle(color: Colors.red))]
+                ? [const TextSpan(text: ' *', style: TextStyle(color: Colors.red))]
                 : [],
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 2),
         TextFormField(
           controller: controller,
           maxLines: maxLines,

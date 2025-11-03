@@ -18,18 +18,18 @@ class DashboardView extends GetView<DashboardController>
     Widget build(BuildContext context)
     {
         return Scaffold(
-          body: Obx(()
+            body: Obx(()
                 {
-                    if(controller.isLoading.value)
+                    if (controller.isLoading.value)
                     {
-                        return  ListView(
-                          children: [
-                            ShimmerDashboardView(),
-                          ],
+                        return ListView(
+                            children: [
+                                ShimmerDashboardView()
+                            ]
                         );
                     }
 
-                    if(controller.hasError.value)
+                    if (controller.hasError.value)
                     {
                         return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -122,150 +122,156 @@ class DashboardView extends GetView<DashboardController>
         );
     }
 
-    Widget _buildStatsCards() {
-      final stats = controller.sellerDashboardModel.value?.data?.stats;
-      final cards = [
-        StateCard(
-          title: "Total Listing",
-          value: NumberCountHelper.formatCount(stats?.totalProperties ?? 0),
-          icon: Icons.list_alt_rounded,
-          color: Colors.blue.shade700,
-        ),
-        StateCard(
-          title: "Total Views",
-          value: NumberCountHelper.formatCount(stats?.totalViews ?? 0),
-          icon: Icons.remove_red_eye_outlined,
-          color: Colors.green.shade700,
-        ),
-        StateCard(
-          title: "Inquiries",
-          value: NumberCountHelper.formatCount(stats?.totalLeads ?? 0),
-          icon: Icons.chat_bubble_outline_rounded,
-          color: Colors.orange.shade800,
-        ),
-        StateCard(
-          title: "Revenue",
-          value: "₹${NumberCountHelper.formatCount(240000)}",
-          icon: Icons.currency_rupee_rounded,
-          color: Colors.purple.shade700,
-        ),
-      ];
+    Widget _buildStatsCards() 
+    {
+        final stats = controller.sellerDashboardModel.value?.data?.stats;
+        final cards = [
+            StateCard(
+                title: "Total Listing",
+                value: NumberCountHelper.formatCount(stats?.totalProperties ?? 0),
+                icon: Icons.list_alt_rounded,
+                color: Colors.blue.shade700
+            ),
+            StateCard(
+                title: "Total Views",
+                value: NumberCountHelper.formatCount(stats?.totalViews ?? 0),
+                icon: Icons.remove_red_eye_outlined,
+                color: Colors.green.shade700
+            ),
+            StateCard(
+                title: "Inquiries",
+                value: NumberCountHelper.formatCount(stats?.totalLeads ?? 0),
+                icon: Icons.chat_bubble_outline_rounded,
+                color: Colors.orange.shade800
+            ),
+            StateCard(
+                title: "Revenue",
+                value: "₹${NumberCountHelper.formatCount(240000)}",
+                icon: Icons.currency_rupee_rounded,
+                color: Colors.purple.shade700
+            )
+        ];
 
-      return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          // Each item will have a maximum width, allowing the grid to show more columns on wider screens.
-          maxCrossAxisExtent: 200.0,
-          mainAxisSpacing: 12.0,
-          crossAxisSpacing: 12.0,
-          // Adjust aspect ratio for a slightly taller, more balanced look.
-          childAspectRatio: 1.8,
-        ),
-        itemCount: cards.length,
-        itemBuilder: (context, index) {
-          return cards[index];
-        },
-      );
+        return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                // Each item will have a maximum width, allowing the grid to show more columns on wider screens.
+                maxCrossAxisExtent: 200.0,
+                mainAxisSpacing: 12.0,
+                crossAxisSpacing: 12.0,
+                // Adjust aspect ratio for a slightly taller, more balanced look.
+                childAspectRatio: 1.8
+            ),
+            itemCount: cards.length,
+            itemBuilder: (context, index)
+            {
+                return cards[index];
+            }
+        );
     }
 
+    Widget _buildRecentInquiries() 
+    {
+        final recentLeads = controller.sellerDashboardModel.value?.data?.recentLeads ?? [];
 
-    Widget _buildRecentInquiries() {
-      final recentLeads = controller.sellerDashboardModel.value?.data?.recentLeads ?? [];
+        return Card(
+            elevation: 2,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                                Text(
+                                    "Recent Inquiries",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600
+                                    )
+                                ),
+                                TextButton(
+                                    onPressed: ()
+                                    {
+                                        Get.find<SellerMainController>().viewAllInquiries();
+                                    },
+                                    child: Text(
+                                        "View All",
+                                        style: TextStyle(color: AppColors.primary)
+                                    )
+                                )
+                            ]
+                        ),
+                        const SizedBox(height: 12),
+                        if (recentLeads.isEmpty) ...[
+                            Text(
+                                "No recent inquiries",
+                                style: TextStyle(color: Colors.grey)
+                            )
+                        ]
 
-      return Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Recent Inquiries",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.find<SellerMainController>().viewAllInquiries();
-                    },
-                    child: Text(
-                      "View All",
-                      style: TextStyle(color: AppColors.primary),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              if (recentLeads.isEmpty)
-                Text(
-                  "No recent inquiries",
-                  style: TextStyle(color: Colors.grey),
+                        else
+                        ...recentLeads.take(5).map((lead) => InquiryItem(recentLeads: lead))
+                    ]
                 )
-              else
-                ...recentLeads.take(5).map((lead) => InquiryItem(recentLeads: lead)),
-            ],
-          ),
-        ),
-      );
+            )
+        );
     }
 
-    Widget _buildTopProperties() {
-      final topProperties = controller.sellerDashboardModel.value?.data?.topProperties ?? [];
+    Widget _buildTopProperties() 
+    {
+        final topProperties = controller.sellerDashboardModel.value?.data?.topProperties ?? [];
 
-      return Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Top Performing Properties",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.find<SellerMainController>().viewAllMyProperties();
-                    },
-                    child: Text(
-                      "View All",
-                      style: TextStyle(color: AppColors.primary),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              if (topProperties.isEmpty)
-                Text(
-                  "No properties data available",
-                  style: TextStyle(color: Colors.grey),
+        return Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                                Text(
+                                    "Top Performing Properties",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600
+                                    )
+                                ),
+                                TextButton(
+                                    onPressed: ()
+                                    {
+                                        Get.find<SellerMainController>().viewAllMyProperties();
+                                    },
+                                    child: Text(
+                                        "View All",
+                                        style: TextStyle(color: AppColors.primary)
+                                    )
+                                )
+                            ]
+                        ),
+                        const SizedBox(height: 12),
+                        if (topProperties.isEmpty)
+                        Text(
+                            "No properties data available",
+                            style: TextStyle(color: Colors.grey)
+                        )
+                        else
+                        ...topProperties
+                            .where((p) => p.views!.isGreaterThan(0) && p.leads!.isGreaterThan(0))
+                            .take(5)
+                            .map((property) => PropertyItem(topProperties: property))
+                    ]
                 )
-              else
-                ...topProperties
-                    .where((p) => p.views!.isGreaterThan(0) && p.leads!.isGreaterThan(0))
-                    .take(5)
-                    .map((property) => PropertyItem(topProperties: property)),
-            ],
-          ),
-        ),
-      );
+            )
+        );
     }
-
-
 
     Widget _buildQuickActions()
     {

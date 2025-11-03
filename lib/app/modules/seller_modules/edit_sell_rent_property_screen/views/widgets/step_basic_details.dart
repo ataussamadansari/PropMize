@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/global_widgets/forms/custom_dropdown_field.dart';
 import 'package:prop_mize/app/global_widgets/forms/custom_text_field.dart';
-import '../../controllers/sell_rent_property_controller.dart';
+import '../../controllers/edit_sell_rent_property_controller.dart';
 
-class StepBasicDetails extends GetView<SellRentPropertyController>
+class StepBasicDetails extends GetView<EditSellRentPropertyController>
 {
     const StepBasicDetails({super.key});
 

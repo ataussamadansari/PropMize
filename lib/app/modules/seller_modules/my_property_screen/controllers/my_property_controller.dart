@@ -4,6 +4,7 @@ import 'package:prop_mize/app/data/models/status_message_model.dart';
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/models/properties/data.dart';
 import '../../../../data/repositories/properties/properties_repository.dart';
+import '../../edit_sell_rent_property_screen/controllers/edit_sell_rent_property_controller.dart';
 import '../../sell_rent_property_screen/controllers/sell_rent_property_controller.dart';
 
 class MyPropertyController extends GetxController {
@@ -89,10 +90,11 @@ class MyPropertyController extends GetxController {
         status.success = response.success;
 
         AppHelpers.showSnackBar(
-            title: 'Property deleted successfully.',
-            message: status.message!,
+            title: status.message!.capitalizeFirst.toString(),
+            message: 'Property deleted successfully.',
           isError: false
         );
+        refreshProperties();
       } else {
         AppHelpers.showSnackBar(
             title: "Property Deletion Failed",
@@ -109,6 +111,10 @@ class MyPropertyController extends GetxController {
     }
   }
 
+  void refreshProperties() {
+    loadMyProperties(isRefresh: true);
+  }
+
 
   //--------------------------------------------------------------------------
   /// Navigation Methods
@@ -116,16 +122,16 @@ class MyPropertyController extends GetxController {
 
   void gotoEditProperty(Data property) {
     // ✅ CORRECTED: Use Get.put to ensure controller is available
-    final sellRentController = Get.put(SellRentPropertyController());
+    final sellRentController = Get.put(EditSellRentPropertyController());
 
     // First load the full property data, then navigate
     _loadPropertyForEditing(property, sellRentController);
   }
 
-  Future<void> _loadPropertyForEditing(Data property, SellRentPropertyController controller) async {
+  Future<void> _loadPropertyForEditing(Data property, EditSellRentPropertyController controller) async {
     controller.loadPropertyForEditing(property);
 
     // Navigate to edit screen
-    Get.toNamed('/sell-rent-property');
+    Get.toNamed('/edit-sell-rent-property');
   }
 }

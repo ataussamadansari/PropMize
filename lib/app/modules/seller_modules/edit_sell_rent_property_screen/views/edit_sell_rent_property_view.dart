@@ -5,17 +5,18 @@ import 'widgets/step_location_features.dart';
 import 'widgets/step_media_pricing.dart';
 import 'widgets/step_review_submit.dart';
 
-import '../controllers/sell_rent_property_controller.dart';
+import '../controllers/edit_sell_rent_property_controller.dart';
 
-class SellRentPropertyView extends GetView<SellRentPropertyController> {
-  const SellRentPropertyView({super.key});
+class EditSellRentPropertyView extends GetView<EditSellRentPropertyController> {
+  final String? propertyId;
+  const EditSellRentPropertyView({super.key, this.propertyId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
           appBar: AppBar(
-            title: Text(
-                'Create New Property'
+            title:Text(
+                'Edit Property'
             ),
           ),
           body: Column(
@@ -119,8 +120,7 @@ class SellRentPropertyView extends GetView<SellRentPropertyController> {
                 : Icons.skip_next
             ),
             label: Text(
-                controller.currentStep.value == 3
-                    ? 'Submit' : 'Next'
+                controller.currentStep.value == 3 ? 'Update' : 'Next'
             ),
           )),
         ],

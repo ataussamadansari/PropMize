@@ -12,6 +12,7 @@ import 'package:prop_mize/app/routes/app_routes.dart';
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/services/storage/storage_services.dart';
 import '../../../common_modules/auth_screen/controllers/auth_controller.dart';
+import '../../sell_rent_property_screen/controllers/sell_rent_property_controller.dart';
 
 
 class SellerMainController extends GetxController {
@@ -219,7 +220,6 @@ class SellerMainController extends GetxController {
   void goToHelpSupport() => Get.toNamed(Routes.helpAndSupport);
 
   void viewAllInquiries() => currentIndex.value = 1;
-  void gotoAddProperty() => currentIndex.value = 2;
   void viewAllMyProperties() => currentIndex.value = 3;
-
+  void gotoAddProperty() => currentIndex.value = 2;
 }

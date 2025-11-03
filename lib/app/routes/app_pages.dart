@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:prop_mize/app/modules/seller_modules/edit_sell_rent_property_screen/views/edit_sell_rent_property_view.dart';
 import 'package:prop_mize/app/modules/seller_modules/lead_details_screen/bindings/lead_details_binding.dart';
 import 'package:prop_mize/app/modules/seller_modules/lead_details_screen/views/lead_details_view.dart';
 import '../modules/buyer_modules/buyer_home_screen/bindings/buyer_main_binding.dart';
@@ -9,6 +10,7 @@ import '../modules/buyer_modules/recent_viewed_screen/bindings/recent_viewed_bin
 import '../modules/buyer_modules/recent_viewed_screen/views/recent_viewed_view.dart';
 import '../modules/seller_modules/analytics_screen/bindings/analytics_binding.dart';
 import '../modules/seller_modules/analytics_screen/views/analytics_view.dart';
+import '../modules/seller_modules/edit_sell_rent_property_screen/bindings/edit_sell_rent_property_binding.dart';
 import '../modules/seller_modules/leads_screen/bindings/leads_binding.dart';
 import '../modules/seller_modules/leads_screen/views/leads_view.dart';
 import '../modules/seller_modules/my_property_screen/bindings/my_property_binding.dart';
@@ -76,6 +78,7 @@ class AppPages
         GetPage(name: Routes.myProperty, page: () => MyPropertyView(), binding: MyPropertyBinding()),
         GetPage(name: Routes.plans, page: () => PlansView(), binding: PlansBinding()),
         GetPage(name: Routes.sellRentProperty, page: () => SellRentPropertyView(), binding: SellRentPropertyBinding()),
+        GetPage(name: Routes.editSellRentProperty, page: () => EditSellRentPropertyView(), binding: EditSellRentPropertyBinding()),
         GetPage(name: Routes.sellerGuide, page: () => SellerGuideView(), binding: SellerGuideBinding()),
     ];
 }

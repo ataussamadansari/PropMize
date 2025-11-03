@@ -7,9 +7,9 @@ import 'package:prop_mize/app/global_widgets/forms/custom_dropdown_field.dart';
 import 'package:prop_mize/app/global_widgets/forms/custom_text_field.dart';
 
 import '../../../../../data/models/properties/lists/near_by_places.dart';
-import '../../controllers/sell_rent_property_controller.dart';
+import '../../controllers/edit_sell_rent_property_controller.dart';
 
-class StepMediaPricing extends GetView<SellRentPropertyController>
+class StepMediaPricing extends GetView<EditSellRentPropertyController>
 {
     const StepMediaPricing({super.key});
 

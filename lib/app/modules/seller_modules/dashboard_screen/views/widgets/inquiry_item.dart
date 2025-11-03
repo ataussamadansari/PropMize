@@ -42,7 +42,7 @@ class InquiryItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                            recentLeads.property!.title!,
+                            recentLeads.property?.title ?? 'No Title',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14

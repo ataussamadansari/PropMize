@@ -15,7 +15,7 @@ class SellerMainBinding extends Bindings {
 
     Get.lazyPut<DashboardController>(() => DashboardController());
     Get.lazyPut<LeadsController>(() => LeadsController());
-    Get.lazyPut<SellRentPropertyController>(() => SellRentPropertyController());
+    Get.lazyPut<SellRentPropertyController>(()=> SellRentPropertyController());
     Get.lazyPut<MyPropertyController>(() => MyPropertyController());
     Get.lazyPut<AnalyticsController>(() => AnalyticsController());
     Get.lazyPut<AllListingController>(() => AllListingController());

@@ -1,5 +1,3 @@
-// D:/FlutterProjects/prop_mize/lib/app/modules/seller_modules/leads_screen/views/lead_details_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/utils/DateTimeHelper.dart';
@@ -177,7 +175,7 @@ class LeadsView extends GetView<LeadsController>
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                      "Property: ${lead.property!.title}",
+                                      "Property: ${lead.property?.title ?? "N/A"}",
                                       style: TextStyle(color: Colors.grey[600]),
                                       overflow: TextOverflow.ellipsis
                                   )

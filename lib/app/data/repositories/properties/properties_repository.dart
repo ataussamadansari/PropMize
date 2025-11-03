@@ -422,7 +422,84 @@ class PropertiesRepository
     // ---------------------------------------------------------------------------
     // 💾 Update Property
     // ---------------------------------------------------------------------------
+
     Future<ApiResponse<PropertyByIdModel>> updateProperty(
+        String propertyId,
+        Map<String, dynamic> payload,
+        ) async {
+        try {
+            _cancelToken = CancelToken();
+
+            // 1. Extract ALL images (existing URLs + new local paths)
+            final List<String> allImageStrings = List<String>.from(payload.remove('images') ?? []);
+
+            final List<MultipartFile> imageFiles = [];
+            final List<String> imageUrls = [];
+
+            // 2. Separate files and URLs
+            for (final imageString in allImageStrings) {
+                if (imageString.startsWith('http')) {
+                    // Existing image URL
+                    imageUrls.add(imageString);
+                } else {
+                    // New local file
+                    final fileName = imageString.split('/').last;
+                    imageFiles.add(await MultipartFile.fromFile(imageString, filename: fileName));
+                }
+            }
+
+            // 3. Create FormData
+            final formData = FormData();
+
+            // ✅ FIX 1: Add ALL images with SAME key 'images'
+            // Files add karo
+            for (final file in imageFiles) {
+                formData.files.add(MapEntry('images', file));
+            }
+            // URLs add karo
+            for (final url in imageUrls) {
+                formData.fields.add(MapEntry('images', url));
+            }
+
+            // ✅ FIX 2: Add amenities as SIMPLE ARRAY (not nested)
+            if (payload.containsKey('amenities')) {
+                final amenitiesList = payload['amenities'];
+
+                // ✅ Ensure it's encoded as simple JSON array
+                formData.fields.add(MapEntry('amenities', json.encode(amenitiesList)));
+                payload.remove('amenities'); // Remove from main payload
+            }
+
+            // 4. Add all other payload fields
+            payload.forEach((key, value) {
+                if (value != null && key != 'amenities') { // amenities already handled
+                    if (value is List || value is Map) {
+                        formData.fields.add(MapEntry(key, json.encode(value)));
+                    } else {
+                        formData.fields.add(MapEntry(key, value.toString()));
+                    }
+                }
+            });
+
+
+            final url = ApiConstants.singleProperty.replaceFirst("{id}", propertyId);
+
+            final response = await _apiServices.put(
+                url,
+                    (data) => PropertyByIdModel.fromJson(data),
+                data: formData,
+                cancelToken: _cancelToken,
+            );
+
+            return _handleApiResponse(response);
+        } on DioException catch (e) {
+            return _handleDioError<PropertyByIdModel>(e);
+        } catch (e) {
+            return ApiResponse.error("❌ Failed to update property: ${e.toString()}");
+        }
+    }
+
+    /*Future<ApiResponse<PropertyByIdModel>> updateProperty(
         String propertyId,
         Map<String, dynamic> payload,
         ) async {
@@ -482,7 +559,7 @@ class PropertiesRepository
         } catch (e) {
             return ApiResponse.error("❌ Failed to update property: ${e.toString()}");
         }
-    }
+    }*/
 
 
 

@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/global_widgets/forms/custom_dropdown_field.dart';
 import 'package:prop_mize/app/global_widgets/forms/custom_text_field.dart';
 
-import '../../controllers/sell_rent_property_controller.dart';
+import '../../controllers/edit_sell_rent_property_controller.dart';
 
-class StepLocationFeatures extends GetView<SellRentPropertyController> {
+class StepLocationFeatures extends GetView<EditSellRentPropertyController> {
   const StepLocationFeatures({super.key});
 
   @override

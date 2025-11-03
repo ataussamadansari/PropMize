@@ -28,6 +28,7 @@ abstract class Routes
     static const myProperty = '/my-property';
     static const plans = '/plans';
     static const sellRentProperty = '/sell-rent-property';
+    static const editSellRentProperty = '/edit-sell-rent-property';
     static const sellerGuide = '/seller-guide';
 
 }
