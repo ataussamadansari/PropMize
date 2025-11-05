@@ -12,45 +12,61 @@ class SellerMainView extends GetView<SellerMainController>
     @override
     Widget build(BuildContext context)
     {
-        DateTime? _lastPointerDown;
-        bool _isScrollGesture = false;
+        DateTime? lastPointerDown;
+        bool isScrollGesture = false;
 
-        return Listener(
-            onPointerDown: (event) {
-                _lastPointerDown = DateTime.now();
-                _isScrollGesture = false;
-            },
-            onPointerMove: (event) {
-                if (_lastPointerDown != null &&
-                    DateTime.now().difference(_lastPointerDown!) <
-                        const Duration(milliseconds: 150)) {
-                    _isScrollGesture = true;
-                }
-            },
-            onPointerUp: (event) {
-                // If user just tapped (not scrolled)
-                if (!_isScrollGesture) {
-                    controller.onUserInteraction();
-                }
-            },
-            behavior: HitTestBehavior.translucent,
-            child: Scaffold(
-                key: controller.globalKey,
-                appBar: const SellerMainAppBar(),
-                endDrawer: const SellerDrawer(),
-                body: Obx(() {
+        return Obx(() {
+            return PopScope(
+                canPop: false, // Control manually when to pop
+                onPopInvokedWithResult: (didPop, result) {
+                    // If system already handled pop (like predictive back animation), skip
+                    if (didPop) return;
 
-                    return NotificationListener<ScrollNotification>(
-                        onNotification: (scrollInfo) {
-                            controller.handleScrollNotification(scrollInfo);
-                            return false;
-                        },
-                        child: controller.pages[controller.currentIndex.value],
-                    );
-                }),
-                bottomNavigationBar: const SellerBottomNav(),
-            ),
-        );
+                    final currentIndex = controller.currentIndex.value;
 
+                    if (currentIndex > 0) {
+                        // If not on first tab, navigate back to home
+                        controller.changePage(0);
+                    } else {
+                        // Already on home → exit app
+                        Navigator.of(context).maybePop();
+                    }
+                },
+                child: Listener(
+                    onPointerDown: (event) {
+                        lastPointerDown = DateTime.now();
+                        isScrollGesture = false;
+                    },
+                    onPointerMove: (event) {
+                        if (lastPointerDown != null &&
+                            DateTime.now().difference(lastPointerDown!) <
+                                const Duration(milliseconds: 150)) {
+                            isScrollGesture = true;
+                        }
+                    },
+                    onPointerUp: (event) {
+                        // If user just tapped (not scrolled)
+                        if (!isScrollGesture) {
+                            controller.onUserInteraction();
+                        }
+                    },
+                    behavior: HitTestBehavior.translucent,
+                    child: Scaffold(
+                        key: controller.globalKey,
+                        appBar: const SellerMainAppBar(),
+                        endDrawer: const SellerDrawer(),
+                        body: NotificationListener<ScrollNotification>(
+                            onNotification: (scrollInfo) {
+                                controller.handleScrollNotification(scrollInfo);
+                                return false;
+                            },
+                            child: controller.pages[controller.currentIndex
+                                .value],
+                        ),
+                        bottomNavigationBar: const SellerBottomNav(),
+                    ),
+                ),
+            );
+        });
     }
 }

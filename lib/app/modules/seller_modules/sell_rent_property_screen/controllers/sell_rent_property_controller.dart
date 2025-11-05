@@ -413,9 +413,9 @@ class SellRentPropertyController extends GetxController
             "notes": additionalNotesController.text,
             "pricing":
             {
-                "basePrice": int.tryParse(monthlyRentController.text) ?? 0,
-                "maintenanceCharges": int.tryParse(maintenanceChargesController.text) ?? 0,
-                "securityDeposit": int.tryParse(securityDepositController.text) ?? 0,
+                "basePrice": num.tryParse(monthlyRentController.text) ?? '',
+                "maintenanceCharges": num.tryParse(maintenanceChargesController.text) ?? '',
+                "securityDeposit": num.tryParse(securityDepositController.text) ?? '',
                 "priceNegotiable": true
             }
         };

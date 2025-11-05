@@ -17,7 +17,7 @@ class LeadsView extends GetView<LeadsController>
     return Scaffold(
         body: Column(
             children: [
-              _buildFilterControls(),
+              _buildFilterControls(context),
               Expanded(
                   child: Obx(()
                   {
@@ -84,7 +84,7 @@ class LeadsView extends GetView<LeadsController>
   }
 
   /// Builds the search bar and status filter dropdown.
-  Widget _buildFilterControls()
+  Widget _buildFilterControls(BuildContext context)
   {
     return Padding(
         padding: const EdgeInsets.all(12.0),
@@ -93,11 +93,11 @@ class LeadsView extends GetView<LeadsController>
           children: [
             Text(
                 'Seller Leads',
-                style: Get.textTheme.headlineLarge
+                style: context.textTheme.headlineLarge
             ),
             Text(
                 'Manage inquiries from interested buyers.',
-                style: Get.textTheme.bodyMedium
+                style: context.textTheme.bodySmall
             ),
             SizedBox(height: 24),
             Row(
@@ -151,9 +151,38 @@ class LeadsView extends GetView<LeadsController>
   Widget _buildLeadCard(Data lead)
   {
     final status = lead.status?.toLowerCase() ?? 'new';
-    final statusColor = status == 'converted'
-        ? Colors.green
-        : (status == 'new' ? Colors.orange : Colors.deepOrange);
+    final statusColor = switch(status) {
+      'new' => Colors.blue,
+      'contacted' => Colors.orange,
+      'interested' => Colors.greenAccent,
+      'not-interested' => Colors.amber,
+      'converted' => Colors.green,
+      'lost' => Colors.red,
+      'rejected' => Colors.deepOrange,
+      _ => Colors.grey,
+    };
+
+    final statusText = switch(status) {
+      'new' => 'New',
+      'contacted' => 'Contacted',
+      'interested' => 'Interested',
+      'not-interested' => 'Not Interested',
+      'converted' => 'Converted',
+      'lost' => 'Lost',
+      'rejected' => 'Rejected',
+      _ => status, // default case
+    };
+
+    final statusIcon = switch(status) {
+      'new' => Icons.fiber_new,
+      'contacted' => Icons.phone,
+      'interested' => Icons.thumb_up,
+      'not-interested' => Icons.thumb_down,
+      'converted' => Icons.check_circle,
+      'lost' => Icons.error,
+      'rejected' => Icons.cancel,
+      _ => Icons.info,
+    };
 
     return Card(
         elevation: 1.5,
@@ -184,7 +213,7 @@ class LeadsView extends GetView<LeadsController>
                         ),
                         Chip(
                             label: Text(
-                                lead.status!.capitalizeFirst!,
+                                statusText,
                                 style: const TextStyle(color: Colors.white, fontSize: 12)
                             ),
                             backgroundColor: statusColor,
@@ -195,7 +224,7 @@ class LeadsView extends GetView<LeadsController>
                       ]
                   ),
                   const SizedBox(height: 8),
-                  const Divider(height: 1),
+                  // const Divider(height: 1),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

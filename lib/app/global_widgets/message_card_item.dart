@@ -25,7 +25,6 @@ class MessageCardItem extends StatelessWidget {
         return LayoutBuilder(
             builder: (context, constraints) {
                 final isMobile = constraints.maxWidth < 600;
-                final isTablet = constraints.maxWidth >= 600 && constraints.maxWidth < 1200;
 
                 return Container(
                     padding: EdgeInsets.all(isMobile ? 12 : 16),
@@ -35,7 +34,7 @@ class MessageCardItem extends StatelessWidget {
                         color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
                         boxShadow: [
                             BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                             ),
@@ -51,7 +50,7 @@ class MessageCardItem extends StatelessWidget {
                                 width: isMobile ? 60 : 70,
                                 height: isMobile ? 60 : 70,
                                 decoration: BoxDecoration(
-                                    color: color.withOpacity(0.15),
+                                    color: color.withValues(alpha: 0.15),
                                     shape: BoxShape.circle,
                                 ),
                                 child: Center(
@@ -91,7 +90,7 @@ class MessageCardItem extends StatelessWidget {
                                 message,
                                 style: context.textTheme.bodyMedium?.copyWith(
                                     fontSize: isMobile ? 13 : 14,
-                                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                                 ),
                                 textAlign: TextAlign.center,
                                 maxLines: 3,

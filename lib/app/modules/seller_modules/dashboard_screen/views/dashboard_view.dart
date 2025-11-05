@@ -17,64 +17,68 @@ class DashboardView extends GetView<DashboardController>
     @override
     Widget build(BuildContext context)
     {
-        return Scaffold(
-            body: Obx(()
-                {
-                    if (controller.isLoading.value)
-                    {
-                        return ListView(
-                            children: [
-                                ShimmerDashboardView()
-                            ]
-                        );
-                    }
+        return RefreshIndicator(
+          onRefresh: () => controller.refreshDashboard(),
 
-                    if (controller.hasError.value)
-                    {
-                        return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                                Text(
-                                    controller.errorMessage.value,
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500
-                                    )
-                                ),
-                                const SizedBox(height: 16),
-                                ElevatedButton(
-                                    onPressed: ()
-                                    {
-                                        controller.loadDashboardData();
-                                    },
-                                    child: const Text("Retry")
-                                )
-                            ]
-                        );
-                    }
+          child: Scaffold(
+              body: Obx(()
+                  {
+                      if (controller.isLoading.value)
+                      {
+                          return ListView(
+                              children: [
+                                  ShimmerDashboardView()
+                              ]
+                          );
+                      }
 
-                    return ListView(
-                        padding: const EdgeInsets.all(16.0),
-                        children: [
-                            // Welcome Header
-                            _buildWelcomeHeader(),
-                            const SizedBox(height: 24),
+                      if (controller.hasError.value)
+                      {
+                          return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                  Text(
+                                      controller.errorMessage.value,
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500
+                                      )
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ElevatedButton(
+                                      onPressed: ()
+                                      {
+                                          controller.loadDashboardData();
+                                      },
+                                      child: const Text("Retry")
+                                  )
+                              ]
+                          );
+                      }
 
-                            // Stats Cards
-                            _buildStatsCards(),
-                            const SizedBox(height: 24),
+                      return ListView(
+                          padding: const EdgeInsets.all(16.0),
+                          children: [
+                              // Welcome Header
+                              _buildWelcomeHeader(),
+                              const SizedBox(height: 24),
 
-                            // Recent Inquiries
-                            _buildRecentInquiries(),
-                            const SizedBox(height: 24),
+                              // Stats Cards
+                              _buildStatsCards(),
+                              const SizedBox(height: 24),
 
-                            // Top Performing Properties
-                            _buildTopProperties()
-                        ]
-                    );
-                }
-            )
+                              // Recent Inquiries
+                              _buildRecentInquiries(),
+                              const SizedBox(height: 24),
+
+                              // Top Performing Properties
+                              _buildTopProperties()
+                          ]
+                      );
+                  }
+              )
+          ),
         );
     }
 
@@ -350,9 +354,9 @@ class DashboardView extends GetView<DashboardController>
             borderRadius: BorderRadius.circular(12),
             child: Container(
                 decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.05),
+                    color: AppColors.primary.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.2))
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.2))
                 ),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

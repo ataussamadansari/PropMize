@@ -424,12 +424,12 @@ class InspectionTipCard extends StatelessWidget {
       curve: Curves.easeInOut,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: (tip['color'] as Color).withOpacity(0.1),
+        color: (tip['color'] as Color).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isExpanded
-              ? (tip['color'] as Color).withOpacity(0.6)
-              : (tip['color'] as Color).withOpacity(0.1),
+              ? (tip['color'] as Color).withValues(alpha: 0.6)
+              : (tip['color'] as Color).withValues(alpha: 0.1),
           width: isExpanded ? 2 : 1,
         ),
         /*boxShadow: [
@@ -469,7 +469,7 @@ class InspectionTipCard extends StatelessWidget {
                       tip['title'],
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: (tip['color'] as Color).withOpacity(0.9),
+                        color: (tip['color'] as Color).withValues(alpha: 0.9),
                         fontSize: isExpanded ? 16 : 14,
                       ),
                       maxLines: isExpanded ? 3 : 2,
@@ -482,7 +482,7 @@ class InspectionTipCard extends StatelessWidget {
                     child: Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 16,
-                      color: (tip['color'] as Color).withOpacity(0.7),
+                      color: (tip['color'] as Color).withValues(alpha: 0.7),
                     ),
                   ),
                 ],
@@ -522,10 +522,10 @@ class InspectionTipCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: (tip['color'] as Color).withOpacity(0.05),
+                    color: (tip['color'] as Color).withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: (tip['color'] as Color).withOpacity(0.2),
+                      color: (tip['color'] as Color).withValues(alpha: 0.2),
                     ),
                   ),
                   child: Row(

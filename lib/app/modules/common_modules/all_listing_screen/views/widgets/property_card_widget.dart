@@ -132,7 +132,7 @@ class PropertyCardWidget extends StatelessWidget {
                     return IconButton(
                       onPressed: () => likeService.toggleLike(property),
                       style: IconButton.styleFrom(
-                        backgroundColor: Colors.grey.withOpacity(0.7), // FIX: withOpacity
+                        backgroundColor: Colors.grey.withValues(alpha: 0.7), // FIX: withOpacity
                         elevation: 2,
                       ),
                       icon: Icon(
@@ -172,7 +172,7 @@ class PropertyCardWidget extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.7), // FIX: withOpacity
+                      color: Colors.black.withValues(alpha: 0.7), // FIX: withOpacity
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -250,7 +250,7 @@ class PropertyCardWidget extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1), // FIX: withOpacity
+                          color: AppColors.primary.withValues(alpha: 0.1), // FIX: withOpacity
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -268,7 +268,7 @@ class PropertyCardWidget extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1), // FIX: withOpacity
+                          color: AppColors.primary.withValues(alpha: 0.1), // FIX: withOpacity
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(

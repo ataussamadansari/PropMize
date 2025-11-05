@@ -31,12 +31,9 @@ class DashboardController extends GetxController
     void onInit()
     {
         super.onInit();
-        _setupListeners();
         _initializeAfterBuild();
     }
 
-    _setupListeners(){
-    }
 
     void _initializeAfterBuild()
     {
@@ -93,6 +90,10 @@ class DashboardController extends GetxController
         {
 
         }
+    }
+
+    Future<void> refreshDashboard() async {
+        await loadDashboardData();
     }
 
     void showAuthBottomSheet()

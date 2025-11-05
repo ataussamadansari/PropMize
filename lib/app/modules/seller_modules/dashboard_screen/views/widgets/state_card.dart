@@ -72,7 +72,7 @@ class StateCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(isSmall ? 8 : 10), // Reduce icon padding
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(

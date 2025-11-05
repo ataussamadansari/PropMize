@@ -13,7 +13,11 @@ class PricingCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final basePrice = pricing?.basePrice ?? price;
+    final basePrice = pricing!.basePrice ?? price;
+
+    debugPrint(
+        '👁️ pricing: ${pricing!.basePrice}, \n price: $price, \n basePrice: $basePrice'
+    );
 
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -29,15 +33,14 @@ class PricingCardItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                // "₹ $basePrice",
                 '${AppHelpers.formatCurrency(basePrice ?? 0)} ${currency ?? 'INR'}',
                 style: context.textTheme.headlineMedium?.copyWith(color: Colors.green),
               ),
-              if (pricing?.basePrice != null)
+              if (pricing!.basePrice! > 0)
                 Text(" /Month", style: context.textTheme.bodySmall),
             ],
           ),
-          if (pricing?.maintenanceCharges != null || pricing?.securityDeposit != null) ...[
+          if (pricing!.maintenanceCharges! > 0 || pricing!.securityDeposit! > 0) ...[
             Divider(color: context.theme.colorScheme.surfaceContainerHighest),
             Row(
               children: [

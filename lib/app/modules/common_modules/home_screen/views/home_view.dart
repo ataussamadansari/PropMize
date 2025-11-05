@@ -78,7 +78,7 @@ class HomeView extends GetView<HomeController> {
             duration: Duration(milliseconds: 2000),
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.2),
+                color: AppColors.primary.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
               padding: EdgeInsets.all(12.0),

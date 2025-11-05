@@ -14,8 +14,6 @@ class HelpAndSupportView extends GetView<HelpAndSupportController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Help & Support"),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
       ),
@@ -112,7 +110,7 @@ class HelpAndSupportView extends GetView<HelpAndSupportController> {
         const SizedBox(height: 20),
 
         // FAQ List
-        ...controller.faqs.map((faq) => FAQItem(faq: faq)).toList(),
+        ...controller.faqs.map((faq) => FAQItem(faq: faq)),
       ],
     );
   }

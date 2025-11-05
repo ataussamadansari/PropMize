@@ -154,21 +154,22 @@ class EditSellRentPropertyController extends GetxController
 
     // ========== LIFECYCLE METHODS ==========
 
-
     @override
-    void onClose() 
+    void onClose()
     {
         pageController.dispose();
         _disposeAllControllers();
-        Future.delayed(Duration.zero, (){
-            resetForm();
-        });
+        Future.delayed(Duration.zero, ()
+            {
+                resetForm();
+            }
+        );
         super.onClose();
     }
 
     // ========== EDITING METHODS ==========
 
-    void loadPropertyForEditing(Data data) 
+    void loadPropertyForEditing(Data data)
     {
         editingPropertyId.value = data.id ?? '';
 
@@ -183,7 +184,7 @@ class EditSellRentPropertyController extends GetxController
         areaUnit.value = _formatUnitForDisplay(data.area?.unit ?? 'sqft');
 
         // Load built-up area if exists
-        if (data.buildUpArea?.value != null) 
+        if (data.buildUpArea?.value != null)
         {
             showBuildUpArea.value = true;
             buildUpAreaController.text = data.buildUpArea!.value!.toString();
@@ -191,7 +192,7 @@ class EditSellRentPropertyController extends GetxController
         }
 
         // Load super built-up area if exists
-        if (data.superBuildUpArea?.value != null) 
+        if (data.superBuildUpArea?.value != null)
         {
             showSuperBuildUpArea.value = true;
             superBuildUpAreaController.text = data.superBuildUpArea!.value!.toString();
@@ -239,6 +240,21 @@ class EditSellRentPropertyController extends GetxController
         // Load pricing
         priceController.text = data.price?.toString() ?? '';
 
+        final pricing = data.pricing!;
+
+        if (pricing.basePrice != null) 
+        {
+            monthlyRentController.text = pricing.basePrice.toString();
+        }
+        if (pricing.maintenanceCharges != null) 
+        {
+            maintenanceChargesController.text = pricing.maintenanceCharges.toString();
+        }
+        if (pricing.securityDeposit != null) 
+        {
+            securityDepositController.text = pricing.securityDeposit.toString();
+        }
+
         // Load contact info
         contactNameController.text = data.contact?.name ?? '';
         contactPhoneController.text = data.contact?.phone ?? '';
@@ -259,9 +275,9 @@ class EditSellRentPropertyController extends GetxController
 
     // ========== NEARBY PLACES METHODS ==========
 
-    void addSchool() 
+    void addSchool()
     {
-        if (schoolNameController.text.isNotEmpty && schoolDistanceController.text.isNotEmpty) 
+        if (schoolNameController.text.isNotEmpty && schoolDistanceController.text.isNotEmpty)
         {
             nearbySchools.add(Schools(
                     name: schoolNameController.text,
@@ -274,9 +290,9 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    void addHospital() 
+    void addHospital()
     {
-        if (hospitalNameController.text.isNotEmpty && hospitalDistanceController.text.isNotEmpty) 
+        if (hospitalNameController.text.isNotEmpty && hospitalDistanceController.text.isNotEmpty)
         {
             nearbyHospitals.add(Hospitals(
                     name: hospitalNameController.text,
@@ -289,9 +305,9 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    void addMall() 
+    void addMall()
     {
-        if (mallNameController.text.isNotEmpty && mallDistanceController.text.isNotEmpty) 
+        if (mallNameController.text.isNotEmpty && mallDistanceController.text.isNotEmpty)
         {
             nearbyMalls.add(Malls(
                     name: mallNameController.text,
@@ -304,9 +320,9 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    void addTransport() 
+    void addTransport()
     {
-        if (transportNameController.text.isNotEmpty && transportDistanceController.text.isNotEmpty) 
+        if (transportNameController.text.isNotEmpty && transportDistanceController.text.isNotEmpty)
         {
             nearbyTransport.add(Transport(
                     name: transportNameController.text,
@@ -325,14 +341,14 @@ class EditSellRentPropertyController extends GetxController
     {
         final List<XFile> pickedFiles = await _picker.pickMultiImage(imageQuality: 80);
 
-        if (pickedFiles.isNotEmpty) 
+        if (pickedFiles.isNotEmpty)
         {
             for (var file in pickedFiles)
             {
                 images.add(file.path);
             }
         }
-        else 
+        else
         {
             AppHelpers.showSnackBar(
                 title: "No Images Selected",
@@ -341,9 +357,9 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    void removeImage(int index) 
+    void removeImage(int index)
     {
-        if (index >= 0 && index < images.length) 
+        if (index >= 0 && index < images.length)
         {
             images.removeAt(index);
         }
@@ -351,15 +367,15 @@ class EditSellRentPropertyController extends GetxController
 
     // ========== STEPPER NAVIGATION ==========
 
-    void nextStep() 
+    void nextStep()
     {
-        if (currentStep.value >= formKeys.length) 
+        if (currentStep.value >= formKeys.length)
         {
             submitProperty();
             return;
         }
 
-        if (formKeys[currentStep.value].currentState!.validate()) 
+        if (formKeys[currentStep.value].currentState!.validate())
         {
             currentStep.value++;
             pageController.animateToPage(
@@ -370,9 +386,9 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    void previousStep() 
+    void previousStep()
     {
-        if (currentStep.value > 0) 
+        if (currentStep.value > 0)
         {
             currentStep.value--;
             pageController.animateToPage(
@@ -383,9 +399,9 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    void onStepTapped(int step) 
+    void onStepTapped(int step)
     {
-        if (step < currentStep.value) 
+        if (step < currentStep.value)
         {
             currentStep.value = step;
             pageController.animateToPage(
@@ -394,12 +410,12 @@ class EditSellRentPropertyController extends GetxController
                 curve: Curves.ease
             );
         }
-        else if (step > currentStep.value) 
+        else if (step > currentStep.value)
         {
             bool allValid = true;
             for (int i = currentStep.value; i < step; i++)
             {
-                if (!formKeys[i].currentState!.validate()) 
+                if (!formKeys[i].currentState!.validate())
                 {
                     allValid = false;
                     currentStep.value = i;
@@ -411,7 +427,7 @@ class EditSellRentPropertyController extends GetxController
                     break;
                 }
             }
-            if (allValid) 
+            if (allValid)
             {
                 currentStep.value = step;
                 pageController.animateToPage(
@@ -430,87 +446,87 @@ class EditSellRentPropertyController extends GetxController
         isLoading.value = true;
         errorMessage.value = '';
 
-        final Map<String, dynamic> payload = 
-        {
-            "title": titleController.text,
-            "description": descriptionController.text,
-            "propertyType": propertyType.value.toLowerCase(),
-            "listingType": listingType.value.toLowerCase().replaceAll('for ', ''),
-            "price": int.tryParse(priceController.text) ?? 0,
-            "area":
+        final Map<String, dynamic> payload =
             {
-                "value": int.tryParse(areaController.text),
-                "unit": _formatUnit(areaUnit.value)
-            },
-            if (buildUpAreaController.text.isNotEmpty) "buildUpArea":
-            {
-                "value": int.tryParse(buildUpAreaController.text),
-                "unit": _formatUnit(buildUpAreaUnit.value)
-            },
-            if (superBuildUpAreaController.text.isNotEmpty) "superBuildUpArea":
-            {
-                "value": int.tryParse(superBuildUpAreaController.text),
-                "unit": _formatUnit(superBuildUpAreaUnit.value)
-            },
-            "furnished": furnishingStatus.value.toLowerCase(),
-            "age": int.tryParse(propertyAgeController.text) ?? 0,
-            "bedrooms": int.tryParse(bedroomsController.text),
-            "bathrooms": int.tryParse(bathroomsController.text),
-            "balconies": int.tryParse(balconiesController.text),
-            "parking": int.tryParse(parkingController.text),
-            "floor": int.tryParse(floorController.text),
-            "totalFloors": int.tryParse(totalFloorsController.text),
-            "address":
-            {
-                "street": streetController.text,
-                "area": areaNameController.text,
-                "city": cityController.text,
-                "state": stateController.text,
-                "zipCode": zipCodeController.text,
-                "country": countryController.text,
-                "landmark": landmarkController.text
-            },
-            "features":
-            {
-                "facing": facing.value.toLowerCase().replaceAll('-', ''),
-                "flooringType": flooringTypeController.text,
-                "waterSupply": waterSupplyController.text,
-                "powerBackup": powerBackup.value,
-                "servantRoom": servantRoom.value,
-                "poojaRoom": poojaRoom.value,
-                "studyRoom": studyRoom.value,
-                "storeRoom": storeRoom.value,
-                "garden": garden.value,
-                "swimmingPool": swimmingPool.value,
-                "gym": gym.value,
-                "lift": lift.value,
-                "security": security.value
-            },
-            "amenities": amenities.toList(),
-            "nearbyPlaces":
-            {
-                "schools": nearbySchools.map((school) => school.toJson()).toList(),
-                "hospitals": nearbyHospitals.map((hospital) => hospital.toJson()).toList(),
-                "malls": nearbyMalls.map((mall) => mall.toJson()).toList(),
-                "transport": nearbyTransport.map((transport) => transport.toJson()).toList()
-            },
-            "images": images.toList(),
-            "contact":
-            {
-                "name": contactNameController.text,
-                "phone": contactPhoneController.text,
-                "whatsapp": contactWhatsappController.text,
-                "type": contactType.value.toLowerCase()
-            },
-            "notes": additionalNotesController.text,
-            "pricing":
-            {
-                "basePrice": int.tryParse(monthlyRentController.text) ?? 0,
-                "maintenanceCharges": int.tryParse(maintenanceChargesController.text) ?? 0,
-                "securityDeposit": int.tryParse(securityDepositController.text) ?? 0,
-                "priceNegotiable": true
-            }
-        };
+                "title": titleController.text,
+                "description": descriptionController.text,
+                "propertyType": propertyType.value.toLowerCase(),
+                "listingType": listingType.value.toLowerCase().replaceAll('for ', ''),
+                "price": int.tryParse(priceController.text) ?? 0,
+                "area":
+                {
+                    "value": int.tryParse(areaController.text),
+                    "unit": _formatUnit(areaUnit.value)
+                },
+                if (buildUpAreaController.text.isNotEmpty) "buildUpArea":
+                {
+                    "value": int.tryParse(buildUpAreaController.text),
+                    "unit": _formatUnit(buildUpAreaUnit.value)
+                },
+                if (superBuildUpAreaController.text.isNotEmpty) "superBuildUpArea":
+                {
+                    "value": int.tryParse(superBuildUpAreaController.text),
+                    "unit": _formatUnit(superBuildUpAreaUnit.value)
+                },
+                "furnished": furnishingStatus.value.toLowerCase(),
+                "age": int.tryParse(propertyAgeController.text) ?? 0,
+                "bedrooms": int.tryParse(bedroomsController.text),
+                "bathrooms": int.tryParse(bathroomsController.text),
+                "balconies": int.tryParse(balconiesController.text),
+                "parking": int.tryParse(parkingController.text),
+                "floor": int.tryParse(floorController.text),
+                "totalFloors": int.tryParse(totalFloorsController.text),
+                "address":
+                {
+                    "street": streetController.text,
+                    "area": areaNameController.text,
+                    "city": cityController.text,
+                    "state": stateController.text,
+                    "zipCode": zipCodeController.text,
+                    "country": countryController.text,
+                    "landmark": landmarkController.text
+                },
+                "features":
+                {
+                    "facing": facing.value.toLowerCase().replaceAll('-', ''),
+                    "flooringType": flooringTypeController.text,
+                    "waterSupply": waterSupplyController.text,
+                    "powerBackup": powerBackup.value,
+                    "servantRoom": servantRoom.value,
+                    "poojaRoom": poojaRoom.value,
+                    "studyRoom": studyRoom.value,
+                    "storeRoom": storeRoom.value,
+                    "garden": garden.value,
+                    "swimmingPool": swimmingPool.value,
+                    "gym": gym.value,
+                    "lift": lift.value,
+                    "security": security.value
+                },
+                "amenities": amenities.toList(),
+                "nearbyPlaces":
+                {
+                    "schools": nearbySchools.map((school) => school.toJson()).toList(),
+                    "hospitals": nearbyHospitals.map((hospital) => hospital.toJson()).toList(),
+                    "malls": nearbyMalls.map((mall) => mall.toJson()).toList(),
+                    "transport": nearbyTransport.map((transport) => transport.toJson()).toList()
+                },
+                "images": images.toList(),
+                "contact":
+                {
+                    "name": contactNameController.text,
+                    "phone": contactPhoneController.text,
+                    "whatsapp": contactWhatsappController.text,
+                    "type": contactType.value.toLowerCase()
+                },
+                "notes": additionalNotesController.text,
+                "pricing":
+                {
+                    "basePrice": num.tryParse(monthlyRentController.text) ?? '',
+                    "maintenanceCharges": num.tryParse(maintenanceChargesController.text) ?? '',
+                    "securityDeposit": num.tryParse(securityDepositController.text) ?? '',
+                    "priceNegotiable": true
+                }
+            };
 
         // Clean up payload
         (payload['features'] as Map).removeWhere((key, value) =>
@@ -520,12 +536,9 @@ class EditSellRentPropertyController extends GetxController
 
         try
         {
-            ApiResponse<PropertyByIdModel> response;
+            final response = await _propertiesRepo.updateProperty(editingPropertyId.value, payload);
 
-            response = await _propertiesRepo.updateProperty(editingPropertyId.value, payload);
-
-
-            if (response.success) 
+            if (response.success)
             {
                 AppHelpers.showSnackBar(
                     title: "Success",
@@ -535,7 +548,7 @@ class EditSellRentPropertyController extends GetxController
 
                 Future.delayed(Duration.zero, ()
                     {
-                        Get.back();
+                        resetForm();
                     }
                 );
             }
@@ -566,13 +579,14 @@ class EditSellRentPropertyController extends GetxController
 
     // ========== FORM MANAGEMENT ==========
 
-    void resetForm() 
+    void resetForm()
     {
         debugPrint("Call Reset form...");
 
         editingPropertyId.value = '';
         currentStep.value = 0;
-        if (pageController.hasClients) {
+        if (pageController.hasClients) 
+        {
             pageController.jumpToPage(0);
         }
 
@@ -582,7 +596,7 @@ class EditSellRentPropertyController extends GetxController
         _resetFormValidation();
     }
 
-    void _clearAllControllers() 
+    void _clearAllControllers()
     {
         debugPrint("Call Clear All Controller...");
         // Basic Details
@@ -631,7 +645,7 @@ class EditSellRentPropertyController extends GetxController
         transportDistanceController.clear();
     }
 
-    void _resetAllRxValues() 
+    void _resetAllRxValues()
     {
         debugPrint("Call Reset All Rx Values...");
 
@@ -672,7 +686,7 @@ class EditSellRentPropertyController extends GetxController
         transportDistanceUnit.value = 'km';
     }
 
-    void _clearAllLists() 
+    void _clearAllLists()
     {
         debugPrint("Call Clear All Lists...");
 
@@ -684,7 +698,7 @@ class EditSellRentPropertyController extends GetxController
         images.clear();
     }
 
-    void _resetFormValidation() 
+    void _resetFormValidation()
     {
         debugPrint("Call Reset Form Validation...");
 
@@ -694,7 +708,7 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    void _disposeAllControllers() 
+    void _disposeAllControllers()
     {
         debugPrint("Call Dispose All Controllers...");
         // Basic Details
@@ -746,7 +760,7 @@ class EditSellRentPropertyController extends GetxController
 
     // ========== HELPER METHODS ==========
 
-    String _capitalizeFirst(String text) 
+    String _capitalizeFirst(String text)
     {
         if (text.isEmpty) return text;
         final words = text.split(' ');
@@ -759,7 +773,7 @@ class EditSellRentPropertyController extends GetxController
         return capitalizedWords.join(' ');
     }
 
-    String _formatListingFurnished(String furnishing) 
+    String _formatListingFurnished(String furnishing)
     {
         switch (furnishing.toLowerCase())
         {
@@ -770,7 +784,7 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    String _formatListingTypeForDisplay(String listingType) 
+    String _formatListingTypeForDisplay(String listingType)
     {
         switch (listingType.toLowerCase())
         {
@@ -781,7 +795,7 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    String _formatFacingType(String facing) 
+    String _formatFacingType(String facing)
     {
         switch (facing.toLowerCase())
         {
@@ -797,7 +811,7 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    String _formatUnitForDisplay(String unit) 
+    String _formatUnitForDisplay(String unit)
     {
         switch (unit.toLowerCase())
         {
@@ -811,7 +825,7 @@ class EditSellRentPropertyController extends GetxController
         }
     }
 
-    String _formatUnit(String unit) 
+    String _formatUnit(String unit)
     {
         switch (unit)
         {

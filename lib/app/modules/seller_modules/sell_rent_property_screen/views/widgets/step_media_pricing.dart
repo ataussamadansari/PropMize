@@ -135,7 +135,7 @@ class StepMediaPricing extends GetView<SellRentPropertyController>
                                         controller: controller.priceController,
                                         labelText: "Sale Price (₹)",
                                         hintText: "Enter sale price",
-                                        isRequired: true,
+                                        isRequired: !isRentOrLease,
                                         isNumeric: true
                                     ),
                                     secondChild: Column(
@@ -373,7 +373,7 @@ class StepMediaPricing extends GetView<SellRentPropertyController>
                                         Expanded(
                                             flex: 1,
                                             child: DropdownButtonFormField<String>(
-                                                value: unit.value,
+                                                initialValue: unit.value,
                                                 items: unitOptions.map((u) => DropdownMenuItem(value: u, child: Text(u))).toList(),
                                                 onChanged: (val) => unit.value = val!,
                                                 decoration: const InputDecoration(border: OutlineInputBorder())

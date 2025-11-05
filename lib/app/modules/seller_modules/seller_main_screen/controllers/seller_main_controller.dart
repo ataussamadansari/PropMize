@@ -2,17 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prop_mize/app/modules/seller_modules/analytics_screen/views/analytics_view.dart';
-import 'package:prop_mize/app/modules/seller_modules/dashboard_screen/views/dashboard_view.dart';
-import 'package:prop_mize/app/modules/seller_modules/leads_screen/views/leads_view.dart';
-import 'package:prop_mize/app/modules/seller_modules/my_property_screen/views/my_property_view.dart';
-import 'package:prop_mize/app/modules/seller_modules/sell_rent_property_screen/views/sell_rent_property_view.dart';
-import 'package:prop_mize/app/routes/app_routes.dart';
+import '../../../../modules/seller_modules/analytics_screen/views/analytics_view.dart';
+import '../../../../modules/seller_modules/dashboard_screen/views/dashboard_view.dart';
+import '../../../../modules/seller_modules/leads_screen/views/leads_view.dart';
+import '../../../../modules/seller_modules/my_property_screen/views/my_property_view.dart';
+import '../../../../modules/seller_modules/sell_rent_property_screen/views/sell_rent_property_view.dart';
+import '../../../../routes/app_routes.dart';
 
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/services/storage/storage_services.dart';
 import '../../../common_modules/auth_screen/controllers/auth_controller.dart';
-import '../../sell_rent_property_screen/controllers/sell_rent_property_controller.dart';
 
 
 class SellerMainController extends GetxController {
@@ -218,6 +217,7 @@ class SellerMainController extends GetxController {
   void goToProfile() => Get.toNamed(Routes.profile);
   void goToSellerGuide() => Get.toNamed(Routes.sellerGuide);
   void goToHelpSupport() => Get.toNamed(Routes.helpAndSupport);
+  void goToPlan() => Get.toNamed(Routes.plans);
 
   void viewAllInquiries() => currentIndex.value = 1;
   void viewAllMyProperties() => currentIndex.value = 3;

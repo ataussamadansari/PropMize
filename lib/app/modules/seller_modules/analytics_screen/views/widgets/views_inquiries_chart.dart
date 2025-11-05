@@ -50,7 +50,7 @@ class ViewsInquiriesChart extends StatelessWidget {
                       );
                     },
                   ),
-                  alignment: BarChartAlignment.spaceAround,
+                  alignment: BarChartAlignment.spaceBetween,
                 ),
               ),
             ),
@@ -127,7 +127,7 @@ class ViewsInquiriesChart extends StatelessWidget {
       ),
     ),
     leftTitles: const AxisTitles(
-      sideTitles: SideTitles(showTitles: true, reservedSize: 28),
+      sideTitles: SideTitles(showTitles: true, reservedSize: 30),
     ),
     topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
     rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -136,7 +136,7 @@ class ViewsInquiriesChart extends StatelessWidget {
   BarTouchData get barTouchData => BarTouchData(
     enabled: true,
     touchTooltipData: BarTouchTooltipData(
-      getTooltipColor: (_) => Colors.blueGrey,
+      getTooltipColor: (_) => AppColors.primary,
       tooltipPadding: const EdgeInsets.all(8),
       getTooltipItem: (group, groupIndex, rod, rodIndex) {
         String label = rodIndex == 0 ? "Views" : "Inquiries";

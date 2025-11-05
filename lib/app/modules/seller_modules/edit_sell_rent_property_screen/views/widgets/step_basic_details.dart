@@ -26,7 +26,7 @@ class StepBasicDetails extends GetView<EditSellRentPropertyController>
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                                Row(
+                                /*Row(
                                     children: [
                                         Expanded(
                                             child: Obx(() => CustomDropdownField<String>(
@@ -49,7 +49,7 @@ class StepBasicDetails extends GetView<EditSellRentPropertyController>
                                         )
                                     ]
                                 ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 16),*/
                                 CustomTextField(
                                     controller: controller.titleController,
                                     labelText: 'Property Title',

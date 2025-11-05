@@ -1,5 +1,3 @@
-import 'buyer.dart';
-
 class Leads
 {
   Leads({

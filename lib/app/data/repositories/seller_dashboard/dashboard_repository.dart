@@ -57,7 +57,7 @@ class DashboardRepository {
   {
     if (response.statusCode == 200 && response.data != null)
     {
-      return ApiResponse.success(response.data!, message: response.message);
+      return ApiResponse.success(response.data as T, message: response.message);
     }
     else
     {

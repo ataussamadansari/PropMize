@@ -11,24 +11,24 @@ class BuyerMainView extends GetView<BuyerMainController> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime? _lastPointerDown;
-    bool _isScrollGesture = false;
+    DateTime? lastPointerDown;
+    bool isScrollGesture = false;
 
     return Listener(
       onPointerDown: (event) {
-        _lastPointerDown = DateTime.now();
-        _isScrollGesture = false;
+        lastPointerDown = DateTime.now();
+        isScrollGesture = false;
       },
       onPointerMove: (event) {
-        if (_lastPointerDown != null &&
-            DateTime.now().difference(_lastPointerDown!) <
+        if (lastPointerDown != null &&
+            DateTime.now().difference(lastPointerDown!) <
                 const Duration(milliseconds: 150)) {
-          _isScrollGesture = true;
+          isScrollGesture = true;
         }
       },
       onPointerUp: (event) {
         // If user just tapped (not scrolled)
-        if (!_isScrollGesture) {
+        if (!isScrollGesture) {
           controller.onUserInteraction();
         }
       },

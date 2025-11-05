@@ -37,7 +37,7 @@ class ChoiceClientSellerBtn extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(isMobile ? 12 : 16),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -66,7 +66,7 @@ class ChoiceClientSellerBtn extends StatelessWidget {
                           subtitle,
                           style: context.textTheme.bodyMedium?.copyWith(
                             fontSize: isMobile ? 13 : 14,
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -77,7 +77,7 @@ class ChoiceClientSellerBtn extends StatelessWidget {
                   Icon(
                     Icons.arrow_forward_ios,
                     size: isMobile ? 16 : 18,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ],
               ),

@@ -5,12 +5,10 @@ import 'lists/area.dart';
 import 'lists/contact.dart';
 import 'lists/contacted_by.dart';
 import 'lists/features.dart';
-import 'lists/leads.dart';
 import 'lists/liked_by.dart';
 import 'lists/near_by_places.dart';
 import 'lists/pricing.dart';
 import 'lists/seo.dart';
-import 'lists/seller.dart';
 import 'lists/viewed_by.dart';
 
 class Data
@@ -60,79 +58,9 @@ class Data
         this.updatedAt,
         this.v});
 
-    /*Data.fromJson(dynamic json) {
-        area = json['area'] != null ? Area.fromJson(json['area']) : null;
-        buildUpArea = json['buildUpArea'] != null ? BuildUpArea.fromJson(json['buildUpArea']) : null;
-        superBuildUpArea = json['superBuildUpArea'] != null ? SuperBuildUpArea.fromJson(json['superBuildUpArea']) : null;
-        address = json['address'] != null ? Address.fromJson(json['address']) : null;
-        seo = json['seo'] != null ? Seo.fromJson(json['seo']) : null;
-        pricing = json['pricing'] != null ? Pricing.fromJson(json['pricing']) : null;
-        contact = json['contact'] != null ? Contact.fromJson(json['contact']) : null;
-        features = json['features'] != null ? Features.fromJson(json['features']) : null;
-        nearbyPlaces = json['nearbyPlaces'] != null ? NearbyPlaces.fromJson(json['nearbyPlaces']) : null;
-        id = json['_id'];
-        title = json['title'];
-        description = json['description'];
-        propertyType = json['propertyType'];
-        listingType = json['listingType'];
-        price = json['price'];
-        currency = json['currency'];
-        bedrooms = json['bedrooms'];
-        bathrooms = json['bathrooms'];
-        balconies = json['balconies'];
-        parking = json['parking'];
-        furnished = json['furnished'];
-        floor = json['floor'];
-        totalFloors = json['totalFloors'];
-        age = json['age'];
-        images = json['images'] != null ? json['images'].cast<String>() : [];
-        videos = json['videos'] != null ? json['videos'].cast<String>() : [];
-        amenities = json['amenities'] != null ? json['amenities'].cast<String>() : [];
-        seller = json['seller'] != null ? Seller.fromJson(json['seller']) : null;
-        status = json['status'];
-        featured = json['featured'];
-        premium = json['premium'];
-        views = json['views'];
-        likes = json['likes'] != null ? json['likes'].cast<String>() : [];
-        // leads = json['leads'] != null ? json['leads'].cast<String>() : [];
-        approvalStatus = json['approvalStatus'];
-        notes = json['notes'];
-        if (json['viewedBy'] != null) {
-            viewedBy = [];
-            json['viewedBy'].forEach((v) {
-                viewedBy?.add(ViewedBy.fromJson(v));
-            });
-        } else {
-            viewedBy = null;
-        }
-
-        if (json['likedBy'] != null) {
-            likedBy = [];
-            json['likedBy'].forEach((v) {
-                likedBy?.add(LikedBy.fromJson(v));
-            });
-        } else {
-            likedBy = null;
-        }
-
-        if (json['contactedBy'] != null) {
-            contactedBy = [];
-            json['contactedBy'].forEach((v) {
-                contactedBy?.add(ContactedBy.fromJson(v));
-            });
-        } else {
-            contactedBy = null;
-        }
-        expiresAt = json['expiresAt'];
-        createdAt = json['createdAt'];
-        updatedAt = json['updatedAt'];
-        v = json['__v'];
-    }*/
 
     Data.fromJson(dynamic json)
     {
-        print("=== START Data.fromJson ===");
-
         // --- FIX FOR NESTED/STRINGIFIED JSON OBJECTS ---
         dynamic parsePotentiallyStringifiedJson(dynamic value)
         {

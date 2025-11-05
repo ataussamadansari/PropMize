@@ -68,14 +68,14 @@ class InquiryItem extends StatelessWidget {
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                      color: recentLeads.status! == "new" ? Colors.deepOrange.withValues(alpha: 0.1) : Colors.green.withValues(alpha: 0.1),
+                      color: _getStatusColor(recentLeads.status!).withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(8)
                   ),
                   child: Text(
                       recentLeads.status!.capitalizeFirst!,
                       style: TextStyle(
                           fontSize: 10,
-                          color: recentLeads.status! == "new" ? Colors.deepOrange : Colors.green,
+                          color: _getStatusColor(recentLeads.status!),
                           fontWeight: FontWeight.w600
                       )
                   )
@@ -83,6 +83,19 @@ class InquiryItem extends StatelessWidget {
             ]
         )
     );
+  }
+
+  Color _getStatusColor(String status) {
+    return switch(status) {
+      'new' => Colors.blue,
+      'contacted' => Colors.orange,
+      'interested' => Colors.greenAccent,
+      'not-interested' => Colors.amber,
+      'converted' => Colors.green,
+      'lost' => Colors.red,
+      'rejected' => Colors.deepOrange,
+      _ => Colors.blue,
+    };
   }
 }
 

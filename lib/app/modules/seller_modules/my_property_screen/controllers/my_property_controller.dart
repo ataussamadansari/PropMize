@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/status_message_model.dart';
+import '../../../../data/models/status_message_model.dart';
 
 import '../../../../core/utils/helpers.dart';
 import '../../../../data/models/properties/data.dart';
 import '../../../../data/repositories/properties/properties_repository.dart';
 import '../../edit_sell_rent_property_screen/controllers/edit_sell_rent_property_controller.dart';
-import '../../sell_rent_property_screen/controllers/sell_rent_property_controller.dart';
 
 class MyPropertyController extends GetxController {
   final PropertiesRepository _propertiesRepo = PropertiesRepository();
@@ -133,5 +132,10 @@ class MyPropertyController extends GetxController {
 
     // Navigate to edit screen
     Get.toNamed('/edit-sell-rent-property');
+  }
+
+  void navigateToPropertyDetails(String propertyId)
+  {
+    Get.toNamed('/product/$propertyId');
   }
 }

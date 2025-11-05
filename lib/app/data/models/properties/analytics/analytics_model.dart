@@ -89,7 +89,8 @@ class Summary {
       this.totalProperties, 
       this.activeProperties, 
       this.totalValue, 
-      this.averagePrice,});
+      this.averagePrice,
+  });
 
   Summary.fromJson(dynamic json) {
     totalProperties = json['totalProperties'];
@@ -100,7 +101,7 @@ class Summary {
   int? totalProperties;
   int? activeProperties;
   int? totalValue;
-  int? averagePrice;
+  double? averagePrice;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

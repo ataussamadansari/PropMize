@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:prop_mize/app/data/models/leads/leads_model.dart';
 import 'package:prop_mize/app/data/repositories/leads/leads_repository.dart';
 
+import '../../../../data/services/leads/leads_service.dart';
+
 class LeadsController extends GetxController {
   final LeadsRepository _leadsRepository = LeadsRepository();
+  final LeadsService _leadsService = Get.find<LeadsService>(); // ✅ GetxService
 
   // ----- State Management -----
   final RxBool isLoading = true.obs;
@@ -16,7 +19,7 @@ class LeadsController extends GetxController {
   final _allLeads = <Data>[];
   final RxList<Data> filteredLeads = <Data>[].obs;
   final RxString selectedStatus = 'All Statuses'.obs;
-  final RxList<String> statusOptions = <String>['All Statuses', 'New', 'Contacted', 'Converted', 'Lost'].obs;
+  final RxList<String> statusOptions = <String>['All Statuses', 'New', 'Contacted', 'Converted','Not Interested', 'Interested', 'Lost', 'Rejected'].obs;
   final TextEditingController searchController = TextEditingController();
 
   // ----- Pagination -----
@@ -26,9 +29,33 @@ class LeadsController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
     searchController.addListener(_filterLeads);
+
+    // ✅ REAL-TIME UPDATES SUNO
+    ever(_leadsService.lastUpdatedLeadId, (String? leadId) {
+      if (leadId != null) {
+        _updateLocalLeadStatus(leadId);
+      }
+    });
+
     loadLeadsData();
+    super.onInit();
+  }
+
+  /// Jab bhi koi lead update hoti hai, yahan automatically call hoga
+  void _updateLocalLeadStatus(String leadId) {
+    final newStatus = _leadsService.leadStatusMap[leadId];
+    if (newStatus != null) {
+      print('🔄 Updating local lead $leadId to $newStatus');
+
+      // Local list mein update karo
+      final index = _allLeads.indexWhere((lead) => lead.id == leadId);
+      if (index != -1) {
+        // Simple status update - agar aapke model immutable nahi hai
+        _allLeads[index].status = newStatus;
+        _filterLeads(); // UI refresh
+      }
+    }
   }
 
   /// Load initial leads data or refresh the list.
@@ -122,145 +149,3 @@ class LeadsController extends GetxController {
 }
 
 
-/*import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/leads/leads_model.dart';
-import 'package:prop_mize/app/data/repositories/leads/leads_repository.dart';
-
-class LeadsController extends GetxController {
-  final LeadsRepository _leadsRepository = LeadsRepository();
-
-  // ----- State Management -----
-  final RxBool isLoading = true.obs;
-  final RxBool hasError = false.obs;
-  final RxString errorMessage = "".obs;
-
-  // ----- Data & Filtering -----
-  final _leadsModel = Rxn<LeadsModel>();
-  final RxList<Data> filteredLeads = <Data>[].obs;
-  final RxString selectedStatus = 'All Statuses'.obs;
-  final RxList<String> statusOptions = <String>['All Statuses', 'New', 'Contacted', 'Converted', 'Lost'].obs;
-  final TextEditingController searchController = TextEditingController();
-
-  @override
-  void onInit() {
-    super.onInit();
-    searchController.addListener(_filterLeads);
-    loadLeadsData();
-  }
-
-  /// Load leads data from the repository
-  Future<void> loadLeadsData() async {
-    try {
-      isLoading.value = true;
-      hasError.value = false;
-      final response = await _leadsRepository.getLeads();
-      if (response.success && response.data != null) {
-        _leadsModel.value = response.data;
-        filteredLeads.assignAll(_leadsModel.value!.data!);
-      } else {
-        hasError.value = true;
-        errorMessage.value = response.message;
-      }
-    } catch (e) {
-      hasError.value = true;
-      errorMessage.value = "An unexpected error occurred: $e";
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  /// Filter leads based on search query and selected status
-  void _filterLeads() {
-    final query = searchController.text.toLowerCase();
-    final status = selectedStatus.value;
-    final allLeads = _leadsModel.value?.data ?? [];
-
-    var leads = allLeads.where((lead) {
-      final buyerName = lead.buyer?.name?.toLowerCase() ?? '';
-      final propertyName = lead.property?.title?.toLowerCase() ?? '';
-      return buyerName.contains(query) || propertyName.contains(query);
-    }).toList();
-
-    if (status != 'All Statuses') {
-      leads = leads.where((lead) => (lead.status?.toLowerCase() ?? '') == status.toLowerCase()).toList();
-    }
-
-    filteredLeads.assignAll(leads);
-  }
-
-  /// Update the filter when a new status is selected
-  void changeStatus(String? newStatus) {
-    if (newStatus != null) {
-      selectedStatus.value = newStatus;
-      _filterLeads();
-    }
-  }
-
-  @override
-  void onClose() {
-    searchController.dispose();
-    super.onClose();
-  }
-}*/
-
-
-/*
-import 'package:get/get.dart';
-import 'package:prop_mize/app/data/models/leads/leads_model.dart';
-import 'package:prop_mize/app/data/repositories/leads/leads_repository.dart';
-
-import '../../../../data/services/storage/storage_services.dart';
-
-class LeadsController extends GetxController {
-
-  //----------------------------------------------------------------------------
-  // Dependency
-  //----------------------------------------------------------------------------
-  final LeadsRepository _leadsRepository = LeadsRepository();
-
-  //----------------------------------------------------------------------------
-  // Variables
-  //----------------------------------------------------------------------------
-  final leadsModel = Rxn<LeadsModel>();
-  final RxBool hasError = false.obs;
-  final RxString errorMessage = "".obs;
-  final RxBool isLoading = false.obs;
-
-  // ===== Computed Getters =====
-  RxString get currentUserId => StorageServices.to.userId;
-
-  @override
-  void onInit() {
-    super.onInit();
-    _initialized();
-  }
-
-  void _initialized() {
-    loadLeadsData();
-  }
-
-  /// Load leads data
-  Future<void> loadLeadsData() async {
-    try {
-      isLoading.value = true;
-      hasError.value = false;
-      errorMessage.value = "";
-
-      final response = await _leadsRepository.getLeads();
-      if(response.success && response.data != null) {
-        leadsModel.value = response.data;
-      } else {
-        hasError.value = true;
-        errorMessage.value = response.message;
-      }
-    } catch (e) {
-      hasError.value = true;
-      errorMessage.value = "An unexpected error occurred: $e";
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-}
-*/

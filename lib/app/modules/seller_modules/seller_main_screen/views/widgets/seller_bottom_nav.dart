@@ -79,7 +79,38 @@ class SellerBottomNav extends GetView<SellerMainController> {
                     onTap: () {
                       controller.changePage(2); // Assistant page index
                     },
-                    child: AnimatedContainer(
+                    child: AnimatedScale(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.linear,
+                      alignment: Alignment.bottomCenter,
+                      scale: controller.isBottomNavVisible.value ? 1.0 : 0.0,
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: controller.currentIndex.value == 2 ? AppColors.primary : Theme.of(context).cardColor,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withValues(alpha: 0.3),
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        child: AnimatedScale(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          scale: controller.currentIndex.value == 2 ? 1.3 : 1.0,
+                          child: Icon(
+                            Icons.add,
+                            color: controller.currentIndex.value == 2 ? Colors.white : Theme.of(context).iconTheme.color,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                    ),
+                    /*child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOutSine,
                       height: controller.isBottomNavVisible.value ? kBottomNavigationBarHeight : 0,
@@ -97,13 +128,17 @@ class SellerBottomNav extends GetView<SellerMainController> {
                             )
                           ],
                         ),
-                        child: Icon(
-                          Icons.add,
-                          color: controller.currentIndex.value == 2 ? Colors.white : Theme.of(context).iconTheme.color,
-                          size: controller.currentIndex.value == 2 ? 40: 28,
+                        child: AnimatedOpacity(
+                          duration: Duration(microseconds: 300),
+                          opacity: controller.isBottomNavVisible.value ? 1.0 : 0.0,
+                          child: Icon(
+                            Icons.add,
+                            color: controller.currentIndex.value == 2 ? Colors.white : Theme.of(context).iconTheme.color,
+                            size: controller.currentIndex.value == 2 ? 40: 28,
+                          ), 
                         ),
                       ),
-                    ),
+                    ),*/
                   ),
                 ),
               ]

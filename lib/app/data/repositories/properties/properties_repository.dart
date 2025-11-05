@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'dart:convert';
-import 'dart:io';
 import 'package:prop_mize/app/data/models/properties/analytics/analytics_model.dart';
-import 'package:prop_mize/app/data/models/properties/my_property/my_property_model.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../data/models/api_response_model.dart';
 import '../../../data/models/like/like_model.dart';
@@ -422,7 +420,6 @@ class PropertiesRepository
     // ---------------------------------------------------------------------------
     // 💾 Update Property
     // ---------------------------------------------------------------------------
-
     Future<ApiResponse<PropertyByIdModel>> updateProperty(
         String propertyId,
         Map<String, dynamic> payload,
@@ -430,79 +427,52 @@ class PropertiesRepository
         try {
             _cancelToken = CancelToken();
 
-            // 1. Extract ALL images (existing URLs + new local paths)
-            final List<String> allImageStrings = List<String>.from(payload.remove('images') ?? []);
-
+            final List<String> imagePaths = List<String>.from(payload.remove('images') ?? []);
             final List<MultipartFile> imageFiles = [];
-            final List<String> imageUrls = [];
 
-            // 2. Separate files and URLs
-            for (final imageString in allImageStrings) {
-                if (imageString.startsWith('http')) {
-                    // Existing image URL
-                    imageUrls.add(imageString);
-                } else {
-                    // New local file
-                    final fileName = imageString.split('/').last;
-                    imageFiles.add(await MultipartFile.fromFile(imageString, filename: fileName));
+            // Convert all images to files (replace all existing images)
+            for (final path in imagePaths) {
+                if (!path.startsWith('http')) { // Only upload new files, ignore URLs
+                    final fileName = path.split('/').last;
+                    imageFiles.add(await MultipartFile.fromFile(path, filename: fileName));
                 }
             }
 
-            // 3. Create FormData
             final formData = FormData();
 
-            // ✅ FIX 1: Add ALL images with SAME key 'images'
-            // Files add karo
-            for (final file in imageFiles) {
-                formData.files.add(MapEntry('images', file));
-            }
-            // URLs add karo
-            for (final url in imageUrls) {
-                formData.fields.add(MapEntry('images', url));
+            // Add images
+            if (imageFiles.isNotEmpty) {
+                formData.files.addAll(imageFiles.map((file) => MapEntry('images', file)));
             }
 
-            // ✅ FIX 2: Add amenities as SIMPLE ARRAY (not nested)
-            if (payload.containsKey('amenities')) {
-                final amenitiesList = payload['amenities'];
-
-                // ✅ Ensure it's encoded as simple JSON array
-                formData.fields.add(MapEntry('amenities', json.encode(amenitiesList)));
-                payload.remove('amenities'); // Remove from main payload
+            // Add image URLs as separate field (if you want to keep track)
+            final existingUrls = imagePaths.where((path) => path.startsWith('http')).toList();
+            if (existingUrls.isNotEmpty) {
+                formData.fields.add(MapEntry('image_urls', json.encode(existingUrls)));
             }
 
-            // 4. Add all other payload fields
+            // Other fields
             payload.forEach((key, value) {
-                if (value != null && key != 'amenities') { // amenities already handled
-                    if (value is List || value is Map) {
-                        formData.fields.add(MapEntry(key, json.encode(value)));
-                    } else {
-                        formData.fields.add(MapEntry(key, value.toString()));
-                    }
+                if (value != null) {
+                    formData.fields.add(MapEntry(key, value is Map || value is List ? json.encode(value) : value.toString()));
                 }
             });
 
-
             final url = ApiConstants.singleProperty.replaceFirst("{id}", propertyId);
-
-            final response = await _apiServices.put(
-                url,
-                    (data) => PropertyByIdModel.fromJson(data),
-                data: formData,
-                cancelToken: _cancelToken,
-            );
+            final response = await _apiServices.put(url, (data) => PropertyByIdModel.fromJson(data), data: formData, cancelToken: _cancelToken);
 
             return _handleApiResponse(response);
         } on DioException catch (e) {
             return _handleDioError<PropertyByIdModel>(e);
-        } catch (e) {
-            return ApiResponse.error("❌ Failed to update property: ${e.toString()}");
         }
     }
+
 
     /*Future<ApiResponse<PropertyByIdModel>> updateProperty(
         String propertyId,
         Map<String, dynamic> payload,
-        ) async {
+        ) async
+    {
         try {
             _cancelToken = CancelToken();
 
@@ -677,7 +647,7 @@ class PropertiesRepository
     {
         if (response.statusCode == 200 && response.data != null)
         {
-            return ApiResponse.success(response.data!, message: response.message);
+            return ApiResponse.success(response.data as T, message: response.message);
         }
         else
         {

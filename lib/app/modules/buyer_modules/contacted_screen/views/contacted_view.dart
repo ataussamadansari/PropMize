@@ -127,7 +127,7 @@ class ContactedView extends GetView<ContactedController> {
     );
   }
 
-  Widget _buildPropertyImage(property) {
+  Widget _buildPropertyImage(dynamic property) {
     if (property?.images?.isNotEmpty ?? false) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8),
@@ -136,13 +136,13 @@ class ContactedView extends GetView<ContactedController> {
           width: 80,
           height: 80,
           fit: BoxFit.cover,
-          placeholder: (_, __) => Container(
+          placeholder: (_, _) => Container(
             width: 80,
             height: 80,
             color: Colors.grey[300],
             child: const Icon(Icons.home, color: Colors.grey),
           ),
-          errorWidget: (_, __, ___) => Container(
+          errorWidget: (_, _, _) => Container(
             width: 80,
             height: 80,
             color: Colors.grey[300],

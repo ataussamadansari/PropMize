@@ -75,7 +75,7 @@ class MarketInsightsGrid extends StatelessWidget
                 width: double.infinity,
                 padding: const EdgeInsets.all(4.0),
                 decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8)
                 ),
                 child: Wrap(

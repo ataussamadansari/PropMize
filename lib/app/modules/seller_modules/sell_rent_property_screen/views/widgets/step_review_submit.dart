@@ -90,9 +90,9 @@ class StepReviewSubmit extends GetView<SellRentPropertyController> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black54)),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(width: 8),
-          Expanded(child: Text(value, style: const TextStyle(color: Colors.black87))),
+          Expanded(child: Text(value)),
         ],
       ),
     );

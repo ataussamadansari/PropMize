@@ -54,7 +54,7 @@ class NotificationView extends GetView<NotificationController>
                                         null : Icon(Icons.circle, color: Colors.blue, size: 10),
                                     onTap: ()
                                     {
-                                        controller.markAsRead(notification.id!);
+                                        controller.markAsRead(notification.id!, notification.metadata!.propertyId!);
                                     }
                                 ),
                               ),

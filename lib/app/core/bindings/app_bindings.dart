@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/data/services/like/liked_properties_service.dart';
 
+import '../../data/repositories/leads/leads_repository.dart';
 import '../../data/services/auth/google_auth_service.dart';
 import '../../data/services/contact_seller_service.dart';
+import '../../data/services/leads/leads_service.dart';
 import '../../data/services/like/like_services.dart';
 import '../../data/services/socket/v1/socket_notification_service.dart';
 import '../../data/services/socket/v1/socket_service.dart';
@@ -41,5 +44,9 @@ class AppBindings extends Bindings {
 
     // ✅ Notification Controller (SocketNotificationService ke baad)
     Get.lazyPut<NotificationController>(() => NotificationController(), fenix: true);
+
+    // ✅ LeadsService (GetxService) add karo
+    Get.lazyPut(() => LeadsService(), fenix: true);
+
   }
 }

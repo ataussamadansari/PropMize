@@ -84,6 +84,11 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                     final details = controller.details?.data;
                     if (details == null) return const Center(child: Text("No data available"));
 
+
+                    debugPrint(
+                        '👁️ pricing: ${details.pricing!.basePrice}, \n price: ${details.price}'
+                    );
+
                     return NotificationListener<ScrollUpdateNotification>(
                         onNotification: (notification)
                         {

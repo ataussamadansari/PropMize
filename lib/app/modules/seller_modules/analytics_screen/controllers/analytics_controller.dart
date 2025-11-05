@@ -35,7 +35,7 @@ class AnalyticsController extends GetxController {
         analyticsData.value = response.data!.data;
       } else {
         hasError.value = true;
-        errorMessage.value = response.message ?? "Failed to load analytics data.";
+        errorMessage.value = response.message;
       }
     } catch (e) {
       hasError.value = true;

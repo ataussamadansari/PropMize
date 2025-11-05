@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
 import 'package:prop_mize/app/data/models/leads/lead_details_model.dart';
+import 'package:prop_mize/app/global_widgets/shimmer/shimmer_lead_details_view.dart';
 
 import '../../../../core/utils/DateTimeHelper.dart';
 import '../controllers/lead_details_controller.dart';
@@ -24,7 +25,7 @@ class LeadDetailsView extends GetView<LeadDetailsController> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const ShimmerLeadDetailsView();
         }
 
         if (controller.hasError.value) {
@@ -83,9 +84,9 @@ class LeadDetailsView extends GetView<LeadDetailsController> {
 
   Widget _buildChip(String label, Color color) {
     return Chip(
-      label: Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
+      label: Text(label, style: const TextStyle(color: Colors.white, fontSize: 14)),
       backgroundColor: color,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.all(8.0),
       visualDensity: VisualDensity.compact,
     );
   }

@@ -69,7 +69,6 @@ class ContactBox extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (context) => StatusUpdateBottomSheet(
         currentStatus: lead.status ?? "New",
         onStatusUpdate: (newStatus) {

@@ -39,6 +39,7 @@ class ApiConstants
     static const String singleLead = "/leads/{id}"; // GET, PUT, DELETE
     static const String followUpLead = "/leads/{id}/followup"; // PUT
     static const String convertLead = "/leads/{id}/convert"; // PUT
+    static const String leadsStatus = "/leads/{id}/status"; // PUT
 
     // ------------------ Notifications Endpoints ------------------
 
@@ -65,6 +66,7 @@ class ApiConstants
     static const String contactedProperties = "/properties/user/contacted"; // GET
     static const String uploadPropertyImages = "/properties/{id}/upload-images"; // POST
     static const String propertyStats = "/properties/{id}/stats"; // GET
+    static const String propertyStatus = "/properties/{id}/status"; // PUT
 
     // ------------------ Users Endpoints ------------------
 
