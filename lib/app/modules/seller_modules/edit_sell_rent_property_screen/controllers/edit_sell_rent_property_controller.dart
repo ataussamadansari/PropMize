@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
-import 'package:prop_mize/app/data/models/properties/property_by_id_model.dart';
 import 'package:prop_mize/app/data/repositories/properties/properties_repository.dart';
+import 'package:prop_mize/app/modules/seller_modules/my_property_screen/controllers/my_property_controller.dart';
 
-import '../../../../data/models/api_response_model.dart';
 import '../../../../data/models/properties/data.dart';
 import '../../../../data/models/properties/lists/near_by_places.dart';
 
@@ -159,11 +158,6 @@ class EditSellRentPropertyController extends GetxController
     {
         pageController.dispose();
         _disposeAllControllers();
-        Future.delayed(Duration.zero, ()
-            {
-                resetForm();
-            }
-        );
         super.onClose();
     }
 
@@ -242,15 +236,15 @@ class EditSellRentPropertyController extends GetxController
 
         final pricing = data.pricing!;
 
-        if (pricing.basePrice != null) 
+        if (pricing.basePrice != null)
         {
             monthlyRentController.text = pricing.basePrice.toString();
         }
-        if (pricing.maintenanceCharges != null) 
+        if (pricing.maintenanceCharges != null)
         {
             maintenanceChargesController.text = pricing.maintenanceCharges.toString();
         }
-        if (pricing.securityDeposit != null) 
+        if (pricing.securityDeposit != null)
         {
             securityDepositController.text = pricing.securityDeposit.toString();
         }
@@ -452,30 +446,30 @@ class EditSellRentPropertyController extends GetxController
                 "description": descriptionController.text,
                 "propertyType": propertyType.value.toLowerCase(),
                 "listingType": listingType.value.toLowerCase().replaceAll('for ', ''),
-                "price": int.tryParse(priceController.text) ?? 0,
+                "price": num.tryParse(priceController.text) ?? '',
                 "area":
                 {
-                    "value": int.tryParse(areaController.text),
+                    "value": num.tryParse(areaController.text) ?? '',
                     "unit": _formatUnit(areaUnit.value)
                 },
                 if (buildUpAreaController.text.isNotEmpty) "buildUpArea":
                 {
-                    "value": int.tryParse(buildUpAreaController.text),
+                    "value": num.tryParse(buildUpAreaController.text) ?? '',
                     "unit": _formatUnit(buildUpAreaUnit.value)
                 },
                 if (superBuildUpAreaController.text.isNotEmpty) "superBuildUpArea":
                 {
-                    "value": int.tryParse(superBuildUpAreaController.text),
+                    "value": num.tryParse(superBuildUpAreaController.text) ?? '',
                     "unit": _formatUnit(superBuildUpAreaUnit.value)
                 },
                 "furnished": furnishingStatus.value.toLowerCase(),
-                "age": int.tryParse(propertyAgeController.text) ?? 0,
-                "bedrooms": int.tryParse(bedroomsController.text),
-                "bathrooms": int.tryParse(bathroomsController.text),
-                "balconies": int.tryParse(balconiesController.text),
-                "parking": int.tryParse(parkingController.text),
-                "floor": int.tryParse(floorController.text),
-                "totalFloors": int.tryParse(totalFloorsController.text),
+                "age": num.tryParse(propertyAgeController.text) ?? '',
+                "bedrooms": num.tryParse(bedroomsController.text) ?? '',
+                "bathrooms": num.tryParse(bathroomsController.text) ?? '',
+                "balconies": num.tryParse(balconiesController.text) ?? '',
+                "parking": num.tryParse(parkingController.text) ?? '',
+                "floor": num.tryParse(floorController.text) ?? '',
+                "totalFloors": num.tryParse(totalFloorsController.text) ?? '',
                 "address":
                 {
                     "street": streetController.text,
@@ -538,19 +532,20 @@ class EditSellRentPropertyController extends GetxController
         {
             final response = await _propertiesRepo.updateProperty(editingPropertyId.value, payload);
 
+            debugPrint("👁️ update response: ${response.success}");
             if (response.success)
             {
-                AppHelpers.showSnackBar(
-                    title: "Success",
-                    message: "Property updated successfully!",
-                    isError: false
-                );
-
                 Future.delayed(Duration.zero, ()
                     {
+                        AppHelpers.showSnackBar(
+                            title: "Success",
+                            message: "Property updated successfully!",
+                            isError: false
+                        );
                         resetForm();
                     }
                 );
+                Get.back(result: Get.find<MyPropertyController>().loadMyProperties());
             }
             else
             {
@@ -579,13 +574,11 @@ class EditSellRentPropertyController extends GetxController
 
     // ========== FORM MANAGEMENT ==========
 
-    void resetForm()
+    Future<bool> resetForm() async
     {
-        debugPrint("Call Reset form...");
-
         editingPropertyId.value = '';
         currentStep.value = 0;
-        if (pageController.hasClients) 
+        if (pageController.hasClients)
         {
             pageController.jumpToPage(0);
         }
@@ -594,11 +587,12 @@ class EditSellRentPropertyController extends GetxController
         _resetAllRxValues();
         _clearAllLists();
         _resetFormValidation();
+
+        return true;
     }
 
     void _clearAllControllers()
     {
-        debugPrint("Call Clear All Controller...");
         // Basic Details
         titleController.clear();
         descriptionController.clear();

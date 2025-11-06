@@ -167,7 +167,7 @@ class StepBasicDetails extends GetView<SellRentPropertyController>
                                     )
                                 ],
 
-                                if(isCommercialOrOffice) ...[
+                                if(isResidential || isCommercialOrOffice) ...[
                                     const SizedBox(height: 16),
                                     CustomTextField(
                                         controller: controller.parkingController,

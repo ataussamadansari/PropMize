@@ -14,42 +14,45 @@ class AnalyticsView extends GetView<AnalyticsController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const AnalyticsShimmerView();
-        }
-        if (controller.hasError.value) {
-          return Center(child: Text(controller.errorMessage.value, style: const TextStyle(color: Colors.red)));
-        }
-        if (controller.analyticsData.value == null) {
-          return const Center(child: Text("No analytics data available."));
-        }
+    return RefreshIndicator(
+      onRefresh: () => controller.fetchAnalytics(),
+      child: Scaffold(
+        body: Obx(() {
+          if (controller.isLoading.value) {
+            return const AnalyticsShimmerView();
+          }
+          if (controller.hasError.value) {
+            return Center(child: Text(controller.errorMessage.value, style: const TextStyle(color: Colors.red)));
+          }
+          if (controller.analyticsData.value == null) {
+            return const Center(child: Text("No analytics data available."));
+          }
 
-        final data = controller.analyticsData.value!;
+          final data = controller.analyticsData.value!;
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildFilterChips(),
-              const SizedBox(height: 24),
-              if (data.overallStats != null) OverallStatsGrid(stats: data.overallStats!),
-              const SizedBox(height: 24),
-              if (data.periodData != null) ViewsInquiriesChart(periodData: data.periodData!),
-              const SizedBox(height: 24),
-              if (data.periodData != null) PerformanceByDay(periodData: data.periodData!),
-              const SizedBox(height: 24),
-              if (data.propertyAnalytics != null) PropertyPerformanceList(properties: data.propertyAnalytics!),
-              const SizedBox(height: 24),
-              if (data.marketInsights != null) MarketInsightsGrid(insights: data.marketInsights!),
-              const SizedBox(height: 24),
-              _buildUpgradeCard(context),
-            ],
-          ),
-        );
-      }),
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildFilterChips(),
+                const SizedBox(height: 24),
+                if (data.overallStats != null) OverallStatsGrid(stats: data.overallStats!),
+                const SizedBox(height: 24),
+                if (data.periodData != null) ViewsInquiriesChart(periodData: data.periodData!),
+                const SizedBox(height: 24),
+                if (data.periodData != null) PerformanceByDay(periodData: data.periodData!),
+                const SizedBox(height: 24),
+                if (data.propertyAnalytics != null) PropertyPerformanceList(properties: data.propertyAnalytics!),
+                const SizedBox(height: 24),
+                if (data.marketInsights != null) MarketInsightsGrid(insights: data.marketInsights!),
+                const SizedBox(height: 24),
+                _buildUpgradeCard(context),
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 

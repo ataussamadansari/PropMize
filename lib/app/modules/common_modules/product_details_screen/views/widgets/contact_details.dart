@@ -71,6 +71,7 @@ class ContactDetails extends GetView<ProductDetailsController> {
           const SizedBox(height: 8),
 
           // WhatsApp
+          contact.whatsapp!.isNotEmpty ?
           _InfoBox(
             title: "WhatsApp",
             background: Colors.greenAccent,
@@ -79,14 +80,13 @@ class ContactDetails extends GetView<ProductDetailsController> {
                 const Icon(FontAwesomeIcons.whatsapp, color: Colors.green),
                 const SizedBox(width: 8),
                 Text(
-                  // controller.userId() ? contact.whatsapp ?? "-" : "Login to view",
                   userIdService.userId.value != null ? contact.whatsapp ?? "-" : "Login to view",
                   style: context.textTheme.bodyLarge
                       ?.copyWith(color: Colors.green[800]),
                 ),
               ],
             ),
-          ),
+          ) : SizedBox.shrink(),
           const SizedBox(height: 16),
 
           // Buttons
@@ -112,7 +112,7 @@ class ContactDetails extends GetView<ProductDetailsController> {
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    controller.whatsapp(contact.whatsapp);
+                    controller.whatsapp(contact.whatsapp!.isEmpty ? contact.phone : contact.whatsapp);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,

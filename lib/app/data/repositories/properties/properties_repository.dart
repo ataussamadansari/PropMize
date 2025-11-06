@@ -459,7 +459,12 @@ class PropertiesRepository
             });
 
             final url = ApiConstants.singleProperty.replaceFirst("{id}", propertyId);
-            final response = await _apiServices.put(url, (data) => PropertyByIdModel.fromJson(data), data: formData, cancelToken: _cancelToken);
+            final response = await _apiServices.put(
+                url,
+                    (data) => PropertyByIdModel.fromJson(data),
+                data: formData,
+                cancelToken: _cancelToken
+            );
 
             return _handleApiResponse(response);
         } on DioException catch (e) {

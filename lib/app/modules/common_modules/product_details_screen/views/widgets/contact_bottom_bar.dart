@@ -41,7 +41,7 @@ class ContactBottomBar extends GetView<ProductDetailsController> {
           Expanded(
             child: ElevatedButton.icon(
               onPressed: () {
-                controller.whatsapp(contact.whatsapp);
+                controller.whatsapp(contact.whatsapp!.isNotEmpty ? contact.whatsapp : contact.phone);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green

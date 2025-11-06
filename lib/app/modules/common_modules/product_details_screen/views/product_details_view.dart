@@ -66,28 +66,23 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                     if (controller.hasError.value)
                     {
                         return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing: 8,
-                            children: [
-                              SvgPicture.asset('assets/icons/404 Error-cuate.svg', width: 200,),
-                              Text(controller.errorMessage.value),
-                              ElevatedButton(
-                                  onPressed: () => controller.getProductDetails(controller.productId),
-                                  child: const Text("Retry")
-                              )
-                            ],
-                          ),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                spacing: 8,
+                                children: [
+                                    SvgPicture.asset('assets/icons/404 Error-cuate.svg', width: 200),
+                                    Text(controller.errorMessage.value),
+                                    ElevatedButton(
+                                        onPressed: () => controller.getProductDetails(controller.productId),
+                                        child: const Text("Retry")
+                                    )
+                                ]
+                            )
                         );
                     }
 
                     final details = controller.details?.data;
                     if (details == null) return const Center(child: Text("No data available"));
-
-
-                    debugPrint(
-                        '👁️ pricing: ${details.pricing!.basePrice}, \n price: ${details.price}'
-                    );
 
                     return NotificationListener<ScrollUpdateNotification>(
                         onNotification: (notification)
@@ -179,7 +174,6 @@ class ProductDetailsView extends GetView<ProductDetailsController>
                                                         onPressed: () => likeService.toggleLike(details),
                                                         style: IconButton.styleFrom(
                                                             backgroundColor: Colors.grey.withValues(alpha: 0.7),
-
                                                             elevation: 2
                                                         ),
                                                         icon: Icon(

@@ -15,6 +15,10 @@ class EditSellRentPropertyView extends GetView<EditSellRentPropertyController> {
   Widget build(BuildContext context) {
     return Scaffold(
           appBar: AppBar(
+            leading: IconButton(onPressed: () async{
+              final reset = await controller.resetForm();
+              Get.back(result: reset);
+            }, icon: Icon(Icons.arrow_back)),
             title:Text(
                 'Edit Property'
             ),

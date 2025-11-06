@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prop_mize/app/core/utils/helpers.dart';
+import 'package:prop_mize/app/modules/seller_modules/edit_sell_rent_property_screen/controllers/edit_sell_rent_property_controller.dart';
 
 import '../../../../data/models/properties/lists/near_by_places.dart';
 import '../../../../data/repositories/properties/properties_repository.dart';
@@ -344,30 +345,30 @@ class SellRentPropertyController extends GetxController
             "description": descriptionController.text,
             "propertyType": propertyType.value.toLowerCase(),
             "listingType": listingType.value.toLowerCase().replaceAll('for ', ''),
-            "price": int.tryParse(priceController.text) ?? 0,
+            "price": num.tryParse(priceController.text) ?? '',
             "area":
             {
-                "value": int.tryParse(areaController.text),
+                "value": num.tryParse(areaController.text) ?? '',
                 "unit": _formatUnit(areaUnit.value)
             },
             if (buildUpAreaController.text.isNotEmpty) "buildUpArea":
             {
-                "value": int.tryParse(buildUpAreaController.text),
+                "value": num.tryParse(buildUpAreaController.text) ?? '',
                 "unit": _formatUnit(buildUpAreaUnit.value)
             },
             if (superBuildUpAreaController.text.isNotEmpty) "superBuildUpArea":
             {
-                "value": int.tryParse(superBuildUpAreaController.text),
+                "value": num.tryParse(superBuildUpAreaController.text) ?? '',
                 "unit": _formatUnit(superBuildUpAreaUnit.value)
             },
             "furnished": furnishingStatus.value.toLowerCase(),
-            "age": int.tryParse(propertyAgeController.text) ?? 0,
-            "bedrooms": int.tryParse(bedroomsController.text),
-            "bathrooms": int.tryParse(bathroomsController.text),
-            "balconies": int.tryParse(balconiesController.text),
-            "parking": int.tryParse(parkingController.text),
-            "floor": int.tryParse(floorController.text),
-            "totalFloors": int.tryParse(totalFloorsController.text),
+            "age": num.tryParse(propertyAgeController.text) ?? '',
+            "bedrooms": num.tryParse(bedroomsController.text) ?? '',
+            "bathrooms": num.tryParse(bathroomsController.text) ?? '',
+            "balconies": num.tryParse(balconiesController.text) ?? '',
+            "parking": num.tryParse(parkingController.text) ?? '',
+            "floor": num.tryParse(floorController.text) ?? '',
+            "totalFloors": num.tryParse(totalFloorsController.text) ?? '',
             "address":
             {
                 "street": streetController.text,
@@ -440,8 +441,11 @@ class SellRentPropertyController extends GetxController
                     isError: false
                 );
 
+                resetForm();
+
                 Future.delayed(Duration.zero, () {
                     Get.find<SellerMainController>().viewAllMyProperties();
+                    Get.find<EditSellRentPropertyController>().loadPropertyForEditing(response.data!.data!);
                 });
             }
             else
@@ -470,6 +474,127 @@ class SellRentPropertyController extends GetxController
     }
 
     // ========== FORM MANAGEMENT ==========
+
+    // ========== FORM MANAGEMENT ==========
+
+    void resetForm()
+    {
+        currentStep.value = 0;
+        if (pageController.hasClients)
+        {
+            pageController.jumpToPage(0);
+        }
+
+        _clearAllControllers();
+        _resetAllRxValues();
+        _clearAllLists();
+        _resetFormValidation();
+    }
+
+    void _clearAllControllers()
+    {
+        // Basic Details
+        titleController.clear();
+        descriptionController.clear();
+        areaController.clear();
+        buildUpAreaController.clear();
+        superBuildUpAreaController.clear();
+        propertyAgeController.clear();
+        bedroomsController.clear();
+        bathroomsController.clear();
+        balconiesController.clear();
+        parkingController.clear();
+        floorController.clear();
+        totalFloorsController.clear();
+
+        // Location & Features
+        streetController.clear();
+        areaNameController.clear();
+        cityController.clear();
+        stateController.clear();
+        zipCodeController.clear();
+        countryController.clear();
+        landmarkController.clear();
+        flooringTypeController.clear();
+        waterSupplyController.clear();
+
+        // Pricing & Contact
+        priceController.clear();
+        monthlyRentController.clear();
+        maintenanceChargesController.clear();
+        securityDepositController.clear();
+        contactNameController.clear();
+        contactPhoneController.clear();
+        contactWhatsappController.clear();
+        additionalNotesController.clear();
+
+        // Nearby Places
+        schoolNameController.clear();
+        schoolDistanceController.clear();
+        hospitalNameController.clear();
+        hospitalDistanceController.clear();
+        mallNameController.clear();
+        mallDistanceController.clear();
+        transportNameController.clear();
+        transportDistanceController.clear();
+    }
+
+    void _resetAllRxValues()
+    {
+        // Basic Details
+        propertyType.value = 'Apartment';
+        listingType.value = 'For Sale';
+        furnishingStatus.value = 'Unfurnished';
+        areaUnit.value = 'Sq. Ft.';
+        buildUpAreaUnit.value = 'Sq. Ft.';
+        superBuildUpAreaUnit.value = 'Sq. Ft.';
+
+        // Features
+        facing.value = 'North';
+        contactType.value = 'Owner';
+
+        // Boolean Values
+        showBuildUpArea.value = false;
+        showSuperBuildUpArea.value = false;
+        powerBackup.value = false;
+        servantRoom.value = false;
+        poojaRoom.value = false;
+        studyRoom.value = false;
+        storeRoom.value = false;
+        swimmingPool.value = false;
+        gym.value = false;
+        lift.value = false;
+        security.value = false;
+        garden.value = false;
+
+        // Nearby Places
+        showAddSchool.value = false;
+        showAddHospital.value = false;
+        showAddMall.value = false;
+        showAddTransport.value = false;
+        schoolDistanceUnit.value = 'meter';
+        hospitalDistanceUnit.value = 'meter';
+        mallDistanceUnit.value = 'km';
+        transportDistanceUnit.value = 'km';
+    }
+
+    void _clearAllLists()
+    {
+        amenities.clear();
+        nearbySchools.clear();
+        nearbyHospitals.clear();
+        nearbyMalls.clear();
+        nearbyTransport.clear();
+        images.clear();
+    }
+
+    void _resetFormValidation()
+    {
+        for (var formKey in formKeys)
+        {
+            formKey.currentState?.reset();
+        }
+    }
 
     void _disposeAllControllers() 
     {
