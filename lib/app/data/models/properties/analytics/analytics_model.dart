@@ -98,10 +98,10 @@ class Summary {
     totalValue = json['totalValue'];
     averagePrice = json['averagePrice'];
   }
-  int? totalProperties;
-  int? activeProperties;
-  int? totalValue;
-  double? averagePrice;
+  dynamic totalProperties;
+  dynamic activeProperties;
+  dynamic totalValue;
+  dynamic averagePrice;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -128,7 +128,7 @@ class MarketInsights {
     recommendation = json['recommendation'];
   }
   String? title;
-  String? value;
+  dynamic value;
   String? insight;
   String? recommendation;
 
@@ -155,8 +155,8 @@ class PeriodData {
     inquiries = json['inquiries'];
   }
   String? day;
-  int? views;
-  int? inquiries;
+  dynamic views;
+  dynamic inquiries;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -205,19 +205,19 @@ class PropertyAnalytics {
   }
   String? id;
   String? title;
-  int? views;
-  int? inquiries;
-  int? favorites;
-  int? calls;
-  int? likes;
+  dynamic views;
+  dynamic inquiries;
+  dynamic favorites;
+  dynamic calls;
+  dynamic likes;
   dynamic conversionRate;
-  int? converted;
-  int? daysListed;
+  dynamic converted;
+  dynamic daysListed;
   String? status;
   String? propertyType;
   String? listingType;
   String? location;
-  int? price;
+  dynamic price;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

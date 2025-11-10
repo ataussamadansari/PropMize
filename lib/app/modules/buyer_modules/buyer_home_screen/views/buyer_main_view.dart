@@ -51,5 +51,7 @@ class BuyerMainView extends GetView<BuyerMainController> {
       ),
     );
   }
+
+
 }
 

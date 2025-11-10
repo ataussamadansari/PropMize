@@ -122,35 +122,6 @@ class AuthRepository
     }
 
     // Update User
-    /*Future<ApiResponse<UserMe>> updateDetails(Map<String, dynamic> data) async {
-        try {
-            final response = await _apiServices.put<UserMe>(
-                ApiConstants.updateProfile,
-                    (json) => UserMe.fromJson(json),
-                data: data,
-                cancelToken: _cancelToken,
-            );
-
-            if (response.statusCode == 200 && response.data != null) {
-                return ApiResponse.success(
-                    response.data!,
-                    message: response.message,
-                );
-            } else {
-                return ApiResponse.error(
-                    response.message,
-                    statusCode: response.statusCode,
-                );
-            }
-        } on DioException catch (e) {
-            return ApiResponse.error(
-                e.message ?? "Something went wrong",
-                statusCode: e.response?.statusCode,
-                errors: e.response?.data,
-            );
-        }
-    }*/
-
     Future<ApiResponse<UserMe>> updateDetails(Map<String, dynamic> data, {File? image}) async {
         try {
             FormData formData = FormData.fromMap(data);
@@ -228,7 +199,6 @@ class AuthRepository
             );
         }
     }
-
 
     Future<void> cancelChat() async {
         _cancelToken?.cancel();

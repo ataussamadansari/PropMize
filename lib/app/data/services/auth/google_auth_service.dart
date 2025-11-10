@@ -72,12 +72,14 @@ class GoogleAuthService extends GetxService
                 debugPrint("success");
                 debugPrint("user: ${response.data!.data.user}");
                 debugPrint("token: ${response.data!.data.tokens.accessToken}");
+                debugPrint("refreshToken: ${response.data!.data.tokens.refreshToken}");
 
                 return 
                 {
                     'success': true,
                     'user': response.data!.data.user,
-                    'token': response.data!.data.tokens.accessToken
+                    'token': response.data!.data.tokens.accessToken,
+                    'refreshToken': response.data!.data.tokens.refreshToken
                 };
             }
             else 

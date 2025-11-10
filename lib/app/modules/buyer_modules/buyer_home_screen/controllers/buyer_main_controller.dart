@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prop_mize/app/modules/buyer_modules/assistant_chat_screen/controllers/assistant_chat_controller.dart';
@@ -30,7 +31,6 @@ class BuyerMainController extends GetxController {
     bool isScrollingDown = false;
     double lastScrollOffset = 0.0;
     final double _scrollThreshold = 10.0;
-
 
     // ===== Computed Getters =====
     RxString get currentUserId => StorageServices.to.userId;

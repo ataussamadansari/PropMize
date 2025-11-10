@@ -24,14 +24,14 @@ class ApiProvider
         return _instance!;
     }
 
-    void _initializeInterceptors() 
+    void _initializeInterceptors()
     {
         _dio.options = BaseOptions(
             baseUrl: ApiConstants.baseUrl,
             connectTimeout: Duration(milliseconds: ApiConstants.connectTimeout),
             receiveTimeout: Duration(milliseconds: ApiConstants.receiveTimeout),
             sendTimeout: Duration(milliseconds: ApiConstants.sendTimeout),
-            headers: 
+            headers:
             {
                 'Content-Type': ApiConstants.contentType,
                 'Accept': ApiConstants.contentType
@@ -43,7 +43,7 @@ class ApiProvider
             InterceptorsWrapper(onRequest: (options, handler) async
                 {
                     final token = _storageService.getToken();
-                    if (token != null) 
+                    if (token != null)
                     {
                         options.headers[ApiConstants.authorization] = 'Bearer $token';
                     }
@@ -54,7 +54,7 @@ class ApiProvider
 
                     // check connectivity
                     final connectivity = Connectivity().checkConnectivity();
-                    if (connectivity == ConnectivityResult.none) 
+                    if (connectivity == ConnectivityResult.none)
                     {
                         throw DioException(
                             requestOptions: options,
@@ -71,7 +71,7 @@ class ApiProvider
                 },
                 onError: (error, handler) async
                 {
-                    if (error.response?.statusCode == 401) 
+                    if (error.response?.statusCode == 401)
                     {
                         await _handleTokenExpiration();
                     }
@@ -81,7 +81,7 @@ class ApiProvider
         );
 
         // logger Interceptor (only for debug mode)
-        if (getx.Get.isLogEnable) 
+        if (getx.Get.isLogEnable)
         {
             _dio.interceptors.add(PrettyDioLogger(
                     requestHeader: true,
@@ -95,9 +95,47 @@ class ApiProvider
     }
 
     Future<void> _handleTokenExpiration() async
-    {
-        _storageService.removeToken();
-    }
+    {}
+
+    // Future<void> _handleTokenExpiration() async
+    // {
+    //     final refreshToken = _storageService.read('refreshToken');
+    //
+    //     if (refreshToken == null || refreshToken.isEmpty)
+    //     {
+    //         _storageService.removeToken();
+    //         return;
+    //     }
+    //
+    //     final response = await _dio.post(
+    //         ApiConstants.refreshToken,
+    //         options: Options(
+    //             headers:
+    //             {
+    //                 'x-refresh-token': refreshToken,
+    //                 'Accept': ApiConstants.contentType
+    //             }
+    //         )
+    //     );
+    //
+    //     final data = response.data['data'];
+    //     final newAccessToken = data['tokens']['accessToken'];
+    //     final newRefreshToken = data['tokens']['refreshToken'];
+    //
+    //     if (newAccessToken != null && newAccessToken.isNotEmpty)
+    //     {
+    //         _storageService.setToken(newAccessToken);
+    //         if (newRefreshToken != null && newRefreshToken.isNotEmpty)
+    //         {
+    //             _storageService.write('refreshToken', newRefreshToken);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         // _storageService.removeToken();
+    //         // _storageService.remove('refreshToken');
+    //     }
+    // }
 
     // Create API call
     Future<Response> get(String path, {
@@ -197,9 +235,9 @@ class ApiProvider
         }
     }
 
-    _handleError(dynamic error) 
+    _handleError(dynamic error)
     {
-        if (error is DioException) 
+        if (error is DioException)
         {
             switch (error.type)
             {
@@ -227,7 +265,7 @@ class ApiProvider
         }
     }
 
-    _handleStatusCode(int? statusCode) 
+    _handleStatusCode(int? statusCode)
     {
         switch (statusCode)
         {

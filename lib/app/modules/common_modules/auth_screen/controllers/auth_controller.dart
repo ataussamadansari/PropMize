@@ -55,8 +55,12 @@ class AuthController extends GetxController
                 // ✅ SUCCESS
                 final userData = result['user'];
                 final token = result['token'];
+                final refreshToken = result['refreshToken'];
 
-                await _saveUserData(userData, token);
+                debugPrint("refreshToken: $refreshToken");
+
+                await _saveUserData(userData, token, refreshToken);
+                // await _saveUserData(userData, token);
 
                 Get.isBottomSheetOpen == true ? Get.back() : null;
 
@@ -79,7 +83,8 @@ class AuthController extends GetxController
         }
     }
 
-    Future<void> _saveUserData(dynamic userData, String token) async {
+    Future<void> _saveUserData(dynamic userData, String token, String refreshToken) async {
+    // Future<void> _saveUserData(dynamic userData, String token) async {
         StorageServices.to.removeChatId();
 
         // Save token
@@ -92,6 +97,7 @@ class AuthController extends GetxController
         }
 
         // Save user details
+        StorageServices.to.write("refreshToken", refreshToken);
         StorageServices.to.write("role", userData.role);
         StorageServices.to.write("email", userData.email);
         StorageServices.to.write("phone", userData.phone);
@@ -422,6 +428,7 @@ class AuthController extends GetxController
         StorageServices.to.removeUserId();
         resetAuthState();
         StorageServices.to.removeChatId();
+        StorageServices.to.remove('refreshToken');
         StorageServices.to.remove('users');
         StorageServices.to.remove('phone');
         StorageServices.to.remove('role');
@@ -431,6 +438,7 @@ class AuthController extends GetxController
         AppHelpers.showSnackBar(icon: CupertinoIcons.bell, title: "Logout", message: "Logout successful");
         return true;
     }
+
 
     Future<ApiResponse<UserMe>> updateProfile(dynamic updateData, {File? image}) async
     {
