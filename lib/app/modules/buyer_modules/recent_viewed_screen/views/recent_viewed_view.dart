@@ -16,6 +16,7 @@ class RecentViewedView extends GetView<RecentViewedController> {
         // ------------------ AUTH CHECK ------------------
         if (!controller.isAuthenticated) {
           return NotLoggedScreen(
+            imgUrl: 'assets/images/image_2.jpg',
             heading: 'Recent Viewed Properties',
             message: 'Login to view your recently viewed properties.',
             onPressed: controller.showAuthBottomSheet,

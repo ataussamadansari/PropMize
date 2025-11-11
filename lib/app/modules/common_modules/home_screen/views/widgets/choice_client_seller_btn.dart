@@ -73,6 +73,7 @@ class ChoiceClientSellerBtn extends StatelessWidget {
                     ),
                   ),
 
+                  const SizedBox(width: 4),
                   // ✅ ARROW ICON
                   Icon(
                     Icons.arrow_forward_ios,

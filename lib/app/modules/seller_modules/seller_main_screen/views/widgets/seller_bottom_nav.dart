@@ -14,7 +14,7 @@ class SellerBottomNav extends GetView<SellerMainController> {
       return AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        height: controller.isBottomNavVisible.value ? kBottomNavigationBarHeight + 16 : 0,
+        height: controller.isBottomNavVisible.value ? kBottomNavigationBarHeight: 0,
           child: Stack(
               clipBehavior: controller.isBottomNavVisible.value ? Clip.none : Clip.hardEdge,
               children: [
@@ -43,7 +43,7 @@ class SellerBottomNav extends GetView<SellerMainController> {
                                 BottomNavigationBarItem(
                                   icon: Icon(Icons.home_outlined),
                                   activeIcon: Icon(Icons.home),
-                                  label: "Contacted",
+                                  label: "Dashboard",
                                 ),
                                 BottomNavigationBarItem(
                                     icon: Icon(Icons.chat_outlined),
@@ -63,7 +63,7 @@ class SellerBottomNav extends GetView<SellerMainController> {
                                 BottomNavigationBarItem(
                                     icon: Icon(Icons.analytics_outlined),
                                     activeIcon: Icon(Icons.analytics),
-                                    label: "Analytics"
+                                    label: "Explore"
                                 )
                               ]
                           )
@@ -74,7 +74,7 @@ class SellerBottomNav extends GetView<SellerMainController> {
                 // Center Floating Action Button for Assistant
                 Positioned(
                   left: MediaQuery.of(context).size.width / 2 - 30,
-                  bottom: 24,
+                  bottom: 12,
                   child: GestureDetector(
                     onTap: () {
                       controller.changePage(2); // Assistant page index

@@ -41,13 +41,20 @@ class BuyerMainView extends GetView<BuyerMainController> {
         body: Obx(() {
           return NotificationListener<ScrollNotification>(
             onNotification: (scrollInfo) {
-              controller.handleScrollNotification(scrollInfo);
+              // ✅ Scroll hide/show only for SellRentPropertyView (index 2)
+              if (controller.currentIndex.value == 2) {
+                controller.handleScrollNotification(scrollInfo);
+              } else {
+                // Make sure bottom nav stays visible for other screens
+                controller.isBottomNavVisible.value = true;
+              }
+              // controller.handleScrollNotification(scrollInfo);
               return false;
             },
             child: controller.pages[controller.currentIndex.value],
           );
         }),
-        bottomNavigationBar: const BuyerMainBottomNav(),
+        bottomNavigationBar: SafeArea(child: const BuyerMainBottomNav()),
       ),
     );
   }

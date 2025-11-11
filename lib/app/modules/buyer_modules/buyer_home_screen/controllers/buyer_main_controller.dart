@@ -39,8 +39,8 @@ class BuyerMainController extends GetxController {
     bool _hasUserScrolled = false;
 
     // Auto-hide timer (3 seconds) - only active after scrolling
-    Timer? _autoHideTimer;
-    final Duration _autoHideDuration = const Duration(seconds: 3);
+    // Timer? _autoHideTimer;
+    // final Duration _autoHideDuration = const Duration(seconds: 3);
 
     final List<Widget> pages = [
         ContactedView(),
@@ -52,11 +52,11 @@ class BuyerMainController extends GetxController {
 
     void onUserInteraction() {
         _showBottomNav();
-        _cancelAutoHideTimer();
+        // _cancelAutoHideTimer();
 
         // only restart timer if user has scrolled before
         if (_hasUserScrolled) {
-            _startAutoHideTimer();
+            // _startAutoHideTimer();
         }
     }
 
@@ -64,7 +64,7 @@ class BuyerMainController extends GetxController {
         // If scrollable area smaller than viewport → no hiding logic
         if (scrollInfo.metrics.maxScrollExtent <= 0) {
             _showBottomNav();
-            _cancelAutoHideTimer();
+            // _cancelAutoHideTimer();
             return;
         }
 
@@ -75,7 +75,7 @@ class BuyerMainController extends GetxController {
             _hasUserScrolled = true;
 
             if (currentScrollOffset <= 0) {
-                _cancelAutoHideTimer();
+                // _cancelAutoHideTimer();
                 _showBottomNav();
                 lastScrollOffset = currentScrollOffset;
                 return;
@@ -88,39 +88,39 @@ class BuyerMainController extends GetxController {
 
             if (delta > 0 && !isScrollingDown) {
                 isScrollingDown = true;
-                _cancelAutoHideTimer();
+                // _cancelAutoHideTimer();
                 _hideBottomNav();
             } else if (delta < 0 && isScrollingDown) {
                 isScrollingDown = false;
                 _showBottomNav();
                 if (_hasUserScrolled) {
-                    _startAutoHideTimer();
+                    // _startAutoHideTimer();
                 }
             }
 
             lastScrollOffset = currentScrollOffset;
         } else if (scrollInfo is ScrollEndNotification) {
             if (!isScrollingDown && _hasUserScrolled) {
-                _startAutoHideTimer();
+                // _startAutoHideTimer();
             }
         }
     }
 
 
-    void _startAutoHideTimer() {
-        _cancelAutoHideTimer();
-        _autoHideTimer = Timer(_autoHideDuration, () {
-            // only hide if currently visible and user has scrolled before
-            if (isBottomNavVisible.value && _hasUserScrolled) {
-                _hideBottomNav();
-            }
-        });
-    }
+    // void _startAutoHideTimer() {
+    //     _cancelAutoHideTimer();
+    //     _autoHideTimer = Timer(_autoHideDuration, () {
+    //         // only hide if currently visible and user has scrolled before
+    //         if (isBottomNavVisible.value && _hasUserScrolled) {
+    //             _hideBottomNav();
+    //         }
+    //     });
+    // }
 
-    void _cancelAutoHideTimer() {
-        _autoHideTimer?.cancel();
-        _autoHideTimer = null;
-    }
+    // void _cancelAutoHideTimer() {
+    //     _autoHideTimer?.cancel();
+    //     _autoHideTimer = null;
+    // }
 
     void _hideBottomNav() {
         if (isBottomNavVisible.value) {
@@ -137,30 +137,30 @@ class BuyerMainController extends GetxController {
     void changePage(int index) {
         currentIndex.value = index;
         _showBottomNav();
-        _cancelAutoHideTimer();
+        // _cancelAutoHideTimer();
 
         // When changing pages, don't start auto-hide timer immediately
         // Only start if user has scrolled before
         if (_hasUserScrolled) {
-            _startAutoHideTimer();
+            // _startAutoHideTimer();
         }
     }
 
     // Call this when user interacts with bottom nav directly
     void onBottomNavInteracted() {
         _showBottomNav();
-        _cancelAutoHideTimer();
+        // _cancelAutoHideTimer();
 
         // Only start auto-hide timer if user has scrolled before
         if (_hasUserScrolled) {
-            _startAutoHideTimer();
+            // _startAutoHideTimer();
         }
     }
 
     // Reset scroll state when needed (optional)
     void resetScrollState() {
         _hasUserScrolled = false;
-        _cancelAutoHideTimer();
+        // _cancelAutoHideTimer();
     }
 
     void showAuthBottomSheet()
@@ -188,7 +188,7 @@ class BuyerMainController extends GetxController {
 
     @override
     void onClose() {
-        _cancelAutoHideTimer();
+        // _cancelAutoHideTimer();
         super.onClose();
     }
 }

@@ -49,6 +49,7 @@ class ContactedView extends GetView<ContactedController>
                     if (!controller.isUserAuthenticated)
                     {
                         return NotLoggedScreen(
+                            imgUrl: 'assets/images/image_1.jpg',
                             heading: 'Get started',
                             message: 'Keep track of all the properties you’ve contacted.',
                             onPressed: () => controller.showAuthBottomSheet()
@@ -59,30 +60,30 @@ class ContactedView extends GetView<ContactedController>
                     if (controller.isUserAuthenticated && controller.contactedLeads.isEmpty)
                     {
                         return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/icons/404 Error-cuate.svg',
-                                width: 300,
-                                height: 300,
-                              ),
-                              Text(
-                                'No contacted leads found',
-                                style: context.textTheme.headlineSmall?.copyWith(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'When you contact potential leads, they will appear here',
-                                style: context.textTheme.bodyMedium?.copyWith(
-                                  color: Colors.grey,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                    SvgPicture.asset(
+                                        'assets/icons/404 Error-cuate.svg',
+                                        width: 300,
+                                        height: 300
+                                    ),
+                                    Text(
+                                        'No contacted leads found',
+                                        style: context.textTheme.headlineSmall?.copyWith(
+                                            color: Colors.grey
+                                        )
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                        'When you contact potential leads, they will appear here',
+                                        style: context.textTheme.bodyMedium?.copyWith(
+                                            color: Colors.grey
+                                        ),
+                                        textAlign: TextAlign.center
+                                    )
+                                ]
+                            )
                         );
                     }
 

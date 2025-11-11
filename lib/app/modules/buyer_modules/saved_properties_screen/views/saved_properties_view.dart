@@ -56,6 +56,7 @@ class SavedPropertiesView extends GetView<SavedPropertiesController> {
 
                 if(!controller.isUserAuthenticated) {
                     return NotLoggedScreen(
+                        imgUrl: 'assets/images/image_3.jpg',
                         heading: 'Get started',
                         message: 'Keep track of all the properties you’ve saved.',
                         onPressed: () => controller.showAuthBottomSheet(),

@@ -17,7 +17,7 @@ class BuyerMainBottomNav extends GetView<BuyerMainController>
                 return AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
-                    height: controller.isBottomNavVisible.value ? kBottomNavigationBarHeight + 16 : 0,
+                    height: controller.isBottomNavVisible.value ? kBottomNavigationBarHeight : 0,
                     child: Stack(
                         clipBehavior: controller.isBottomNavVisible.value ? Clip.none : Clip.hardEdge,
                         children: [
@@ -66,7 +66,7 @@ class BuyerMainBottomNav extends GetView<BuyerMainController>
                                                 BottomNavigationBarItem(
                                                     icon: Icon(CupertinoIcons.building_2_fill),
                                                     activeIcon: Icon(CupertinoIcons.building_2_fill),
-                                                    label: "All Listings"
+                                                    label: "Explore"
                                                 )
                                             ]
                                         )
@@ -77,7 +77,7 @@ class BuyerMainBottomNav extends GetView<BuyerMainController>
                             // Center Floating Action Button for Assistant
                             Positioned(
                                 left: MediaQuery.of(context).size.width / 2 - 30,
-                                bottom: 24,
+                                bottom: 12,
                                 child: GestureDetector(
                                     onTap: ()
                                     {
@@ -121,75 +121,3 @@ class BuyerMainBottomNav extends GetView<BuyerMainController>
     }
 }
 
-/*
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../controllers/buyer_main_controller.dart';
-
-class BuyerMainBottomNav extends GetView<BuyerMainController>
-{
-    const BuyerMainBottomNav({super.key});
-
-    @override
-    Widget build(BuildContext context)
-    {
-        return Obx(()
-            {
-                return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    height: controller.isBottomNavVisible.value ? kBottomNavigationBarHeight + 16 : 0,
-                    child: Wrap(
-                        children: [
-                            BottomNavigationBar(
-                                elevation: 0,
-                                type: BottomNavigationBarType.fixed,
-                                currentIndex: controller.currentIndex.value,
-                                onTap: (index)
-                                {
-                                    controller.changePage(index);
-                                },
-                                selectedLabelStyle: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 12
-                                ),
-                                items: [
-                                    BottomNavigationBarItem(
-                                        icon: Icon(CupertinoIcons.phone),
-                                        activeIcon: Icon(CupertinoIcons.phone_fill),
-                                        label: "Contacted",
-                                    ),
-                                    BottomNavigationBarItem(
-                                        icon: Icon(Icons.favorite_border),
-                                        activeIcon: Icon(Icons.favorite),
-                                        label: "Saved"
-                                    ),
-                                    BottomNavigationBarItem(
-                                        icon: Icon(Icons.chat_outlined),
-                                        activeIcon: Icon(Icons.chat),
-                                        label: "Assistant"
-                                    ),
-                                    BottomNavigationBarItem(
-                                        icon: Icon(Icons.remove_red_eye_outlined),
-                                        activeIcon: Icon(Icons.remove_red_eye),
-                                        label: "Recent"
-                                    ),
-                                    BottomNavigationBarItem(
-                                        icon: Icon(CupertinoIcons.building_2_fill),
-                                        activeIcon: Icon(CupertinoIcons.building_2_fill),
-                                        label: "All Listings"
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                );
-            }
-        );
-    }
-}
-
-*/

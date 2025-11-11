@@ -339,6 +339,7 @@ class SocketNotificationService extends GetxService
 
         try
         {
+
             socketService.send('notification:read',
                 {
                     'id': notificationId,

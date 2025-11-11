@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prop_mize/app/core/themes/app_colors.dart';
 
 class ChoiceClientSellerBtn extends StatelessWidget {
@@ -52,15 +53,14 @@ class ChoiceClientSellerBtn extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: context.textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
                     Text(
                       subtitle,
-                      style: const TextStyle(
+                      style: context.textTheme.bodyMedium!.copyWith(
                         color: Colors.white,
                       ),
                     ),
